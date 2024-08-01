@@ -21,8 +21,9 @@ const submitForm = async () => {
   console.log(formData.value)
 
   try {
-    const { data: responseData } = await useFetch('http://conkard-api-dev.byandev.com/api/v1/auth/register', {
+    const responseData = await $fetch('http://conkard-api-dev.byandev.com/api/v1/auth/register', {
         method: 'post',
+        headers: myHeaders,
         body: { 
           name: formData.value.name,
           email: formData.value.email,
@@ -31,7 +32,7 @@ const submitForm = async () => {
         },
         redirect: 'follow'
     })
-    console.log(responseData.value)
+    console.log(responseData)
   } catch (error) {
     console.error('Error:', error);
   }
@@ -48,7 +49,7 @@ const submitForm = async () => {
             <p class="mt-2 text-sm leading-6 text-gray-500">
               Already a member?
               {{ ' ' }}
-              <NuxtLink to="/login" class="font-semibold text-indigo-600 hover:text-indigo-500">Login to your account.</NuxtLink>
+              <NuxtLink to="/authentication/login" class="font-semibold text-indigo-600 hover:text-indigo-500">Login to your account.</NuxtLink>
             </p>
           </div>
   
@@ -82,7 +83,6 @@ const submitForm = async () => {
                     <input id="password_confimation" v-model="formData.password_confirmation" type="password" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
-  
                 <div>
                   <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up</button>
                 </div>

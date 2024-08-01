@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const formData = ref({
+  email: '',
+  password: '',
+});
+
+type ResponseData = {
+  data: {
+  access_token: string;
+  };
+};
+
+const submitForm = async () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json");
+
+  const formdata = new FormData();
+  formdata.append("email", formData.value.email);
+  formdata.append("password", formData.value.password);
+
+  console.log(formData.value);
+
+  try {
+    const responseData = await $fetch<ResponseData>('http://conkard-api-dev.byandev.com/api/v1/auth/login', {
+      method: 'post',
+      headers: myHeaders,
+      body: { 
+        email: formData.value.email,
+        password: formData.value.password, 
+      },
+      redirect: 'follow'
+    });
+
+    // console.log(responseData.value?.data.access_token);
+
+    if (responseData && responseData.data.access_token) {
+      localStorage.setItem('access_token', responseData.data.access_token);
+      router.push({ path: "/dashboard" });
+      // console.log('success');
+    } else {
+      console.log('error');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+</script>
+
 <template>
     <div class="flex min-h-full flex-1">
       <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
@@ -8,24 +61,24 @@
             <p class="mt-2 text-sm leading-6 text-gray-500">
               Not a member?
               {{ ' ' }}
-              <NuxtLink to="/register" class="font-semibold text-indigo-600 hover:text-indigo-500">Create a account.</NuxtLink>
+              <NuxtLink to="/authentication/register" class="font-semibold text-indigo-600 hover:text-indigo-500">Create a account.</NuxtLink>
             </p>
           </div>
   
           <div class="mt-10">
             <div>
-              <form action="#" method="POST" class="space-y-6">
+              <form @submit.prevent="submitForm" method="POST" class="space-y-6">
                 <div>
                   <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                   <div class="mt-2">
-                    <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <input id="email" v-model="formData.email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
   
                 <div>
                   <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                   <div class="mt-2">
-                    <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <input id="password" v-model="formData.password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
   
