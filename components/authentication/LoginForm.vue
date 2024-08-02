@@ -2,19 +2,34 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+//Define the type of the response data
+type ResponseData = {
+  data: {
+    access_token: string;
+  };
+};
+
+//Initialize the router
 const router = useRouter();
 
+//Ref for the form data
 const formData = ref({
   email: '',
   password: '',
 });
 
-type ResponseData = {
-  data: {
-  access_token: string;
-  };
-};
+//Ref for the form response
+const formResponse = ref({
+  show: false,
+  type: '',
+  header: '',
+  message: '',
+});
 
+//Ref for the alert key
+const alertKey = ref(0)
+
+//Function to submit the form
 const submitForm = async () => {
   const myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -22,8 +37,6 @@ const submitForm = async () => {
   const formdata = new FormData();
   formdata.append("email", formData.value.email);
   formdata.append("password", formData.value.password);
-
-  console.log(formData.value);
 
   try {
     const responseData = await $fetch<ResponseData>('http://conkard-api-dev.byandev.com/api/v1/auth/login', {
@@ -36,22 +49,41 @@ const submitForm = async () => {
       redirect: 'follow'
     });
 
-    // console.log(responseData.value?.data.access_token);
-
     if (responseData && responseData.data.access_token) {
-      localStorage.setItem('access_token', responseData.data.access_token);
-      router.push({ path: "/dashboard" });
-      // console.log('success');
+      formResponse.value.show = true;
+      formResponse.value.header = 'Success';
+      formResponse.value.type = 'success';
+      formResponse.value.message = 'Successfully logged in';
+      alertKey.value++; //Used to update the key of the component to force a re-render
+
+      //Add delay before redirecting to the dashboard page to show the alert
+      setTimeout(() => {
+        router.push({ path: "/dashboard" }); //Redirect to the dashboard page
+      }, 1000);
+
     } else {
       console.log('error');
     }
-  } catch (error) {
-    console.error('Error:', error);
+  } catch (error: any) {
+    formResponse.value.show = true;
+    formResponse.value.header = 'Error';
+    formResponse.value.type = 'error';
+    formResponse.value.message = error?.response?._data.message;
+    alertKey.value++; //Used to update the key of the component to force a re-render
+
+    //Hide the alert after 7 second
+    setTimeout(() => {
+        formResponse.value.show = false; //Hide the alert
+      }, 7000);
   }
 };
 </script>
 
 <template>
+    <!-- The form component -->
+    <SimpleAlert v-if="formResponse.show" :type="formResponse.type" :key="alertKey" :header=formResponse.header :message=formResponse.message :show=formResponse.show class="z-50" />
+    
+    <!-- The form component -->
     <div class="flex min-h-full flex-1">
       <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div class="mx-auto w-full max-w-sm lg:w-96">
@@ -135,4 +167,5 @@ const submitForm = async () => {
         <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="" />
       </div>
     </div>
+    
   </template>
