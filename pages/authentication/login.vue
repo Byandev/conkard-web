@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
   auth: {
-    unauthenticatedOnly: false,
+    unauthenticatedOnly: true,
     navigateAuthenticatedTo: '/',
   },
 });
