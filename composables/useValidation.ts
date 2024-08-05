@@ -26,7 +26,7 @@ export function useValidation() {
     name: { required },
     email: { required, email },
     password: { required, minLength: minLength(6) },
-    password_confirmation: { required, sameAsPassword: sameAs(() => formRegister.value.password) },
+    password_confirmation: { required, sameAsPassword: sameAs(() => RegisterForm.value.password) },
   };
   
   const v$Login = useVuelidate(LoginRules, LoginForm);
