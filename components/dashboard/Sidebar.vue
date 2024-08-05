@@ -51,18 +51,6 @@ const isActiveRoute = (href: string) => {
     return route.path === href
 }
 
-type ResponseData = {
-    data: {
-        access_token: string;
-    };
-};
-
-//ref for the form data
-const formData = ref({
-    email: '',
-    password: '',
-});
-
 const sidebarOpen = ref(false)
 </script>
 
