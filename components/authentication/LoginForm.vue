@@ -1,30 +1,30 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-import type {ApiErrorResponse} from "~/types/api/response/error";
-import {useSubmit} from "~/composables/useSubmit";
-import type {AuthenticationResponse} from "~/types/api/response/auth";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import type { ApiErrorResponse } from "~/types/api/response/error";
+import { useSubmit } from "~/composables/useSubmit";
+import type { AuthenticationResponse } from "~/types/api/response/auth";
 
+import { useValidation } from '~/composables/useValidation';
+import ErrorMessage from '../common/ErrorMessage.vue';
 
 const router = useRouter();
-const {sendRequest: signIn} = useSubmit<AuthenticationResponse, ApiErrorResponse>()
+const { sendRequest: signIn } = useSubmit<AuthenticationResponse, ApiErrorResponse>()
+const { LoginForm, v$Login } = useValidation();
 
-const {getSession, data} = useAuth()
-const {setToken} = useAuthState();
-
-const form = ref({
-  email: '',
-  password: '',
-});
-
+const { getSession, data } = useAuth()
+const { setToken } = useAuthState();
 
 const submitForm = async () => {
+  v$Login.value.$touch();
+  if (v$Login.value.$invalid) return;
+
   try {
     const response = await signIn('/v1/auth/login', {
       method: 'POST',
       body: {
-        email: form.value.email,
-        password: form.value.password,
+        email: LoginForm.value.email,
+        password: LoginForm.value.password,
       },
     });
 
@@ -46,7 +46,7 @@ const submitForm = async () => {
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <img alt="Your Company" class="h-10 w-auto"
-               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"/>
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" />
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Not a member?
@@ -63,28 +63,31 @@ const submitForm = async () => {
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
                 <div class="mt-2">
-                  <input id="email" v-model="form.email" autocomplete="email"
-                         class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                         required
-                         type="email"/>
+                  <input id="email" v-model="LoginForm.email" autocomplete="email"
+                    :class="{ 'ring-red-300': v$Login.email.$error, 'ring-gray-300': !v$Login.email.$error }"
+                    class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    type="email" />
+                  <span class="text-red-900 text-sm" v-if="v$Login.email.$error">{{ v$Login.email.$errors[0].$message
+                    }}</span>
                 </div>
               </div>
 
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
                 <div class="mt-2">
-                  <input id="password" v-model="form.password" autocomplete="current-password"
-                         class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                         required
-                         type="password"/>
+                  <input id="password" v-model="LoginForm.password" autocomplete="current-password"
+                    :class="{ 'ring-red-300': v$Login.password.$error, 'ring-gray-300': !v$Login.password.$error }"
+                    class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    type="password" />
+                  <span class="text-red-900 text-sm" v-if="v$Login.password.$error">{{
+                    v$Login.password.$errors[0].$message }}</span>
                 </div>
               </div>
 
               <div class="flex items-center justify-between">
                 <div class="flex items-center">
                   <input id="remember-me" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                         name="remember-me"
-                         type="checkbox"/>
+                    name="remember-me" type="checkbox" />
                   <label class="ml-3 block text-sm leading-6 text-gray-700" for="remember-me">Remember me</label>
                 </div>
 
@@ -95,8 +98,8 @@ const submitForm = async () => {
 
               <div>
                 <button
-                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    type="submit">
+                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  type="submit">
                   Sign in
                 </button>
               </div>
@@ -136,9 +139,8 @@ const submitForm = async () => {
       </div>
     </div>
     <div class="relative hidden w-0 flex-1 lg:block">
-      <img alt=""
-           class="absolute inset-0 h-full w-full object-cover"
-           src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"/>
+      <img alt="" class="absolute inset-0 h-full w-full object-cover"
+        src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" />
     </div>
   </div>
 

@@ -9,23 +9,20 @@ const {getSession} = useAuth()
 const {setToken} = useAuthState()
 
 const {sendRequest: signUp} = useSubmit<AuthenticationResponse, ApiErrorResponse>()
-
-const form = ref({
-  name: '',
-  email: '',
-  password: '',
-  password_confirmation: '',
-});
+const { RegisterForm, v$Register } = useValidation();
 
 const submitForm = async () => {
+  v$Register.value.$touch();
+  if (v$Register.value.$invalid) return;
+
   try {
     const response = await signUp('/v1/auth/register', {
       method: 'POST',
       body: {
-        name: form.value.name,
-        email: form.value.email,
-        password: form.value.password,
-        password_confirmation: form.value.password_confirmation,
+        name: RegisterForm.value.name,
+        email: RegisterForm.value.email,
+        password: RegisterForm.value.password,
+        password_confirmation: RegisterForm.value.password_confirmation,
       },
     });
 
@@ -65,10 +62,11 @@ const submitForm = async () => {
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="name">Name</label>
                 <div class="mt-2">
                   <input
-                      id="name" v-model="form.name"
-                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      required
+                      id="name" v-model="RegisterForm.name"
+                      :class="{ 'ring-red-300': v$Register.name.$error, 'ring-gray-300': !v$Register.name.$error }"
+                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       type="text">
+                      <span class="text-red-900 text-sm" v-if="v$Register.name.$error">{{ v$Register.name.$errors[0].$message }}</span> 
                 </div>
               </div>
 
@@ -76,10 +74,11 @@ const submitForm = async () => {
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
                 <div class="mt-2">
                   <input
-                      id="email" v-model="form.email" autocomplete="email"
-                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      required
+                      id="email" v-model="RegisterForm.email" autocomplete="email"
+                      :class="{ 'ring-red-300': v$Register.email.$error, 'ring-gray-300': !v$Register.email.$error }"
+                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       type="email">
+                      <span class="text-red-900 text-sm" v-if="v$Register.email.$error">{{ v$Register.email.$errors[0].$message }}</span> 
                 </div>
               </div>
 
@@ -87,10 +86,11 @@ const submitForm = async () => {
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
                 <div class="mt-2">
                   <input
-                      id="password" v-model="form.password" autocomplete="current-password"
-                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      required
+                      id="password" v-model="RegisterForm.password" autocomplete="current-password"
+                      :class="{ 'ring-red-300': v$Register.password.$error, 'ring-gray-300': !v$Register.password.$error }"
+                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       type="password">
+                      <span class="text-red-900 text-sm" v-if="v$Register.password.$error">{{ v$Register.password.$errors[0].$message }}</span> 
                 </div>
               </div>
 
@@ -99,10 +99,11 @@ const submitForm = async () => {
                   Confimation</label>
                 <div class="mt-2">
                   <input
-                      id="password_confimation" v-model="form.password_confirmation"
-                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      required
+                      id="password_confimation" v-model="RegisterForm.password_confirmation"
+                      :class="{ 'ring-red-300': v$Register.password_confirmation.$error, 'ring-gray-300': !v$Register.password_confirmation.$error }"
+                      class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       type="password">
+                      <span class="text-red-900 text-sm" v-if="v$Register.password_confirmation.$error">{{ v$Register.password_confirmation.$errors[0].$message }}</span> 
                 </div>
               </div>
               <div>
