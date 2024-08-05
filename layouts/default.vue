@@ -3,7 +3,7 @@
 <template>
   <div class="app h-screen">
     <NuxtLoadingIndicator :throttle=0 />
-    <slot></slot>
+    <slot/>
     
   </div>
 </template>
