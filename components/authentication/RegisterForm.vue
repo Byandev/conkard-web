@@ -12,6 +12,8 @@ const {sendRequest: signUp} = useSubmit<AuthenticationResponse, ApiErrorResponse
 const { RegisterForm, v$Register } = useValidation();
 
 const submitForm = async () => {
+  console.log(RegisterForm.value)
+
   v$Register.value.$touch();
   if (v$Register.value.$invalid) return;
 
