@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
 import {useSubmit} from "~/composables/useSubmit";
-import type {User} from "~/types/models/User";
+import type {AuthenticationResponse} from "~/types/api/response/auth";
+import type {ApiErrorResponse} from "~/types/api/response/error";
 
 const router = useRouter();
 const {getSession} = useAuth()
 const {setToken} = useAuthState()
-const {error, sendRequest, data: response} = useSubmit<{ data: { access_token: string, user: User } }>()
+
+const {sendRequest: signUp} = useSubmit<AuthenticationResponse, ApiErrorResponse>()
 
 const form = ref({
   name: '',
@@ -15,23 +17,26 @@ const form = ref({
   password_confirmation: '',
 });
 
-
 const submitForm = async () => {
-  await sendRequest('/v1/auth/register', {
-    method: 'POST',
-    body: {
-      name: form.value.name,
-      email: form.value.email,
-      password: form.value.password,
-      password_confirmation: form.value.password_confirmation,
-    },
-  });
+  try {
+    const response = await signUp('/v1/auth/register', {
+      method: 'POST',
+      body: {
+        name: form.value.name,
+        email: form.value.email,
+        password: form.value.password,
+        password_confirmation: form.value.password_confirmation,
+      },
+    });
 
-  setToken(response.value?.data?.access_token as string)
+    setToken(response?.data?.access_token as string)
 
-  await getSession()
+    await getSession()
 
-  await router.push("/dashboard")
+    await router.push("/dashboard")
+  } catch (error) {
+    console.log(error as ApiErrorResponse)
+  }
 };
 </script>
 

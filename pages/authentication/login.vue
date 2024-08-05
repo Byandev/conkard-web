@@ -1,9 +1,14 @@
-<script setup lang="ts"></script>
+<script lang="ts" setup>
+definePageMeta({
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: '/',
+  },
+});
+</script>
 
 <template>
   <div class="h-full">
-    <LoginForm />
+    <LoginForm/>
   </div>
 </template>
-
-<style scoped="true"></style>

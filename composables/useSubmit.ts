@@ -1,9 +1,7 @@
 import type {NitroFetchOptions, NitroFetchRequest} from 'nitropack';
 
-export function useSubmit<ResponseType, ErrorType =  unknown>() {
+export function useSubmit<ResponseType, ErrorType = unknown>() {
     const pending = ref(false);
-    const data = ref<ResponseType>();
-    const error = ref<ErrorType>();
     const {$api} = useNuxtApp();
 
     async function sendRequest(
@@ -11,12 +9,10 @@ export function useSubmit<ResponseType, ErrorType =  unknown>() {
         opts?: NitroFetchOptions<NitroFetchRequest, 'patch' | 'post' | 'put' | 'delete'> | undefined
     ) {
         try {
-            error.value = undefined;
             pending.value = true;
-            const response = await $api<ResponseType>(request, opts);
-            data.value = response as ResponseType;
+            return await $api<ResponseType>(request, opts)
         } catch (e) {
-            error.value = e as ErrorType;
+            throw e as ErrorType
         } finally {
             pending.value = false;
         }
@@ -24,8 +20,6 @@ export function useSubmit<ResponseType, ErrorType =  unknown>() {
 
     return {
         pending,
-        data,
-        error,
         sendRequest,
     };
 }
