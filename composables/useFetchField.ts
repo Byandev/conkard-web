@@ -1,14 +1,18 @@
 import { ref, onMounted } from "vue";
-import type { Card } from "~/types/models/Card"; // Adjust the import path as necessary
+import type { Card } from "~/types/models/Card";
 
-export function useFetchCards() {
+export function useFetchFields() {
   const cards = ref<Card[]>([]);
   const { $api } = useNuxtApp();
+  const { fetchCards } = useCurrentCard();
 
   const fetchData = async () => {
     try {
       const response: { data: Card[] } = await $api("v1/cards");
       cards.value = response.data;
+      if (cards.value.length > 0) {
+        await fetchCards(cards.value[0].id.toString());
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }

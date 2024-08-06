@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { EnvelopeIcon } from '@heroicons/vue/24/solid';
-import type { Field } from '~/types/models/Card';
-import { computed } from 'vue';
+// import type { Field } from '~/types/models/Card';
+// import { computed } from 'vue';
 
-const props = defineProps<{
-    currentCard: Field[] | null;
-}>();
+// const props = defineProps<{
+//     currentCard: Field[] | null;
+// }>();
 
-// Sort the cards by its order
-const sortedCards = computed(() => {
-    if (!props.currentCard) return [];
-    return [...props.currentCard].sort((a, b) => (a.type.order || 0) - (b.type.order || 0));
-});
+// // Sort the cards by its order
+// const sortedCards = computed(() => {
+//     if (!props.currentCard) return [];
+//     return [...props.currentCard].sort((a, b) => (a.type.order || 0) - (b.type.order || 0));
+// });
 </script>
 
 <template>
@@ -29,18 +29,17 @@ const sortedCards = computed(() => {
             </div>
             <div class="px-5 md:px-10 pb-7">
                 <div class="text-2xl md:text-3xl my-7 font-semibold">
-                    <div class="whitespace-nowrap">{{ sortedCards[0] ? sortedCards[0].value : 'No Name' }}</div>
+                    <div class="whitespace-nowrap">Name</div>
                 </div>
-                <div v-if="sortedCards.length > 1" class="flex gap-5 flex-col">
-                    <div v-for="(item, index) in sortedCards.slice(1)" :key="index"
-                        class="flex flex-row items-center gap-5">
+                <div class="flex gap-5 flex-col">
+                    <div class="flex flex-row items-center gap-5">
                         <div class="bg-gray-500 rounded-full p-2 inline-flex items-center justify-center">
                             <EnvelopeIcon class="text-white h-6 w-6" />
                         </div>
                         <div>
                             <div class="text-sm md:text-base">
                                 <div>
-                                    {{ item.value }}
+                                    field
                                 </div>
                             </div>
                         </div>
