@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { ApiErrorResponse } from "~/types/api/response/error";
 import { useSubmit } from "~/composables/useSubmit";
@@ -27,14 +26,13 @@ const submitForm = async () => {
       },
     });
 
-    console.log(response?.data?.access_token as string)
     setToken(response?.data?.access_token as string)
 
     await getSession()
 
     await router.push("/dashboard/cards/personal")
   } catch (error) {
-    console.log(error as ApiErrorResponse)
+    console.error(error as ApiErrorResponse)
   }
 };
 </script>
