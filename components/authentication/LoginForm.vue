@@ -6,7 +6,6 @@ import { useSubmit } from "~/composables/useSubmit";
 import type { AuthenticationResponse } from "~/types/api/response/auth";
 
 import { useValidation } from '~/composables/useValidation';
-import ErrorMessage from '../common/ErrorMessage.vue';
 
 const router = useRouter();
 const { sendRequest: signIn } = useSubmit<AuthenticationResponse, ApiErrorResponse>()
@@ -28,11 +27,12 @@ const submitForm = async () => {
       },
     });
 
+    console.log(response?.data?.access_token as string)
     setToken(response?.data?.access_token as string)
 
     await getSession()
 
-    await router.push("/dashboard/card-page")
+    await router.push("/dashboard/cards/personal")
   } catch (error) {
     console.log(error as ApiErrorResponse)
   }

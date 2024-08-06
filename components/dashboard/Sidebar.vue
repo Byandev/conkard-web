@@ -27,7 +27,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { authStore } from '~/store/auth';
 
 const navigation = [
-    { name: 'Cards', href: '/dashboard/cards-page', icon: IdentificationIcon },
+    { name: 'Cards', href: '/dashboard/cards/personal', icon: IdentificationIcon },
     { name: 'Email Signature', href: '#', icon: EnvelopeIcon },
     { name: 'Virtual Backgrounds', href: '#', icon: PhotoIcon },
     { name: 'Accessories', href: '#', icon: ShoppingBagIcon },
