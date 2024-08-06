@@ -8,7 +8,8 @@ export default defineNuxtPlugin(() => {
             Accept: 'application/json',
         },
         onRequest({options}) {
-            const accessToken = useCookie(useRuntimeConfig().public.auth?.provider?.token?.cookieName || 'accessToken');
+            const accessToken = useCookie('auth:token');
+
             if (accessToken.value) {
                 options.headers = new Headers(options.headers || {});
                 options.headers.set('Authorization', `Bearer ${accessToken.value}`);
