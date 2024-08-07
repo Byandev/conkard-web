@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h2 class="text-xl font-medium leading-6 text-gray-900 mb-8">Choose a Theme</h2>
-        <div class="grid grid-cols-12 gap-2">
+        <h2 class="text-xl font-medium leading-6 text-gray-900">Choose a Theme</h2>
+        <div class="grid grid-cols-12 gap-1">
             <div v-for="theme in themes" :key="theme.id"
-                :class="['w-8 h-8 cursor-pointer rounded-lg', { 'ring-2 ring-offset-2 ring-blue-500': theme.id === selectedThemeId }]"
+                :class="['mt-5 w-6 h-6 cursor-pointer rounded-lg', { 'ring-2 ring-offset-2 ring-blue-500': theme.id === selectedThemeId }]"
                 :style="{ backgroundColor: theme.color }" @click="selectTheme(theme)">
             </div>
         </div>
@@ -26,10 +26,6 @@ const themes = ref([
     { id: 10, name: 'Theme 10', color: '#FF33A1' },
     { id: 11, name: 'Theme 11', color: '#FFB533' },
     { id: 12, name: 'Theme 12', color: '#33FFB5' },
-    { id: 13, name: 'Theme 13', color: '#B533FF' },
-    { id: 14, name: 'Theme 14', color: '#FF33B5' },
-    { id: 15, name: 'Theme 15', color: '#33B5FF' },
-    // Add more themes as needed
 ]);
 const selectedThemeId = ref<number | null>(null);
 

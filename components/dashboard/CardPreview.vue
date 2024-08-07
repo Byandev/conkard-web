@@ -17,7 +17,7 @@ import { EnvelopeIcon } from '@heroicons/vue/24/solid';
 <template>
     <div class="grid grid-cols-1 gap-4">
         <div
-            class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:w-[440px] shadow drop-shadow-xl">
+            class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:max-w-[440px] shadow drop-shadow-xl">
             <div class="px-4 py-5 sm:px-6 h-28 bg-orange-400 flex items-center justify-center">
                 <svg class="h-12 w-12 text-white"
                     xmlns="http://conkard-api-dev.byandev.com/storage/images/icons/name.svg" viewBox="0 0 20 20"

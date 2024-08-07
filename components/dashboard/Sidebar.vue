@@ -22,6 +22,7 @@ import {
     ShareIcon,
     ShoppingBagIcon,
     XMarkIcon,
+    Cog8ToothIcon
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { authStore } from '~/store/auth';
@@ -45,7 +46,10 @@ const userNavigation = [
 
 const route = useRoute()
 
-const {user} = authStore()
+const isDashboardCardsNew = computed(() => route.path === '/dashboard/cards/new');
+const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/cards/personal');
+
+const { user } = authStore()
 
 const isActiveRoute = (href: string) => {
     return route.path === href
@@ -156,7 +160,8 @@ const sidebarOpen = ref(false)
                             <img class="h-8 w-8 rounded-full bg-gray-50"
                                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                 alt="" />
-                            <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{ user.name }}</span>
+                            <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{
+                                user.name }}</span>
                         </div>
                         <span class="hidden lg:flex lg:items-between">
                             <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -177,7 +182,8 @@ const sidebarOpen = ref(false)
                                     alt="" />
 
                                 <div class="flex items-start flex-col">
-                                    <span class="text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{ user.name }}</span>
+                                    <span class="text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{
+                                        user.name }}</span>
                                     <div>
                                         <span class="text-xs font-semibold leading-6 text-gray-500"
                                             aria-hidden="true">Free Plan</span>
@@ -259,12 +265,28 @@ const sidebarOpen = ref(false)
                 <!-- Separator -->
                 <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
-                <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2 justify-between">
+                <!-- Home Dashboard Option -->
+                <div v-if="isDashboardCardsPersonal"
+                    class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2 justify-between">
                     <div class="flex flex-row gap-x-4 self-stretch lg:gap-x-6">
                         <ButtonIcon :icon="PencilSquareIcon" text="Edit" background="gray" foreground="white" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
                     <ButtonIcon :icon="ShareIcon" text="Share card" background="gray" foreground="white" />
+                </div>
+
+                <!-- New Card Options -->
+                <div v-if="isDashboardCardsNew"
+                    class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2 justify-between">
+                    <div class="flex flex-row gap-x-4 self-stretch lg:gap-x-6">
+                        <ButtonIcon :icon="Cog8ToothIcon" text="Settings" background="white" foreground="gray" />
+                        <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
+                    </div>
+                    <div class="flex flex-row gap-x-4">
+                        <Button text="Cancel" background="white" foreground="gray" />
+                        <ButtonIconIconify icon="material-symbols:save-outline" text="Create" background="gray"
+                            foreground="white" />
+                    </div>
                 </div>
             </div>
 
