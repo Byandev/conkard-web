@@ -1,12 +1,14 @@
 <script setup lang="ts">
-
+defineProps<{
+    color: string;
+}>();
 </script>
 
 <template>
     <div class="grid grid-cols-1 gap-4">
         <div
             class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:max-w-[440px] shadow drop-shadow-xl">
-            <div class="px-4 py-5 sm:px-6 h-28 bg-orange-400 flex items-center justify-center">
+            <div class="px-4 py-5 sm:px-6 h-28 flex items-center justify-center" :style="{ backgroundColor: color }">
                 <svg class="h-12 w-12 text-white"
                     xmlns="http://conkard-api-dev.byandev.com/storage/images/icons/name.svg" viewBox="0 0 20 20"
                     fill="currentColor">
@@ -16,7 +18,7 @@
                 </svg>
             </div>
             <div class="px-5 md:px-10 pb-7">
-                <section class=" hover:cursor-pointer w-full my-7 flex flex-row items-center justify-between group">
+                <section class="hover:cursor-pointer w-full my-7 flex flex-row items-center justify-between group">
                     <h1 class="text-3xl font-bold text-gray-300">Name</h1>
                     <Icon name="lucide:edit"
                         class="text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

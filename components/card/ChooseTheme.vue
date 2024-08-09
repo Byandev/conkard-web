@@ -34,10 +34,12 @@ const themes = ref<Theme[]>([
     { id: 12, name: 'Theme 12', color: '#33FFB5' },
 ]);
 
-const selectedThemeId = ref<number | null>(null);
+const selectedThemeId = ref<number | null>(1);
 
 const selectTheme = (theme: Theme) => {
     selectedThemeId.value = theme.id;
-    console.log('Selected theme:', theme);
+    emit('update:theme', theme.color);
 };
+
+const emit = defineEmits(['update:theme']);
 </script>

@@ -7,6 +7,8 @@ definePageMeta({
 
 var isModalOpen = ref(false)
 var ModalTitle = ref('Name')
+
+var previewColor = ref('#FF5733')
 </script>
 
 <template>
@@ -15,7 +17,7 @@ var ModalTitle = ref('Name')
     <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:p-10">
       <div class="flex flex-col gap-7 w-full md:w-1/3">
         <section class="grid grid-cols-1 gap-4">
-          <CardPreview @click="isModalOpen = true" />
+          <CardPreview :color="previewColor" @click="isModalOpen = true" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
             <ModalContent :ModalTitle="ModalTitle" />
           </AddModal>
@@ -29,7 +31,7 @@ var ModalTitle = ref('Name')
           <AddImages />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
-          <ChooseTheme />
+          <ChooseTheme @update:theme="previewColor = $event" />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <AddDetails @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />

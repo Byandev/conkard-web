@@ -23,7 +23,6 @@
         <AddSocials :buttonText="['Subscribe to my channel on YouTube']" v-else-if="ModalTitle == 'YouTube'" />
         <AddSocials :buttonText="['Add me on SnapChat', 'Send me a snap']" v-else-if="ModalTitle == 'SnapChat'" />
         <AddSocials :buttonText="['Follow me on TikTok']" v-else-if="ModalTitle == 'TikTok'" />
-        <AddSocials :buttonText="['Follow me on TikTok']" v-else-if="ModalTitle == 'TikTok'" />
         <AddSocials :buttonText="['Follow me on Twitch']" v-else-if="ModalTitle == 'Twitch'" />
         <AddYelp :buttonText="['View our business on Yelp']" v-else-if="ModalTitle == 'Yelp'" />
         <AddWhatsApp v-else-if="ModalTitle == 'WhatsApp'" />
@@ -35,7 +34,7 @@
         <AddSocials :buttonText="['View my work on GitHub', 'View our GitHub repo']"
             v-else-if="ModalTitle == 'GitHub'" />
         <AddSocials :buttonText="['Book a session with me', 'Book a meeting with me']"
-            v-else-if="ModalTitle == 'Calendly  '" />
+            v-else-if="ModalTitle == 'Calendly'" />
         <AddSocials :buttonText="['Pay via PayPal']" v-else-if="ModalTitle == 'PayPal'" />
         <AddSocials :buttonText="['Pay via Venmo ']" v-else-if="ModalTitle == 'Venmo'" />
         <AddSocials :buttonText="['Pay via Cash App ']" v-else-if="ModalTitle == 'Cash App'" />
