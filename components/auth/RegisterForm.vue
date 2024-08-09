@@ -10,7 +10,14 @@ const { setToken } = useAuthState()
 
 const { sendRequest: signUp } = useSubmit<AuthenticationResponse, ApiErrorResponse>()
 
-const RegisterForm = ref({
+interface RegisterForm {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
+
+const RegisterForm = ref<RegisterForm>({
   name: '',
   email: '',
   password: '',

@@ -27,35 +27,46 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { authStore } from '~/store/auth';
 
-const navigation = [
+interface NavigationItem {
+    name: string;
+    href: string;
+    icon: any;
+}
+
+interface UserNavigationItem {
+    name: string;
+    href: string;
+}
+
+const navigation: NavigationItem[] = [
     { name: 'Cards', href: '/dashboard/cards/personal', icon: IdentificationIcon },
     { name: 'Email Signature', href: '#', icon: EnvelopeIcon },
     { name: 'Virtual Backgrounds', href: '#', icon: PhotoIcon },
     { name: 'Accessories', href: '#', icon: ShoppingBagIcon },
-]
+];
 
-const lowerNavigation = [
+const lowerNavigation: NavigationItem[] = [
     { name: 'Contacts', href: '#', icon: ChatBubbleBottomCenterIcon },
-]
+];
 
-const userNavigation = [
+const userNavigation: UserNavigationItem[] = [
     { name: 'Upgrade Conkard plan', href: '#' },
     { name: 'Account', href: '#' },
     { name: 'Log out', href: '#' },
-]
+];
 
-const route = useRoute()
+const route = useRoute();
 
 const isDashboardCardsNew = computed(() => route.path === '/dashboard/cards/new');
 const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/cards/personal');
 
-const { user } = authStore()
+const { user } = authStore();
 
 const isActiveRoute = (href: string) => {
-    return route.path === href
-}
+    return route.path === href;
+};
 
-const sidebarOpen = ref(false)
+const sidebarOpen = ref(false);
 </script>
 
 <template>

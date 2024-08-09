@@ -13,7 +13,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const themes = ref([
+interface Theme {
+    id: number;
+    name: string;
+    color: string;
+}
+
+const themes = ref<Theme[]>([
     { id: 1, name: 'Theme 1', color: '#FF5733' },
     { id: 2, name: 'Theme 2', color: '#33FF57' },
     { id: 3, name: 'Theme 3', color: '#3357FF' },
@@ -27,9 +33,10 @@ const themes = ref([
     { id: 11, name: 'Theme 11', color: '#FFB533' },
     { id: 12, name: 'Theme 12', color: '#33FFB5' },
 ]);
+
 const selectedThemeId = ref<number | null>(null);
 
-const selectTheme = (theme: { id: number, name: string, color: string }) => {
+const selectTheme = (theme: Theme) => {
     selectedThemeId.value = theme.id;
     console.log('Selected theme:', theme);
 };

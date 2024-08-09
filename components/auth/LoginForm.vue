@@ -9,7 +9,12 @@ import { useValidation } from '~/composables/useValidation';
 const router = useRouter();
 const { sendRequest: signIn } = useSubmit<AuthenticationResponse, ApiErrorResponse>()
 
-const LoginForm = ref({
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
+const LoginForm = ref<LoginForm>({
   email: '',
   password: '',
 });
@@ -21,9 +26,7 @@ const LoginRules = {
 
 const { formRef, v$ } = useValidation(LoginForm, LoginRules);
 
-
-
-const { getSession, data } = useAuth()
+const { getSession } = useAuth()
 const { setToken } = useAuthState();
 
 const submitForm = async () => {

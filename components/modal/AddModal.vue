@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
+var openState = ref(false)
+
+onMounted(() => {
+    openState.value = props.open
+})
+
+var props = defineProps<{
+    open: boolean;
+}>()
+
+const emit = defineEmits(['update:open'])
+
+const closeModal = () => {
+    openState.value = false
+    emit('update:open', false)
+}
+</script>
+
 <template>
     <TransitionRoot as="template" :show="open">
         <Dialog class="relative z-50" @close="openState = false">
@@ -36,25 +58,3 @@
         </Dialog>
     </TransitionRoot>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
-
-var openState = ref(false)
-
-onMounted(() => {
-    openState.value = props.open
-})
-
-var props = defineProps<{
-    open: boolean;
-}>()
-
-const emit = defineEmits(['update:open'])
-
-const closeModal = () => {
-    openState.value = false
-    emit('update:open', false)
-}
-</script>
