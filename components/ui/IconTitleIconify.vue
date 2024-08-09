@@ -14,8 +14,8 @@ const props = defineProps<{
             `text-${props.foreground}-900`,
             `group-hover:text-${props.foreground}`,
             'text-center',
-            'h-12',
-            'w-12',
+            'h-8',
+            'w-8',
             'shrink-0',
             'mb-2'
         ]" aria-hidden="true" />
