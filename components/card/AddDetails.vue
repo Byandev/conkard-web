@@ -4,7 +4,7 @@ import { UserIcon, BriefcaseIcon, UserGroupIcon, BuildingOffice2Icon, ShieldChec
 </script>
 
 <template>
-    <CardLabel forId="add-details" text="Add your details" />
+    <CardTitle forId="add-details" text="Add your details" />
     <div class="mt-5">
         <CardSubtitle forId="add-details" text="Personal" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">

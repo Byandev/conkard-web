@@ -3,19 +3,32 @@ import { useRouter } from 'vue-router';
 import type { ApiErrorResponse } from "~/types/api/response/error";
 import { useSubmit } from "~/composables/useSubmit";
 import type { AuthenticationResponse } from "~/types/api/response/auth";
-
+import { required, email } from '@vuelidate/validators';
 import { useValidation } from '~/composables/useValidation';
 
 const router = useRouter();
 const { sendRequest: signIn } = useSubmit<AuthenticationResponse, ApiErrorResponse>()
-const { LoginForm, v$Login } = useValidation();
+
+const LoginForm = ref({
+  email: '',
+  password: '',
+});
+
+const LoginRules = {
+  email: { required, email },
+  password: { required },
+};
+
+const { formRef, v$ } = useValidation(LoginForm, LoginRules);
+
+
 
 const { getSession, data } = useAuth()
 const { setToken } = useAuthState();
 
 const submitForm = async () => {
-  v$Login.value.$touch();
-  if (v$Login.value.$invalid) return;
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
 
   try {
     const response = await signIn('/v1/auth/login', {
@@ -61,11 +74,11 @@ const submitForm = async () => {
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
                 <div class="mt-2">
-                  <input id="email" v-model="LoginForm.email" autocomplete="email"
-                    :class="{ 'ring-red-300': v$Login.email.$error, 'ring-gray-300': !v$Login.email.$error }"
+                  <input id="email" v-model="formRef.email" autocomplete="email"
+                    :class="{ 'ring-red-300': v$.email.$error, 'ring-gray-300': !v$.email.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="email" />
-                  <span class="text-red-900 text-sm" v-if="v$Login.email.$error">{{ v$Login.email.$errors[0].$message
+                  <span class="text-red-900 text-sm" v-if="v$.email.$error">{{ v$.email.$errors[0].$message
                     }}</span>
                 </div>
               </div>
@@ -73,12 +86,12 @@ const submitForm = async () => {
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
                 <div class="mt-2">
-                  <input id="password" v-model="LoginForm.password" autocomplete="current-password"
-                    :class="{ 'ring-red-300': v$Login.password.$error, 'ring-gray-300': !v$Login.password.$error }"
+                  <input id="password" v-model="formRef.password" autocomplete="current-password"
+                    :class="{ 'ring-red-300': v$.password.$error, 'ring-gray-300': !v$.password.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="password" />
-                  <span class="text-red-900 text-sm" v-if="v$Login.password.$error">{{
-                    v$Login.password.$errors[0].$message }}</span>
+                  <span class="text-red-900 text-sm" v-if="v$.password.$error">{{
+                    v$.password.$errors[0].$message }}</span>
                 </div>
               </div>
 

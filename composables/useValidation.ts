@@ -1,36 +1,9 @@
-import { useVuelidate } from '@vuelidate/core';
-import { required, email, minLength, sameAs } from '@vuelidate/validators';
-import { ref } from 'vue';
-// import { email as customEmail } from '~/validation/rules/email';
-// import { password as customPassword } from '~/validation/rules/password';
+import { useVuelidate } from "@vuelidate/core";
+import { ref } from "vue";
 
-export function useValidation() {
-  const LoginForm = ref({
-    email: '',
-    password: '',
-  });
+export function useValidation(formValues: any, validationRules: any) {
+  const formRef = ref(formValues);
+  const v$ = useVuelidate(validationRules, formRef);
 
-  const RegisterForm = ref({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-  });
-
-  const LoginRules = {
-    email: { required, email },
-    password: { required },
-  };
-
-  const RegisterRules = {
-    name: { required },
-    email: { required, email },
-    password: { required, minLength: minLength(6) },
-    password_confirmation: { required, sameAsRef: sameAs(computed(() => RegisterForm.value.password)) },
-  };
-  
-  const v$Login = useVuelidate(LoginRules, LoginForm);
-  const v$Register = useVuelidate(RegisterRules, RegisterForm);
-
-  return { LoginForm, v$Login, RegisterForm, v$Register };
+  return { formRef, v$ };
 }

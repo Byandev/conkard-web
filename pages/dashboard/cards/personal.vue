@@ -20,11 +20,11 @@ const currentCard = computed(() => cardStore.currentCard);
 <template>
   <div class="h-full">
     <div class="flex flex-col md:flex-row h-full gap-3">
-      <div class="flex flex-col gap-7 w-full md:w-auto">
-        <div class="flex flex-row items-start justify-start md:justify-start gap-2 mt-10">
+      <section class="flex flex-col gap-7 w-full md:w-auto">
+        <section class="flex flex-row items-start justify-start md:justify-start gap-2 mt-10">
           <h1 class="text-3xl font-normal">Cards</h1>
-          <Dropdown />
-        </div>
+          <CardDropdown />
+        </section>
         <div class="flex flex-col gap-3 justify-start items-start">
           <div v-for="card in cards" :key="card.id"
             class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full md:w-auto">
@@ -32,13 +32,13 @@ const currentCard = computed(() => cardStore.currentCard);
             </h2>
           </div>
         </div>
-      </div>
+      </section>
       <div class="p-4 md:p-10 w-full">
-        <CardTabs />
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+        <Tabs />
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
           <DashboardCard v-if="currentCard.length > 0" :key="key" :currentCard="currentCard"
             class="m-6 w-full md:w-96" />
-        </div>
+        </section>
       </div>
     </div>
   </div>

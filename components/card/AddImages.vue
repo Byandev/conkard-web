@@ -6,7 +6,7 @@ import { PlusIcon } from '@heroicons/vue/24/outline';
 <template>
     <div>
         <div class="flex flex-row justify-between h-12 items-center">
-            <CardLabel forId="add-images" text="Add Images" />
+            <CardTitle forId="add-images" text="Add Images" />
             <Button text="Change Layout" background="white" foreground="black" />
         </div>
         <div class="mt-5 flex flex-row justify-between gap-5">
