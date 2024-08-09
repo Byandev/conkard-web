@@ -43,7 +43,7 @@ const submitForm = async () => {
 
     await getSession()
 
-    await router.push("/dashboard/cards/personal")
+    await router.push("/dashboard")
   } catch (error) {
     console.error(error as ApiErrorResponse)
   }
@@ -62,7 +62,7 @@ const submitForm = async () => {
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Not a member?
             {{ ' ' }}
-            <NuxtLink class="font-semibold text-indigo-600 hover:text-indigo-500" to="/authentication/register">Create a
+            <NuxtLink class="font-semibold text-indigo-600 hover:text-indigo-500" to="/register">Create a
               account.
             </NuxtLink>
           </p>

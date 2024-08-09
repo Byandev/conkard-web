@@ -71,7 +71,7 @@ const submitForm = async () => {
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Already a member?
             {{ ' ' }}
-            <NuxtLink class="font-semibold text-indigo-600 hover:text-indigo-500" to="/authentication/login">Login to
+            <NuxtLink class="font-semibold text-indigo-600 hover:text-indigo-500" to="/login">Login to
               your account.
             </NuxtLink>
           </p>

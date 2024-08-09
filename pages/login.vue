@@ -2,13 +2,13 @@
 definePageMeta({
   auth: {
     unauthenticatedOnly: true,
-    navigateAuthenticatedTo: '/',
+    navigateAuthenticatedTo: '/dashboard',
   },
 });
 </script>
 
 <template>
   <div class="h-full">
-    <LoginForm/>
+    <LoginForm />
   </div>
 </template>
