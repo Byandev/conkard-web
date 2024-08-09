@@ -10,7 +10,14 @@ const { setToken } = useAuthState()
 
 const { sendRequest: signUp } = useSubmit<AuthenticationResponse, ApiErrorResponse>()
 
-const RegisterForm = ref({
+interface Form {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
+
+const RegisterForm = ref<Form>({
   name: '',
   email: '',
   password: '',
@@ -27,7 +34,6 @@ const RegisterRules = {
 const { formRef, v$ } = useValidation(RegisterForm, RegisterRules);
 
 const submitForm = async () => {
-  console.log(RegisterForm.value)
 
   v$.value.$touch();
   if (v$.value.$invalid) return;
