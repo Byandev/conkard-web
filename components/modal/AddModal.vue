@@ -10,6 +10,7 @@ onMounted(() => {
 
 var props = defineProps<{
     open: boolean;
+    title: string;
 }>()
 
 const emit = defineEmits(['update:open'])
@@ -38,7 +39,7 @@ const closeModal = () => {
                         <DialogPanel
                             class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
                             <header class="bg-white text-gray-700 px-4 py-4 rounded-t-lg border-b-2 border-gray-200">
-                                <h2 class="text-lg font-semibold">Header Title</h2>
+                                <h2 class="text-lg font-semibold">{{ props.title }}</h2>
                             </header>
                             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 gap-5 flex flex-col">
                                 <slot></slot>

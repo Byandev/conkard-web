@@ -6,6 +6,7 @@ definePageMeta({
 })
 
 var isModalOpen = ref(false)
+var ModalTitle = ref('Name')
 </script>
 
 <template>
@@ -15,8 +16,8 @@ var isModalOpen = ref(false)
       <div class="flex flex-col gap-7 w-full md:w-1/3">
         <section class="grid grid-cols-1 gap-4">
           <CardPreview @click="isModalOpen = true" />
-          <AddModal :open="isModalOpen" @update:open="isModalOpen = $event">
-            <AddName />
+          <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
+            <ModalContent :ModalTitle="ModalTitle" />
           </AddModal>
         </section>
       </div>
@@ -31,7 +32,7 @@ var isModalOpen = ref(false)
           <ChooseTheme />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
-          <AddDetails />
+          <AddDetails @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
         </section>
       </div>
     </div>
