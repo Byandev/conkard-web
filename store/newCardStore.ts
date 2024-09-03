@@ -56,7 +56,6 @@ export const useNewCardStore = defineStore("newCard", () => {
   };
 
   const addOrUpdateEmailField = (value: CardFields["general"]["email"]) => {
-    console.log("Setting email:", value.id);
     const existingEmailIndex = fields.emailField.value.findIndex(
       (email) => email.id === value.id
     );

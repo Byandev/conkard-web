@@ -9,7 +9,6 @@ const isModalOpen = ref(false)
 const ModalTitle = ref('Name')
 const isEdit = ref(false)
 const currentId = ref(0);
-
 const previewColor = ref('#FF5733')
 </script>
 
