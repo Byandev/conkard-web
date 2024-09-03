@@ -5,10 +5,10 @@ definePageMeta({
   layout: 'dashboard-layout',
 })
 
-var isModalOpen = ref(false)
-var ModalTitle = ref('Name')
+const isModalOpen = ref(false)
+const ModalTitle = ref('Name')
 
-var previewColor = ref('#FF5733')
+const previewColor = ref('#FF5733')
 </script>
 
 <template>
@@ -17,9 +17,9 @@ var previewColor = ref('#FF5733')
     <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:p-10">
       <div class="flex flex-col gap-7 w-full md:w-1/3">
         <section class="grid grid-cols-1 gap-4">
-          <CardPreview :color="previewColor" @click="isModalOpen = true" />
+          <CardPreview @update:title="ModalTitle = $event" :color="previewColor" @update:open="isModalOpen = $event" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
-            <ModalContent :ModalTitle="ModalTitle" />
+            <ModalContent @update:open="isModalOpen = false" :modal-title="ModalTitle" />
           </AddModal>
         </section>
       </div>

@@ -2,16 +2,15 @@
 import { ref } from 'vue';
 import { useNewCardStore } from "~/store/newCardStore";
 
+const { addHeadlineField, headlineField } = useNewCardStore();
 
-const { addJobField, jobField } = useNewCardStore();
+let headline = ref(headlineField?.headline || '');
 
-let jobTitle = ref(jobField?.job_title || '');
-
-const saveJobFields = () => {
-    const jobFields = {
-        job_title: jobTitle.value,
+const saveHeadlineFields = () => {
+    const newHeadlineField = {
+        headline: headline.value,
     };
-    addJobField(jobFields);
+    addHeadlineField(newHeadlineField);
     closeModal();
 };
 
@@ -23,7 +22,7 @@ const closeModal = () => {
 </script>
 
 <template>
-    <FloatingLabelTextarea v-model="jobTitle" label="Job Title" input-name="job-title" placeholder="Job Title"
+    <FloatingLabelTextarea v-model="headline" label="Headline" input-name="Headline" placeholder="Headline"
         input-type="text" class="w-full" />
     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row justify-end">
         <button type="button"
@@ -31,6 +30,6 @@ const closeModal = () => {
             @click="closeModal" ref="cancelButtonRef">Cancel</button>
         <button type="button"
             class="inline-flex  w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 sm:ml-3 sm:w-auto"
-            @click="saveJobFields">Save</button>
+            @click="saveHeadlineFields">Save</button>
     </div>
 </template>
