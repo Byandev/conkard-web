@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { UserIcon, BriefcaseIcon, UserGroupIcon, BuildingOffice2Icon, ShieldCheckIcon, DocumentCheckIcon, EnvelopeIcon, PhoneIcon, LinkIcon, GlobeAltIcon, MapPinIcon } from '@heroicons/vue/24/solid';
 
-const emit = defineEmits(['update:title', 'update:open']);
+const emit = defineEmits(['update:title', 'update:open', 'update:isEdit', 'update:id']);
 
 const updateTitle = (title: string) => {
     emit('update:title', title);
     emit('update:open', true);
+    emit('update:isEdit', false);
+    emit('update:id', null);
 };
 
 </script>

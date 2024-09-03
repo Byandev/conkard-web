@@ -2,21 +2,24 @@
 import { useNewCardStore } from '~/store/newCardStore';
 import { ref } from 'vue';
 
-const { addEmailField, emailField } = useNewCardStore();
+const { addOrUpdateEmailField, emailField } = useNewCardStore();
 
 const props = defineProps<{
     edit_data: boolean;
-    id?: number;
+    id?: number | null;
 }>();
 
+console.log(props);
+
 const buttonText = ref<string[]>(['Work', 'Personal']);
-const label = ref<string>(props.edit_data ? emailField?.[props.id || 0]?.label : '');
-const labelValue = ref<string>(props.edit_data ? emailField?.[props.id || 0]?.value : '');
+const label = ref<string>(props.edit_data ? emailField?.[props.id ?? 0]?.label : '');
+const labelValue = ref<string>(props.edit_data ? emailField?.[props.id ?? 0]?.value : '');
 
 const saveEmailField = () => {
-    addEmailField({
+    addOrUpdateEmailField({
         label: label.value,
         value: labelValue.value,
+        id: props.id ?? null,
     });
     closeModal();
 };

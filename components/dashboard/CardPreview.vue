@@ -9,7 +9,7 @@ defineProps<{
 }>();
 
 interface ComponentData {
-  id: number;
+  id: number | null;
 }
 
 const newCard = useNewCardStore();
@@ -65,11 +65,18 @@ const isHeadlineFieldEmpty = computed(() => {
   return !field?.headline;
 });
 
-const emit = defineEmits(["update:title", "update:open"]);
+const emit = defineEmits(["update:title", "update:open", "update:isEdit", "update:id"]);
 
 const updateTitle = (title: string) => {
   emit("update:title", title);
   emit("update:open", true);
+};
+
+const updateEdit = (title: string, id: number) => {
+  emit("update:id", id);
+  emit("update:title", title);
+  emit("update:open", true);
+  emit("update:isEdit", true);
 };
 
 </script>
@@ -190,7 +197,7 @@ const updateTitle = (title: string) => {
                   'w-7',
                   'shrink-0'
                 ]" aria-hidden="true" />
-                <EmailPreview :id="element.id" />
+                <EmailPreview @click="updateEdit('Email', element.id)" :id="element.id" />
               </div>
             </transition-group>
           </template>

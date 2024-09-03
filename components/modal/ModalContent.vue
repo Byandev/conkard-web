@@ -6,7 +6,7 @@
     <AddCompanyName v-else-if="modalTitle == 'Company name'" @update:open="closeModal" />
     <AddAccreditation v-else-if="modalTitle == 'Accreditation'" @update:open="closeModal" />
     <AddHeadline v-else-if="modalTitle == 'Headline'" @update:open="closeModal" />
-    <AddEmail :edit_data="false" v-else-if="modalTitle == 'Email'" @update:open="closeModal" />
+    <AddEmail :id=id :edit_data="isEdit" v-else-if="modalTitle == 'Email'" @update:open="closeModal" />
     <AddPhone v-else-if="modalTitle == 'Phone'" />
     <AddCompanyURL v-else-if="modalTitle == 'Company URL'" />
     <AddLink v-else-if="modalTitle == 'Link'" />
@@ -38,6 +38,8 @@
 <script setup lang="ts">
 defineProps<{
   modalTitle: string;
+  isEdit: boolean;
+  id?: number;
 }>();
 
 const emit = defineEmits(["update:open"]);

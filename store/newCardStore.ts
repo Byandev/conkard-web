@@ -30,7 +30,7 @@ interface CardFields {
   };
   general: {
     email: {
-      id: number;
+      id: number | null;
       value: string;
       label: string;
     };
@@ -55,12 +55,23 @@ export const useNewCardStore = defineStore("newCard", () => {
     (fields[field] as any).value = value;
   };
 
-  const addEmailField = (value: Omit<CardFields["general"]["email"], "id">) => {
-    const newEmail = {
-      ...value,
-      id: emailIdCounter++, // Increment the counter for each new email
-    };
-    fields.emailField.value.push(newEmail);
+  const addOrUpdateEmailField = (value: CardFields["general"]["email"]) => {
+    console.log("Setting email:", value.id);
+    const existingEmailIndex = fields.emailField.value.findIndex(
+      (email) => email.id === value.id
+    );
+
+    if (existingEmailIndex !== -1) {
+      // Update existing email
+      fields.emailField.value[existingEmailIndex] = value;
+    } else {
+      // Add new email
+      const newEmail = {
+        ...value,
+        id: emailIdCounter++, // Increment the counter for each new email
+      };
+      fields.emailField.value.push(newEmail);
+    }
   };
 
   return {
@@ -75,6 +86,6 @@ export const useNewCardStore = defineStore("newCard", () => {
       addField("accreditationField", value),
     addHeadlineField: (value: CardFields["headline"]) =>
       addField("headlineField", value),
-    addEmailField,
+    addOrUpdateEmailField,
   };
 });

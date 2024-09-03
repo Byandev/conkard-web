@@ -7,6 +7,8 @@ definePageMeta({
 
 const isModalOpen = ref(false)
 const ModalTitle = ref('Name')
+const isEdit = ref(false)
+const currentId = ref(0);
 
 const previewColor = ref('#FF5733')
 </script>
@@ -17,9 +19,11 @@ const previewColor = ref('#FF5733')
     <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:p-10">
       <div class="flex flex-col gap-7 w-full md:w-1/3">
         <section class="grid grid-cols-1 gap-4">
-          <CardPreview @update:title="ModalTitle = $event" :color="previewColor" @update:open="isModalOpen = $event" />
+          <CardPreview @update:id="currentId = $event" @update:title="ModalTitle = $event" :color="previewColor"
+            @update:open="isModalOpen = $event" @update:is-edit="isEdit = $event" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
-            <ModalContent @update:open="isModalOpen = false" :modal-title="ModalTitle" />
+            <ModalContent :id="currentId" :is-edit="isEdit" @update:open="isModalOpen = false"
+              :modal-title="ModalTitle" />
           </AddModal>
         </section>
       </div>
@@ -34,7 +38,8 @@ const previewColor = ref('#FF5733')
           <ChooseTheme @update:theme="previewColor = $event" />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
-          <AddDetails @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
+          <AddDetails @update:id="currentId = $event" @update:is-edit="isEdit = $event"
+            @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
         </section>
       </div>
     </div>
