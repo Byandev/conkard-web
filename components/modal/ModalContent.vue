@@ -7,7 +7,7 @@
     <AddAccreditation v-else-if="modalTitle == 'Accreditation'" @update:open="closeModal" />
     <AddHeadline v-else-if="modalTitle == 'Headline'" @update:open="closeModal" />
     <AddEmail :id=id :edit_data="isEdit" v-else-if="modalTitle == 'Email'" @update:open="closeModal" />
-    <AddPhone v-else-if="modalTitle == 'Phone'" />
+    <AddPhone :id=id :edit_data="isEdit" v-else-if="modalTitle == 'Phone'" @update:open="closeModal" />
     <AddCompanyURL v-else-if="modalTitle == 'Company URL'" />
     <AddLink v-else-if="modalTitle == 'Link'" />
     <AddAddress v-else-if="modalTitle == 'Address'" />

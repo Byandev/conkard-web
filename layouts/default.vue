@@ -2,10 +2,9 @@
 
 <template>
   <div class="app h-screen">
-    <NuxtLoadingIndicator :throttle=0 />
-    <slot/>
+    <!-- <NuxtLoadingIndicator :throttle=0 /> -->
+    <slot />
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

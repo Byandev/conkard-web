@@ -72,7 +72,7 @@ const sidebarOpen = ref(false);
 <template>
     <div>
         <TransitionRoot as="template" :show="sidebarOpen">
-            <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
+            <Dialog class="relative z-50 xl:hidden" @close="sidebarOpen = false">
                 <TransitionChild as="template" enter="transition-opacity ease-linear duration-300"
                     enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300"
                     leave-from="opacity-100" leave-to="opacity-0">
@@ -151,7 +151,7 @@ const sidebarOpen = ref(false);
         </TransitionRoot>
 
         <!-- Static sidebar for desktop -->
-        <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl :flex-col">
 
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 drop-shadow">
@@ -173,7 +173,7 @@ const sidebarOpen = ref(false);
                             <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{
                                 user.name }}</span>
                         </div>
-                        <span class="hidden lg:flex lg:items-between">
+                        <span class="hidden xl:flex xl:items-between">
                             <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                         </span>
                     </MenuButton>
@@ -264,21 +264,21 @@ const sidebarOpen = ref(false);
             </div>
         </div>
 
-        <div class="lg:pl-72">
+        <div class="xl:pl-72">
             <div
-                class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-                <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
+                class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 xl:px-8">
+                <button type="button" class="-m-2.5 p-2.5 text-gray-700 xl:hidden" @click="sidebarOpen = true">
                     <span class="sr-only">Open sidebar</span>
                     <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                 </button>
 
                 <!-- Separator -->
-                <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+                <div class="h-6 w-px bg-gray-900/10 xl:hidden" aria-hidden="true" />
 
                 <!-- Home Dashboard Option -->
                 <div v-if="isDashboardCardsPersonal"
-                    class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2 justify-between">
-                    <div class="flex flex-row gap-x-4 self-stretch lg:gap-x-6">
+                    class="flex flex-1 gap-x-4 self-stretch xl:gap-x-6 py-2 justify-between">
+                    <div class="flex flex-row gap-x-4 self-stretch xl:gap-x-6">
                         <ButtonIcon :icon="PencilSquareIcon" text="Edit" background="gray" foreground="white" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
@@ -287,8 +287,8 @@ const sidebarOpen = ref(false);
 
                 <!-- New Card Options -->
                 <div v-if="isDashboardCardsNew"
-                    class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2 justify-between">
-                    <div class="flex flex-row gap-x-4 self-stretch lg:gap-x-6">
+                    class="flex flex-1 gap-x-4 self-stretch xl:gap-x-6 py-2 justify-between overflow-x-auto">
+                    <div class="flex flex-row gap-x-4 self-stretch xl:gap-x-6">
                         <ButtonIcon :icon="Cog8ToothIcon" text="Settings" background="white" foreground="gray" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
@@ -301,7 +301,7 @@ const sidebarOpen = ref(false);
             </div>
 
             <main class="py-2">
-                <div class="px-4 sm:px-6 lg:px-8">
+                <div class="px-4 sm:px-6 xl:px-8">
                     <slot></slot>
                 </div>
             </main>

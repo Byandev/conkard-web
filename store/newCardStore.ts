@@ -12,65 +12,73 @@ interface CardFields {
     suffix: string;
     pronoun: string;
   };
-  job: {
-    job_title: string;
-  };
-  department: {
-    department_name: string;
-  };
-  company: {
-    company_name: string;
-  };
-  accreditation: {
-    id: number;
-    value: string[];
-  };
-  headline: {
-    headline: string;
-  };
+  job: { job_title: string };
+  department: { department_name: string };
+  company: { company_name: string };
+  accreditation: { id: number; value: string[] };
+  headline: { headline: string };
   general: {
-    email: {
-      id: number | null;
-      value: string;
-      label: string;
-    };
+    email: { id: number | null; value: string; label: string };
+    phone: { id: number | null; value: string; label: string };
   };
 }
 
 export const useNewCardStore = defineStore("newCard", () => {
   const fields = {
-    nameField: ref<CardFields["name"]>(),
-    jobField: ref<CardFields["job"]>(),
-    departmentField: ref<CardFields["department"]>(),
-    companyNameField: ref<CardFields["company"]>(),
+    nameField: ref<CardFields["name"] | null>(null),
+    jobField: ref<CardFields["job"] | null>(null),
+    departmentField: ref<CardFields["department"] | null>(null),
+    companyNameField: ref<CardFields["company"] | null>(null),
     accreditationField: ref<CardFields["accreditation"][]>([]),
-    headlineField: ref<CardFields["headline"]>(),
+    headlineField: ref<CardFields["headline"] | null>(null),
     emailField: ref<CardFields["general"]["email"][]>([]),
+    phoneField: ref<CardFields["general"]["phone"][]>([]),
   };
 
-  let emailIdCounter = 0; // Counter for email IDs
+  let uniqueId = 0;
 
   const addField = <T>(field: keyof typeof fields, value: T) => {
-    console.log(`Setting ${field}:`, value);
     (fields[field] as any).value = value;
   };
 
-  const addOrUpdateEmailField = (value: CardFields["general"]["email"]) => {
-    const existingEmailIndex = fields.emailField.value.findIndex(
-      (email) => email.id === value.id
+  const addOrUpdateField = <T extends { id: number | null }>(
+    field: keyof typeof fields,
+    value: T
+  ) => {
+    const fieldValue = fields[field].value as T[] | null;
+    if (!fieldValue) {
+      console.error(`Field ${field} is not an array or is undefined`);
+      return;
+    }
+
+    const existingIndex = fieldValue.findIndex(
+      (item: T) => item.id === value.id
     );
 
-    if (existingEmailIndex !== -1) {
-      // Update existing email
-      fields.emailField.value[existingEmailIndex] = value;
+    if (existingIndex !== -1) {
+      fieldValue[existingIndex] = value;
     } else {
-      // Add new email
-      const newEmail = {
-        ...value,
-        id: emailIdCounter++, // Increment the counter for each new email
-      };
-      fields.emailField.value.push(newEmail);
+      fieldValue.push({ ...value, id: uniqueId++ });
     }
+  };
+
+  const changeOrder = <T>(
+    field: keyof typeof fields,
+    currentIndex: number,
+    newIndex: number
+  ) => {
+    const array = fields[field].value as unknown as T[];
+    if (
+      currentIndex < 0 ||
+      currentIndex >= array.length ||
+      newIndex < 0 ||
+      newIndex >= array.length
+    ) {
+      console.error("Invalid indices for changing order");
+      return;
+    }
+    const [movedItem] = array.splice(currentIndex, 1);
+    array.splice(newIndex, 0, movedItem);
   };
 
   return {
@@ -85,6 +93,10 @@ export const useNewCardStore = defineStore("newCard", () => {
       addField("accreditationField", value),
     addHeadlineField: (value: CardFields["headline"]) =>
       addField("headlineField", value),
-    addOrUpdateEmailField,
+    addOrUpdateEmailField: (value: CardFields["general"]["email"]) =>
+      addOrUpdateField("emailField", value),
+    addOrUpdatePhoneField: (value: CardFields["general"]["phone"]) =>
+      addOrUpdateField("phoneField", value),
+    changeOrder,
   };
 });

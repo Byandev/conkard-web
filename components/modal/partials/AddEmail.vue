@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useNewCardStore } from '~/store/newCardStore';
-import { ref } from 'vue';
 
 const { addOrUpdateEmailField, emailField } = useNewCardStore();
 

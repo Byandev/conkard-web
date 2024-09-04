@@ -2,7 +2,7 @@
 
 <template>
   <div class="app h-screen">
-    <NuxtLoadingIndicator :throttle=0 />
+    <!-- <NuxtLoadingIndicator :throttle=0 /> -->
     <Sidebar>
       <slot></slot>
     </Sidebar>

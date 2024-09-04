@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { UserIcon, BriefcaseIcon, UserGroupIcon, BuildingOffice2Icon, ShieldCheckIcon, DocumentCheckIcon, EnvelopeIcon, PhoneIcon, LinkIcon, GlobeAltIcon, MapPinIcon } from '@heroicons/vue/24/solid';
+import { useNewCardStore } from '~/store/newCardStore';
+
+const newCardStore = useNewCardStore();
+
+const { nameField, jobField, departmentField, companyNameField, accreditationField, headlineField, emailField } = storeToRefs(newCardStore);
 
 const emit = defineEmits(['update:title', 'update:open', 'update:isEdit', 'update:id']);
 
@@ -9,7 +14,6 @@ const updateTitle = (title: string) => {
     emit('update:isEdit', false);
     emit('update:id', null);
 };
-
 </script>
 
 <template>
@@ -17,17 +21,23 @@ const updateTitle = (title: string) => {
     <div class="mt-5">
         <CardSubtitle forId="add-details" text="Personal" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-            <IconTitle @click="updateTitle('Name')" foreground="gray" background="gray" :icon="UserIcon" text="Name" />
-            <IconTitle @click="updateTitle('Job title')" foreground="gray" background="gray" :icon="BriefcaseIcon"
-                text="Job title" />
-            <IconTitle @click="updateTitle('Department')" foreground="gray" background="gray" :icon="UserGroupIcon"
-                text="Department" />
-            <IconTitle @click="updateTitle('Company name')" foreground="gray" background="gray"
-                :icon="BuildingOffice2Icon" text="Company name" />
-            <IconTitle @click="updateTitle('Accreditation')" foreground="gray" background="gray" :icon="ShieldCheckIcon"
-                text="Accreditation" />
-            <IconTitle @click="updateTitle('Headline')" foreground="gray" background="gray" :icon="DocumentCheckIcon"
-                text="Headline" />
+            <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Name')"
+                foreground="gray" background="gray" :icon="UserIcon" text="Name" :disabled="nameField !== undefined" />
+            <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Job title')"
+                foreground="gray" background="gray" :icon="BriefcaseIcon" text="Job title"
+                :disabled="jobField !== undefined" />
+            <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Department')"
+                foreground="gray" background="gray" :icon="UserGroupIcon" text="Department"
+                :disabled="departmentField !== undefined" />
+            <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Company name')"
+                foreground="gray" background="gray" :icon="BuildingOffice2Icon" text="Company name"
+                :disabled="companyNameField !== undefined" />
+            <IconTitle class="disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Accreditation')"
+                foreground="gray" background="gray" :icon="ShieldCheckIcon" text="Accreditation"
+                :disabled="accreditationField.length !== 0" />
+            <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Headline')"
+                foreground="gray" background="gray" :icon="DocumentCheckIcon" text="Headline"
+                :disabled="headlineField !== undefined" />
         </div>
     </div>
 
@@ -102,7 +112,7 @@ const updateTitle = (title: string) => {
         <CardSubtitle forId="add-details" text="Payment" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             <IconTitleIconify @click="updateTitle('PayPal')" icon="ic:baseline-paypal" foreground="gray"
-                background="gray" text="Paypal" />
+                background="gray" text="PayPal" />
             <IconTitleIconify @click="updateTitle('Venmo')" icon="bxl:venmo" foreground="gray" background="gray"
                 text="Venmo" />
             <IconTitleIconify @click="updateTitle('Cash App')" icon="tabler:brand-cashapp" foreground="gray"
