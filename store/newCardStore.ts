@@ -1,38 +1,72 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 
-interface CardFields {
-  name: {
-    first_name: string;
-    last_name: string;
-    prefix: string;
-    preferred_name: string;
-    middle_name: string;
-    maiden_name: string;
-    suffix: string;
-    pronoun: string;
+export interface CardFields {
+  personal: {
+    name: {
+      first_name: string;
+      last_name: string;
+      prefix: string;
+      preferred_name: string;
+      middle_name: string;
+      maiden_name: string;
+      suffix: string;
+      pronoun: string;
+    };
+    accreditation: { id: number; value: string[] };
+    job: { value: string };
+    department: { value: string };
+    company: { value: string };
+    headline: { value: string };
   };
-  job: { job_title: string };
-  department: { department_name: string };
-  company: { company_name: string };
-  accreditation: { id: number; value: string[] };
-  headline: { headline: string };
   general: {
-    email: { id: number | null; value: string; label: string };
-    phone: { id: number | null; value: string; label: string };
+    id: number | null;
+    title: string;
+    url: string;
+    type: string;
+    value: string;
+    label: string;
+  };
+  socials: {
+    id: number | null;
+    title: string;
+    url: string;
+    type: string;
+  };
+  messaging: {
+    id: number | null;
+    title: string;
+    url: string;
+    username: string;
+    type: string;
+    value: string;
+  };
+  business: {
+    id: number | null;
+    title: string;
+    url: string;
+    type: string;
+  };
+  payment: {
+    id: number | null;
+    title: string;
+    url: string;
+    type: string;
   };
 }
 
 export const useNewCardStore = defineStore("newCard", () => {
   const fields = {
-    nameField: ref<CardFields["name"] | null>(null),
-    jobField: ref<CardFields["job"] | null>(null),
-    departmentField: ref<CardFields["department"] | null>(null),
-    companyNameField: ref<CardFields["company"] | null>(null),
-    accreditationField: ref<CardFields["accreditation"][]>([]),
-    headlineField: ref<CardFields["headline"] | null>(null),
-    emailField: ref<CardFields["general"]["email"][]>([]),
-    phoneField: ref<CardFields["general"]["phone"][]>([]),
+    nameField: ref<CardFields["personal"]["name"] | null>(null),
+    jobField: ref<CardFields["personal"]["job"] | null>(null),
+    departmentField: ref<CardFields["personal"]["department"] | null>(null),
+    companyNameField: ref<CardFields["personal"]["company"] | null>(null),
+    accreditationField: ref<CardFields["personal"]["accreditation"][]>([]),
+    headlineField: ref<CardFields["personal"]["headline"] | null>(null),
+    generalField: ref<CardFields["general"][]>([]),
+    socialField: ref<CardFields["socials"][]>([]),
+    messagingField: ref<CardFields["messaging"][]>([]),
+    businessField: ref<CardFields["business"][]>([]),
+    paymentField: ref<CardFields["payment"][]>([]),
   };
 
   let uniqueId = 0;
@@ -62,41 +96,48 @@ export const useNewCardStore = defineStore("newCard", () => {
     }
   };
 
-  const changeOrder = <T>(
+  const deleteField = <T extends { id: number | null }>(
     field: keyof typeof fields,
-    currentIndex: number,
-    newIndex: number
+    id: number | null
   ) => {
-    const array = fields[field].value as unknown as T[];
-    if (
-      currentIndex < 0 ||
-      currentIndex >= array.length ||
-      newIndex < 0 ||
-      newIndex >= array.length
-    ) {
-      console.error("Invalid indices for changing order");
+    const fieldValue = fields[field].value as T[] | null;
+    if (!fieldValue) {
+      console.error(`Field ${field} is not an array or is undefined`);
       return;
     }
-    const [movedItem] = array.splice(currentIndex, 1);
-    array.splice(newIndex, 0, movedItem);
+
+    const index = fieldValue.findIndex((item: T) => item.id === id);
+    if (index !== -1) {
+      fieldValue.splice(index, 1);
+    } else {
+      console.error(`Item with id ${id} not found in field ${field}`);
+    }
   };
 
   return {
     ...fields,
-    addNameField: (value: CardFields["name"]) => addField("nameField", value),
-    addJobField: (value: CardFields["job"]) => addField("jobField", value),
-    addDepartmentField: (value: CardFields["department"]) =>
+    addNameField: (value: CardFields["personal"]["name"]) =>
+      addField("nameField", value),
+    addJobField: (value: CardFields["personal"]["job"]) =>
+      addField("jobField", value),
+    addDepartmentField: (value: CardFields["personal"]["department"]) =>
       addField("departmentField", value),
-    addCompanyNameField: (value: CardFields["company"]) =>
+    addCompanyNameField: (value: CardFields["personal"]["company"]) =>
       addField("companyNameField", value),
-    addAccreditationField: (value: CardFields["accreditation"][]) =>
+    addAccreditationField: (value: CardFields["personal"]["accreditation"][]) =>
       addField("accreditationField", value),
-    addHeadlineField: (value: CardFields["headline"]) =>
+    addHeadlineField: (value: CardFields["personal"]["headline"]) =>
       addField("headlineField", value),
-    addOrUpdateEmailField: (value: CardFields["general"]["email"]) =>
-      addOrUpdateField("emailField", value),
-    addOrUpdatePhoneField: (value: CardFields["general"]["phone"]) =>
-      addOrUpdateField("phoneField", value),
-    changeOrder,
+    addOrUpdateGeneralField: (value: CardFields["general"]) =>
+      addOrUpdateField("generalField", value),
+    addOrUpdateSocialField: (value: CardFields["socials"]) =>
+      addOrUpdateField("socialField", value),
+    addOrUpdateMessagingField: (value: CardFields["messaging"]) =>
+      addOrUpdateField("messagingField", value),
+    addOrUpdateBusinessField: (value: CardFields["business"]) =>
+      addOrUpdateField("businessField", value),
+    addOrUpdatePaymentField: (value: CardFields["payment"]) =>
+      addOrUpdateField("paymentField", value),
+    deleteField,
   };
 });

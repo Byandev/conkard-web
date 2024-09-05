@@ -5,11 +5,11 @@ import { useNewCardStore } from "~/store/newCardStore";
 
 const { addJobField, jobField } = useNewCardStore();
 
-let jobTitle = ref(jobField?.job_title || '');
+let jobTitle = ref(jobField?.value || '');
 
 const saveJobFields = () => {
     const jobFields = {
-        job_title: jobTitle.value,
+        value: jobTitle.value,
     };
     addJobField(jobFields);
     closeModal();

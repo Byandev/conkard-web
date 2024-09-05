@@ -22,22 +22,22 @@ const updateTitle = (title: string) => {
         <CardSubtitle forId="add-details" text="Personal" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Name')"
-                foreground="gray" background="gray" :icon="UserIcon" text="Name" :disabled="nameField !== undefined" />
+                foreground="gray" background="gray" :icon="UserIcon" text="Name" :disabled="nameField !== null" />
             <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Job title')"
                 foreground="gray" background="gray" :icon="BriefcaseIcon" text="Job title"
-                :disabled="jobField !== undefined" />
+                :disabled="jobField !== null" />
             <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Department')"
                 foreground="gray" background="gray" :icon="UserGroupIcon" text="Department"
-                :disabled="departmentField !== undefined" />
+                :disabled="departmentField !== null" />
             <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Company name')"
                 foreground="gray" background="gray" :icon="BuildingOffice2Icon" text="Company name"
-                :disabled="companyNameField !== undefined" />
+                :disabled="companyNameField !== null" />
             <IconTitle class="disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Accreditation')"
                 foreground="gray" background="gray" :icon="ShieldCheckIcon" text="Accreditation"
                 :disabled="accreditationField.length !== 0" />
             <IconTitle class=" disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle('Headline')"
                 foreground="gray" background="gray" :icon="DocumentCheckIcon" text="Headline"
-                :disabled="headlineField !== undefined" />
+                :disabled="headlineField !== null" />
         </div>
     </div>
 

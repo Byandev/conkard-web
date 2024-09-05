@@ -1,14 +1,32 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useNewCardStore } from '~/store/newCardStore';
+import { computed } from 'vue';
+
+interface PhoneData {
+    id: number;
+    value: string;
+    label: string;
+}
 
 const phoneData = useNewCardStore();
-
 const { phoneField } = storeToRefs(phoneData);
 
-defineProps<{
+const props = defineProps<{
     id: number;
 }>();
+
+const filteredPhone = computed<PhoneData>(() => {
+    const phone = phoneField.value.find(phone => phone.id === props.id);
+    if (phone && phone.id !== null) {
+        return phone as PhoneData;
+    }
+    return {
+        id: -1,
+        value: '',
+        label: ''
+    };
+});
 
 </script>
 
@@ -27,12 +45,12 @@ defineProps<{
         <div class="flex flex-col">
             <div>
                 <h1 class="text-1xl font-semibold text-black">
-                    {{ phoneField?.[id]?.value }}
+                    {{ filteredPhone?.value }}
                 </h1>
             </div>
             <div>
                 <h1 class="text-1xl font-normal text-black">
-                    {{ phoneField?.[id]?.label }}
+                    {{ filteredPhone?.label }}
                 </h1>
             </div>
         </div>

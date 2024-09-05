@@ -38,7 +38,7 @@ const closeModal = () => {
 };
 
 const onDeleteField = () => {
-    deleteField("socialField", props.id ?? null);
+    deleteField("messagingField", props.id ?? null);
     closeModal();
 };
 </script>

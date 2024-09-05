@@ -1,37 +1,47 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useNewCardStore } from "~/store/newCardStore";
-import { computed } from "vue";
 import draggable from "vuedraggable";
 
 defineProps<{ color: string }>();
 
 interface ComponentData {
-  email: {
-    id: number | null;
-    value: string;
-    label: string;
-  },
-  phone: {
-    id: number | null;
-    value: string;
-    label: string;
-  }
+  id: number | null;
+  value?: string;
+  label?: string;
+  type?: string;
+  title?: string;
+  url?: string;
+  group?: string;
 }
 
 const newCard = useNewCardStore();
-const { nameField, jobField, departmentField, companyNameField, accreditationField, headlineField, emailField, phoneField } = storeToRefs(newCard);
+const { generalField, messagingField, businessField, paymentField, nameField, jobField, socialField, departmentField, companyNameField, accreditationField, headlineField } = storeToRefs(newCard);
 
-const cardItem = computed(() => [...emailField.value, ...phoneField.value]);
+const cardItem = ref<ComponentData[]>([]);
+
+watch(
+  [generalField, socialField, messagingField, businessField, paymentField],
+  ([newGeneralField, newSocialField, newMessagingField, newBusinessField, newPaymentField]) => {
+    cardItem.value = [
+      ...newGeneralField.map(general => ({ id: general.id ?? null, title: general.title ?? '', url: general.url ?? '', type: general.type, value: general.value, label: general.label, group: 'General' })),
+      ...newSocialField.map(social => ({ id: social.id ?? null, title: social.title ?? '', url: social.url ?? '', type: social.type, group: 'Social' })),
+      ...newMessagingField.map(messaging => ({ id: messaging.id ?? null, title: messaging.title ?? '', url: messaging.url ?? '', type: messaging.type, value: messaging.value, group: 'Messaging' })),
+      ...newBusinessField.map(business => ({ id: business.id ?? null, title: business.title ?? '', url: business.url ?? '', type: business.type, group: 'Business' })),
+      ...newPaymentField.map(payment => ({ id: payment.id ?? null, title: payment.title ?? '', url: payment.url ?? '', type: payment.type, group: 'Payment' })),
+    ];
+  },
+  { immediate: true, deep: true }
+);
 
 const isFieldEmpty = (field: any, keys: string[]) => computed(() => keys.every(key => !field.value?.[key]));
 
 const isNameFieldEmpty = isFieldEmpty(nameField, ['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']);
-const isJobFieldEmpty = isFieldEmpty(jobField, ['job_title']);
-const isDepartmentFieldEmpty = isFieldEmpty(departmentField, ['department_name']);
-const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['company_name']);
+const isJobFieldEmpty = isFieldEmpty(jobField, ['value']);
+const isDepartmentFieldEmpty = isFieldEmpty(departmentField, ['value']);
+const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
 const isAccreditationFieldEmpty = computed(() => !accreditationField.value?.length);
-const isHeadlineFieldEmpty = isFieldEmpty(headlineField, ['headline']);
+const isHeadlineFieldEmpty = isFieldEmpty(headlineField, ['value']);
 
 const emit = defineEmits(["update:title", "update:open", "update:isEdit", "update:id"]);
 
@@ -46,7 +56,6 @@ const updateEdit = (title: string, id: number) => {
   emit("update:open", true);
   emit("update:isEdit", true);
 };
-
 </script>
 
 <template>
@@ -66,28 +75,24 @@ const updateEdit = (title: string, id: number) => {
           :keys="['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']"
           :isNameField="true" />
         <FieldSection v-else @click="updateTitle('Name')" placeholder="Name" />
-
-        <FieldSection v-if="!isJobFieldEmpty" @click="updateTitle('Job title')" :field="jobField"
-          :keys="['job_title']" />
+        <FieldSection v-if="!isJobFieldEmpty" @click="updateTitle('Job title')" :field="jobField" :keys="['value']" />
         <FieldSection v-if="!isDepartmentFieldEmpty" @click="updateTitle('Department')" :field="departmentField"
-          :keys="['department_name']" />
+          :keys="['value']" />
         <FieldSection v-if="!isCompanyNameEmpty" @click="updateTitle('Company name')" :field="companyNameField"
-          :keys="['company_name']" />
+          :keys="['value']" />
         <FieldSection :is-headline-field="true" v-if="!isHeadlineFieldEmpty" @click="updateTitle('Headline')"
-          :field="headlineField" :keys="['headline']" />
+          :field="headlineField" :keys="['value']" />
         <FieldSection v-if="!isAccreditationFieldEmpty" @click="updateTitle('Accreditation')"
           :field="accreditationField" isAccreditation />
-
-        <draggable @end="console.log('Hello')" v-model="cardItem" class="flex flex-col gap-3" itemKey="id">
+        <draggable v-model="cardItem" class="flex flex-col gap-3" item-key="id">
           <template #item="{ element }">
             <transition-group name="list" tag="div">
               <div class="flex flex-row items-center group hover:cursor-pointer -ml-5" :key="element.id">
                 <Icon name="ph:dots-six-vertical-bold"
                   class="text-black opacity-0 group-hover:opacity-100 text-center h-5 w-5 shrink-0"
                   aria-hidden="true" />
-                <EmailPreview v-if="element.value.includes('@')" @click="updateEdit('Email', element.id)"
-                  :id="element.id" />
-                <PhonePreview v-else @click="updateEdit('Phone', element.id)" :id="element.id" />
+                <ContactPreview :id="element.id" :title="element.title" :url="element.url" :type="element.type"
+                  :value="element.value" :label="element.label" :group="element.group" :OnUpdateEdit="updateEdit" />
               </div>
             </transition-group>
           </template>
