@@ -1,3 +1,18 @@
+<script setup lang="ts">
+defineProps<{
+  modalTitle: string;
+  isEdit: boolean;
+  id?: number;
+}>();
+
+const emit = defineEmits(["update:open"]);
+
+const closeModal = () => {
+  emit("update:open", false);
+};
+</script>
+
+
 <template>
   <div>
     <AddName v-if="modalTitle == 'Name'" @update:open="closeModal" />
@@ -70,19 +85,3 @@
       type="Cash App" @update:open="closeModal" />
   </div>
 </template>
-
-<script setup lang="ts">
-import AddGeneral from './partials/AddGeneral.vue';
-
-defineProps<{
-  modalTitle: string;
-  isEdit: boolean;
-  id?: number;
-}>();
-
-const emit = defineEmits(["update:open"]);
-
-const closeModal = () => {
-  emit("update:open", false);
-};
-</script>
