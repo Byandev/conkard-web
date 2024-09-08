@@ -25,7 +25,8 @@ const closeModal = () => {
     <!-- General -->
     <AddGeneral :id="id" :edit_data="isEdit" v-else-if="modalTitle == 'Email'" fieldLabel="Email"
       fieldName="email-value" fieldPlaceholder="Value" fieldType="emailField" :buttonText="['Work', 'Personal']"
-      @update:open="closeModal" type="Email" />
+      @update:open="closeModal" type="Email">
+    </AddGeneral>
     <AddGeneral :id="id" :edit_data="isEdit" v-else-if="modalTitle == 'Phone'" :buttonText="['Mobile', 'Home', 'Work']"
       @update:open="closeModal" type="Phone" />
     <AddGeneral :id="id" :edit_data="isEdit" v-else-if="modalTitle == 'Company URL'"

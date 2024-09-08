@@ -30,6 +30,7 @@ export interface CardFields {
     id: number | null;
     title: string;
     url: string;
+    username: string;
     type: string;
   };
   messaging: {
@@ -44,12 +45,14 @@ export interface CardFields {
     id: number | null;
     title: string;
     url: string;
+    username: string;
     type: string;
   };
   payment: {
     id: number | null;
     title: string;
     url: string;
+    username: string;
     type: string;
   };
 }

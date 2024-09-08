@@ -25,8 +25,8 @@ watch(
   ([newGeneralField, newSocialField, newMessagingField, newBusinessField, newPaymentField]) => {
     cardItem.value = [
       ...newGeneralField.map(general => ({ id: general.id ?? null, title: general.title ?? '', url: general.url ?? '', type: general.type, value: general.value, label: general.label, group: 'General' })),
-      ...newSocialField.map(social => ({ id: social.id ?? null, title: social.title ?? '', url: social.url ?? '', type: social.type, group: 'Social' })),
-      ...newMessagingField.map(messaging => ({ id: messaging.id ?? null, title: messaging.title ?? '', url: messaging.url ?? '', type: messaging.type, value: messaging.value, group: 'Messaging' })),
+      ...newSocialField.map(social => ({ id: social.id ?? null, title: social.title ?? '', url: social.url ?? '', username: social.username, type: social.type, group: 'Social' })),
+      ...newMessagingField.map(messaging => ({ id: messaging.id ?? null, title: messaging.title ?? '', url: messaging.url ?? '', username: messaging.username, type: messaging.type, value: messaging.value, group: 'Messaging' })),
       ...newBusinessField.map(business => ({ id: business.id ?? null, title: business.title ?? '', url: business.url ?? '', type: business.type, group: 'Business' })),
       ...newPaymentField.map(payment => ({ id: payment.id ?? null, title: payment.title ?? '', url: payment.url ?? '', type: payment.type, group: 'Payment' })),
     ];
@@ -92,7 +92,8 @@ const updateEdit = (title: string, id: number) => {
                   class="text-black opacity-0 group-hover:opacity-100 text-center h-5 w-5 shrink-0"
                   aria-hidden="true" />
                 <ContactPreview :id="element.id" :title="element.title" :url="element.url" :type="element.type"
-                  :value="element.value" :label="element.label" :group="element.group" :OnUpdateEdit="updateEdit" />
+                  :value="element.value" :username="element.username" :label="element.label" :group="element.group"
+                  :OnUpdateEdit="updateEdit" />
               </div>
             </transition-group>
           </template>

@@ -8,6 +8,7 @@ const props = defineProps<{
     url?: string;
     title?: string;
     group?: string;
+    username?: string;
     type: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'Twitter' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'WhatsApp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp';
     OnUpdateEdit: (title: string, id: number) => void;
 }>();
