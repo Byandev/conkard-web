@@ -4,7 +4,7 @@ import { useNewCardStore } from '~/store/newCardStore';
 
 const newCardStore = useNewCardStore();
 
-const { nameField, jobField, departmentField, companyNameField, accreditationField, headlineField, emailField } = storeToRefs(newCardStore);
+const { nameField, jobField, departmentField, companyNameField, accreditationField, headlineField } = storeToRefs(newCardStore);
 
 const emit = defineEmits(['update:title', 'update:open', 'update:isEdit', 'update:id']);
 

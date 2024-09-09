@@ -2,8 +2,15 @@
 import { storeToRefs } from "pinia";
 import { useNewCardStore } from "~/store/newCardStore";
 import draggable from "vuedraggable";
+import { Preview } from 'vue-advanced-cropper';
 
-defineProps<{ color: string }>();
+const props = defineProps<{
+  color: string;
+  companyImage?: string;
+  companyImageCoordinates?: any
+  profilePicture?: string;
+  profilePictureCoordinates?: any;
+}>();
 
 interface ComponentData {
   id: number | null;
@@ -56,21 +63,26 @@ const updateEdit = (title: string, id: number) => {
   emit("update:open", true);
   emit("update:isEdit", true);
 };
+
+const bgColor = computed(() => props.companyImage ? 'white' : props.color);
 </script>
 
 <template>
   <div class="grid grid-cols-1 gap-4">
     <div
       class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:min-w-[100px] shadow drop-shadow-xl">
-      <div class="px-4 py-5 sm:px-6 h-28 flex items-center justify-center" :style="{ backgroundColor: color }">
-        <svg class="h-12 w-12 text-white" xmlns="http://conkard-api-dev.byandev.com/storage/images/icons/name.svg"
-          viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12zm0-10a2 2 0 100-4 2 2 0 000 4z"
-            clip-rule="evenodd" />
-        </svg>
+      <div class="px-4 py-5 sm:px-6 h-[180px] flex items-center justify-center" :style="{ backgroundColor: bgColor }">
+        <div>
+          <Preview v-if="props?.companyImage" :width="320" :height="180" :image="props?.companyImage"
+            :coordinates="props.companyImageCoordinates" class="preview" />
+        </div>
+        <div class="absolute -mb-56 -ml-72 profile-picture-container">
+          <Preview v-if="props?.profilePicture" :width="100" :height="100" :image="props?.profilePicture"
+            :coordinates="props.profilePictureCoordinates" class="profile-picture" />
+        </div>
       </div>
       <div class="px-5 md:px-5 pb-5">
+        <div class=" mt-32" v-if="props?.profilePicture"></div>
         <FieldSection v-if="!isNameFieldEmpty" @click="updateTitle('Name')" :field="nameField"
           :keys="['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']"
           :isNameField="true" />
@@ -91,9 +103,9 @@ const updateEdit = (title: string, id: number) => {
                 <Icon name="ph:dots-six-vertical-bold"
                   class="text-black opacity-0 group-hover:opacity-100 text-center h-5 w-5 shrink-0"
                   aria-hidden="true" />
-                <ContactPreview :id="element.id" :title="element.title" :url="element.url" :type="element.type"
-                  :value="element.value" :username="element.username" :label="element.label" :group="element.group"
-                  :OnUpdateEdit="updateEdit" />
+                <ContactPreview :color="props.color" :id="element.id" :title="element.title" :url="element.url"
+                  :type="element.type" :value="element.value" :username="element.username" :label="element.label"
+                  :group="element.group" :OnUpdateEdit="updateEdit" />
               </div>
             </transition-group>
           </template>
@@ -110,6 +122,36 @@ const updateEdit = (title: string, id: number) => {
   padding: 10px;
   color: white;
   border-radius: 4px;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Ensure the image fits inside the div while maintaining aspect ratio */
+}
+
+.profile-picture-container {
+  width: 150px;
+  /* Set the desired width */
+  height: 150px;
+  /* Set the desired height */
+  overflow: hidden;
+  /* Ensure the image does not overflow the container */
+  border-radius: 50%;
+  /* Make the container circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Ensure the image covers the container while maintaining aspect ratio */
+  border-radius: 50%;
+  /* Make the image circular */
 }
 
 .list-enter-active,

@@ -3,6 +3,7 @@ import { defineProps } from 'vue';
 
 const props = defineProps<{
     id: number;
+    color: string,
     value?: string;
     label?: string;
     url?: string;
@@ -46,7 +47,7 @@ const iconName = computed(() => {
 
 <template>
     <div class="flex flex-row items-center gap-3" @click="props.OnUpdateEdit(props.type, props.id)">
-        <div class="flex items-center justify-center w-11 h-11 bg-red-500 rounded-full">
+        <div class="flex items-center justify-center w-11 h-11 rounded-full" :style="{ backgroundColor: props.color }">
             <Icon :name="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
                 aria-hidden="true" />
         </div>

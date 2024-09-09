@@ -18,11 +18,13 @@
     "@nuxt/icon": "^1.4.5",
     "@pinia/nuxt": "^0.5.2",
     "@sidebase/nuxt-auth": "^0.6.7",
+    "@vueform/nuxt": "^1.7.0",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "nuxt": "^3.12.4",
     "pinia": "^2.2.0",
     "vue": "latest",
+    "vue-advanced-cropper": "^2.8.9",
     "vue-draggable": "^2.0.6",
     "vuedraggable": "^4.1.0"
   },

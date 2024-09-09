@@ -10,6 +10,14 @@ const ModalTitle = ref('Name')
 const isEdit = ref(false)
 const currentId = ref(0);
 const previewColor = ref('#FF5733')
+
+
+const companyImage = ref<string>('')
+const companyImageCoordinates = ref<string>('');
+
+const profilePicture = ref<string>('')
+const profilePictureCoordinates = ref<string>('')
+
 </script>
 
 <template>
@@ -18,7 +26,9 @@ const previewColor = ref('#FF5733')
     <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:p-10">
       <div class="flex flex-col gap-7 w-full md:w-1/3">
         <section class="grid grid-cols-1 gap-4">
-          <CardPreview @update:id="currentId = $event" @update:title="ModalTitle = $event" :color="previewColor"
+          <CardPreview :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
+            :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
+            @update:id="currentId = $event" @update:title="ModalTitle = $event" :color="previewColor"
             @update:open="isModalOpen = $event" @update:is-edit="isEdit = $event" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
             <ModalContent :id="currentId" :is-edit="isEdit" @update:open="isModalOpen = false"
@@ -31,7 +41,10 @@ const previewColor = ref('#FF5733')
           <TextInput label="Label this card" input-name="card-label" placeholder="Label this card" input-type="text" />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
-          <AddImages />
+          <AddImages @update:company-image="companyImage = $event"
+            @update:company-image-coordinates="companyImageCoordinates = $event"
+            @update:profile-image="profilePicture = $event"
+            @update:profile-image-coordinates="profilePictureCoordinates = $event" />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <ChooseTheme @update:theme="previewColor = $event" />
