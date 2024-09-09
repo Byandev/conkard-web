@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
     <button type="button" :class="[`bg-${props.background}-100`]"
-        class=" whitespace-nowrap p-2 border text-sm border-gray-300 rounded-xl flex flex-col items-center">
+        class=" whitespace-nowrap p-1 border text-xs border-gray-300 rounded-xl flex flex-col items-center">
         <component :is="props.icon" :class="[
             `text-${props.foreground}-900`,
             `group-hover:text-${props.foreground}`,

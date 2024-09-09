@@ -151,7 +151,7 @@ const sidebarOpen = ref(false);
         </TransitionRoot>
 
         <!-- Static sidebar for desktop -->
-        <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-56 xl:flex-col">
+        <div class="hidden 2xl:fixed 2xl:inset-y-0 2xl:z-50 2xl:flex 2xl:w-56 2xl:flex-col">
 
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white pl-5 pr-3 pb-4 drop-shadow">
@@ -173,7 +173,7 @@ const sidebarOpen = ref(false);
                             <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{
                                 user.name }}</span>
                         </div>
-                        <span class="hidden xl:flex xl:items-between">
+                        <span class="hidden 2xl:flex 2xl:items-between">
                             <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                         </span>
                     </MenuButton>
@@ -264,21 +264,21 @@ const sidebarOpen = ref(false);
             </div>
         </div>
 
-        <div class="xl:pl-56">
+        <div class="2xl:pl-56">
             <div
-                class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 xl:px-8">
-                <button type="button" class="-m-2.5 p-2.5 text-gray-700 xl:hidden" @click="sidebarOpen = true">
+                class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 2xl:px-8">
+                <button type="button" class="-m-2.5 p-2.5 text-gray-700 2xl:hidden" @click="sidebarOpen = true">
                     <span class="sr-only">Open sidebar</span>
                     <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                 </button>
 
                 <!-- Separator -->
-                <div class="h-6 w-px bg-gray-900/10 xl:hidden" aria-hidden="true" />
+                <div class="h-6 w-px bg-gray-900/10 2xl:hidden" aria-hidden="true" />
 
                 <!-- Home Dashboard Option -->
                 <div v-if="isDashboardCardsPersonal"
-                    class="flex flex-1 gap-x-4 self-stretch xl:gap-x-6 py-2 justify-between">
-                    <div class="flex flex-row gap-x-4 self-stretch xl:gap-x-6">
+                    class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between">
+                    <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
                         <ButtonIcon :icon="PencilSquareIcon" text="Edit" background="gray" foreground="white" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
@@ -287,8 +287,8 @@ const sidebarOpen = ref(false);
 
                 <!-- New Card Options -->
                 <div v-if="isDashboardCardsNew"
-                    class="flex flex-1 gap-x-4 self-stretch xl:gap-x-6 py-2 justify-between overflow-x-auto">
-                    <div class="flex flex-row gap-x-4 self-stretch xl:gap-x-6">
+                    class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between overflow-x-auto">
+                    <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
                         <ButtonIcon :icon="Cog8ToothIcon" text="Settings" background="white" foreground="gray" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
@@ -301,7 +301,7 @@ const sidebarOpen = ref(false);
             </div>
 
             <main class="py-2">
-                <div class="px-4 sm:px-6 xl:px-8">
+                <div class="px-4 sm:px-6 2xl:px-8">
                     <slot></slot>
                 </div>
             </main>

@@ -26,8 +26,8 @@ const coverPhotoCoordinates = ref<string>('')
 <template>
   <div class="h-full">
     <Tabs class="ml-10" />
-    <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:py-10 md:px-3">
-      <div class="flex flex-col gap-7 w-full md:w-1/3">
+    <div class="flex flex-col md:flex-row w-fit h-full gap-5 p-4 md:py-10 md:px-3">
+      <div class="flex flex-col gap-7 w-full md:w-1/8">
         <section class="grid grid-cols-1 gap-4">
           <CardPreview :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
             :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
@@ -41,10 +41,10 @@ const coverPhotoCoordinates = ref<string>('')
         </section>
       </div>
       <div class="w-full md:max-w-[580px] flex flex-col gap-7">
-        <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <TextInput label="Label this card" input-name="card-label" placeholder="Label this card" input-type="text" />
         </section>
-        <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <AddImages @update:company-image="companyImage = $event"
             @update:company-image-coordinates="companyImageCoordinates = $event"
             @update:profile-image="profilePicture = $event"
@@ -52,10 +52,10 @@ const coverPhotoCoordinates = ref<string>('')
             @update:cover-image="coverPhoto = $event"
             @update:cover-image-coordinates="coverPhotoCoordinates = $event" />
         </section>
-        <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <ChooseTheme @update:theme="previewColor = $event" />
         </section>
-        <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <AddDetails @update:id="currentId = $event" @update:is-edit="isEdit = $event"
             @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
         </section>
