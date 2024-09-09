@@ -10,7 +10,7 @@ const updateModalState = (title: string) => {
     isModalOpen.value = true;
 }
 
-const emit = defineEmits(['update:companyImage', 'update:companyImageCoordinates', 'update:profileImage', 'update:profileImageCoordinates']);
+const emit = defineEmits(['update:companyImage', 'update:companyImageCoordinates', 'update:profileImage', 'update:profileImageCoordinates', 'update:coverImage', 'update:coverImageCoordinates']);
 
 const handleImageData = ({ type, image, coordinates }: { type: string, image: string, coordinates: any }) => {
     if (type === 'company') {
@@ -19,6 +19,9 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
     } else if (type === 'profile') {
         emit('update:profileImage', image);
         emit('update:profileImageCoordinates', coordinates);
+    } else if (type === 'cover') {
+        emit('update:coverImage', image);
+        emit('update:coverImageCoordinates', coordinates);
     }
 }
 </script>
@@ -34,8 +37,8 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
                 :icon="PlusIcon" text="Company Logo" />
             <VerticalButtonIcon @click="updateModalState('Profile')" background="gray" foreground="gray"
                 :icon="PlusIcon" text="Profile Picture" />
-            <VerticalButtonIcon @click="updateModalState('Cover Photo')" background="gray" foreground="gray"
-                :icon="PlusIcon" text="Cover Photo" />
+            <VerticalButtonIcon @click="updateModalState('Cover')" background="gray" foreground="gray" :icon="PlusIcon"
+                text="Cover Photo" />
             <UploadFile @update:imageData="handleImageData($event)" :title="modalTitle" :isOpen="isModalOpen"
                 @update:isOpen="isModalOpen = $event" />
         </div>

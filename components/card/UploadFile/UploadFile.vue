@@ -14,20 +14,26 @@ const closeModal = () => emit('update:isOpen', false);
 const saveImage = () => console.log('Save');
 const deleteImage = () => console.log('Deleted');
 
-const img = ref<string | null>(null);
+const companyImg = ref<string | null>(null);
 const profileImg = ref<string | null>(null);
+const coverImg = ref<string | null>(null);
 
-const handleChange = (type: 'company' | 'profile', { coordinates, image }: { coordinates: any; image: string }) => {
+const handleChange = (type: 'company' | 'profile' | 'cover', { coordinates, image }: { coordinates: any; image: string }) => {
     emit('update:imageData', { type, image, coordinates });
 };
 
-const handleFileChange = (type: 'company' | 'profile', event: Event) => {
+const handleFileChange = (type: 'company' | 'profile' | 'cover', event: Event) => {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = (e: ProgressEvent<FileReader>) => {
-            if (type === 'company') img.value = e.target?.result as string;
-            else profileImg.value = e.target?.result as string;
+            if (type === 'company') {
+                companyImg.value = e.target?.result as string;
+            } else if (type === 'profile') {
+                profileImg.value = e.target?.result as string;
+            } else if (type === 'cover') {
+                coverImg.value = e.target?.result as string;
+            }
         };
         reader.readAsDataURL(input.files[0]);
     }
@@ -35,11 +41,11 @@ const handleFileChange = (type: 'company' | 'profile', event: Event) => {
 </script>
 
 <template>
-    <AddModal :title="`Add ${props.title} Logo`" :open="props.isOpen">
+    <AddModal :title="`Add ${props.title}`" :open="props.isOpen">
         <div v-if="props.title === 'Company'">
             <input type="file" @change="handleFileChange('company', $event)" accept="image/*"
                 style="margin-bottom: 16px;" />
-            <cropper v-if="img" class="cropper" :src="img" :stencil-props="{ aspectRatio: 16 / 9 }"
+            <cropper v-if="companyImg" class="cropper" :src="companyImg" :stencil-props="{ aspectRatio: 16 / 9 }"
                 image-restriction="stencil" @change="handleChange('company', $event)" />
         </div>
 
@@ -48,6 +54,13 @@ const handleFileChange = (type: 'company' | 'profile', event: Event) => {
                 style="margin-bottom: 16px;" />
             <cropper v-if="profileImg" class="cropper" :src="profileImg" :stencil-props="{ aspectRatio: 1 / 1 }"
                 image-restriction="stencil" @change="handleChange('profile', $event)" />
+        </div>
+
+        <div v-if="props.title === 'Cover'">
+            <input type="file" @change="handleFileChange('cover', $event)" accept="image/*"
+                style="margin-bottom: 16px;" />
+            <cropper v-if="coverImg" class="cropper" :src="coverImg" :stencil-props="{ aspectRatio: 16 / 9 }"
+                image-restriction="stencil" @change="handleChange('cover', $event)" />
         </div>
         <ModalFooterButton :edit_data="true" :OnSave="saveImage" :OnDelete="deleteImage" :OnCancel="closeModal" />
     </AddModal>

@@ -10,6 +10,8 @@ const props = defineProps<{
   companyImageCoordinates?: any
   profilePicture?: string;
   profilePictureCoordinates?: any;
+  coverPhoto?: string;
+  coverPhotoCoordinates?: any;
 }>();
 
 interface ComponentData {
@@ -76,13 +78,17 @@ const bgColor = computed(() => props.companyImage ? 'white' : props.color);
           <Preview v-if="props?.companyImage" :width="320" :height="180" :image="props?.companyImage"
             :coordinates="props.companyImageCoordinates" class="preview" />
         </div>
-        <div class="absolute -mb-56 -ml-72 profile-picture-container">
-          <Preview v-if="props?.profilePicture" :width="100" :height="100" :image="props?.profilePicture"
+        <div class="absolute left-0 mt-52 profile-picture-container">
+          <Preview v-if="props?.profilePicture" :width="120" :height="120" :image="props?.profilePicture"
             :coordinates="props.profilePictureCoordinates" class="profile-picture" />
+        </div>
+        <div class="absolute right-5 mt-52">
+          <Preview v-if="props?.coverPhoto" :width="192" :height="108" :image="props?.coverPhoto"
+            :coordinates="props.coverPhotoCoordinates" class="preview" />
         </div>
       </div>
       <div class="px-5 md:px-5 pb-5">
-        <div class=" mt-32" v-if="props?.profilePicture"></div>
+        <div class=" mt-28" v-if="props?.profilePicture || props?.coverPhoto"></div>
         <FieldSection v-if="!isNameFieldEmpty" @click="updateTitle('Name')" :field="nameField"
           :keys="['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']"
           :isNameField="true" />

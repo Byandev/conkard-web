@@ -18,6 +18,9 @@ const companyImageCoordinates = ref<string>('');
 const profilePicture = ref<string>('')
 const profilePictureCoordinates = ref<string>('')
 
+const coverPhoto = ref<string>('')
+const coverPhotoCoordinates = ref<string>('')
+
 </script>
 
 <template>
@@ -28,8 +31,9 @@ const profilePictureCoordinates = ref<string>('')
         <section class="grid grid-cols-1 gap-4">
           <CardPreview :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
             :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
-            @update:id="currentId = $event" @update:title="ModalTitle = $event" :color="previewColor"
-            @update:open="isModalOpen = $event" @update:is-edit="isEdit = $event" />
+            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" @update:id="currentId = $event"
+            @update:title="ModalTitle = $event" :color="previewColor" @update:open="isModalOpen = $event"
+            @update:is-edit="isEdit = $event" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
             <ModalContent :id="currentId" :is-edit="isEdit" @update:open="isModalOpen = false"
               :modal-title="ModalTitle" />
@@ -44,7 +48,9 @@ const profilePictureCoordinates = ref<string>('')
           <AddImages @update:company-image="companyImage = $event"
             @update:company-image-coordinates="companyImageCoordinates = $event"
             @update:profile-image="profilePicture = $event"
-            @update:profile-image-coordinates="profilePictureCoordinates = $event" />
+            @update:profile-image-coordinates="profilePictureCoordinates = $event"
+            @update:cover-image="coverPhoto = $event"
+            @update:cover-image-coordinates="coverPhotoCoordinates = $event" />
         </section>
         <section class="px-10 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <ChooseTheme @update:theme="previewColor = $event" />
