@@ -23,8 +23,8 @@ import {
     ShoppingBagIcon,
     XMarkIcon,
     Cog8ToothIcon
-} from '@heroicons/vue/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+} from '@heroicons/vue/24/solid'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { authStore } from '~/store/auth';
 
 interface NavigationItem {
@@ -107,9 +107,9 @@ const sidebarOpen = ref(false);
                                             <ul role="list" class="-mx-2 space-y-1">
                                                 <li v-for="item in navigation" :key="item.name">
                                                     <a :href="item.href"
-                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-white' : 'text-indigo-200 hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6']">
+                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-white' : 'text-indigo-200 hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                                         <component :is="item.icon"
-                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-indigo-200 group-hover:text-white', 'h-6 w-6 shrink-0']"
+                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-indigo-200 group-hover:text-white', 'h-5 w-5 shrink-0']"
                                                             aria-hidden="true" />
                                                         {{ item.name }}
                                                     </a>
@@ -122,9 +122,9 @@ const sidebarOpen = ref(false);
                                             <ul role="list" class="-mx-2 mt-2 space-y-1">
                                                 <li v-for="item in lowerNavigation" :key="item.name">
                                                     <NuxtLink :to="item.href"
-                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-gray-600' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6']">
+                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-gray-600' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                                         <component :is="item.icon"
-                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-white group-hover:text-white', 'h-6 w-6 shrink-0']"
+                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-white group-hover:text-white', 'h-5 w-5 shrink-0']"
                                                             aria-hidden="true" />
                                                         {{ item.name }}
                                                     </NuxtLink>
@@ -151,10 +151,10 @@ const sidebarOpen = ref(false);
         </TransitionRoot>
 
         <!-- Static sidebar for desktop -->
-        <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-56 xl :flex-col">
+        <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-56 xl:flex-col">
 
             <!-- Sidebar component, swap this element with another sidebar if you like -->
-            <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 drop-shadow">
+            <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white pl-5 pr-3 pb-4 drop-shadow">
                 <div class="flex gap-2 h-16 shrink-0 items-center">
                     <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=black"
                         alt="Your Company" />
@@ -225,9 +225,9 @@ const sidebarOpen = ref(false);
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li v-for="item in navigation" :key="item.name">
                                     <NuxtLink :to="item.href"
-                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6']">
+                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                         <component :is="item.icon"
-                                            :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-6 w-6 shrink-0']"
+                                            :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
                                             aria-hidden="true" />
                                         {{ item.name }}
                                     </NuxtLink>
@@ -242,9 +242,9 @@ const sidebarOpen = ref(false);
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li v-for="item in lowerNavigation" :key="item.name">
                                     <NuxtLink :to="item.href"
-                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6']">
+                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                         <component :is="item.icon"
-                                            :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-6 w-6 shrink-0']"
+                                            :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
                                             aria-hidden="true" />
                                         {{ item.name }}
                                     </NuxtLink>
