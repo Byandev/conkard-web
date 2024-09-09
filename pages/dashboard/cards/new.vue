@@ -26,7 +26,7 @@ const coverPhotoCoordinates = ref<string>('')
 <template>
   <div class="h-full">
     <Tabs class="ml-10" />
-    <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:p-10">
+    <div class="flex flex-col md:flex-row h-full gap-5 p-4 md:py-10 md:px-3">
       <div class="flex flex-col gap-7 w-full md:w-1/3">
         <section class="grid grid-cols-1 gap-4">
           <CardPreview :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
