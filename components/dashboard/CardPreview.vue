@@ -66,29 +66,30 @@ const updateEdit = (title: string, id: number) => {
   emit("update:isEdit", true);
 };
 
-const bgColor = computed(() => props.companyImage ? 'white' : props.color);
+const bgColor = computed(() => props.coverPhoto ? 'white' : props.color);
 </script>
 
 <template>
   <div class="grid grid-cols-1 gap-4">
     <div
-      class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:min-w-[100px] shadow drop-shadow-xl">
-      <div class="px-4 py-5 sm:px-6 h-[180px] flex items-center justify-center" :style="{ backgroundColor: bgColor }">
+      class="w-[440px] divide-y divide-gray-200 overflow-hidden rounded-xl bg-white md:min-w-[100px] shadow drop-shadow-xl">
+      <div class="px-4 py-5 sm:px-6 flex items-center justify-center"
+        :class="props.coverPhoto ? 'h-[248px]' : 'h-[100px]'" :style="{ backgroundColor: bgColor }">
         <div>
-          <Preview v-if="props?.companyImage" :width="320" :height="180" :image="props?.companyImage"
-            :coordinates="props.companyImageCoordinates" class="preview" />
+          <Preview v-if="props?.coverPhoto" :width="440" :height="248" :image="props?.coverPhoto"
+            :coordinates="props?.coverPhotoCoordinates" class="preview" />
         </div>
-        <div class="absolute left-0 mt-52 profile-picture-container">
-          <Preview v-if="props?.profilePicture" :width="120" :height="120" :image="props?.profilePicture"
+        <div class="absolute left-0 profile-picture-container" :class="props.coverPhoto ? 'mt-52' : ' mt-24'">
+          <Preview v-if="props?.profilePicture" :width="118" :height="118" :image="props?.profilePicture"
             :coordinates="props.profilePictureCoordinates" class="profile-picture" />
         </div>
-        <div class="absolute right-5 mt-52">
-          <Preview v-if="props?.coverPhoto" :width="192" :height="108" :image="props?.coverPhoto"
-            :coordinates="props.coverPhotoCoordinates" class="preview" />
+        <div class="absolute right-5" :class="props.coverPhoto ? 'mt-52' : ' mt-24'">
+          <Preview v-if="props?.companyImage" :width="157" :height="88" :image="props?.companyImage"
+            :coordinates="props.companyImageCoordinates" class="preview" />
         </div>
       </div>
       <div class="px-5 md:px-5 pb-5">
-        <div class=" mt-28" v-if="props?.profilePicture || props?.coverPhoto"></div>
+        <div class=" mt-16" v-if="props?.profilePicture || props?.companyImage"></div>
         <FieldSection v-if="!isNameFieldEmpty" @click="updateTitle('Name')" :field="nameField"
           :keys="['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']"
           :isNameField="true" />
@@ -134,7 +135,6 @@ const bgColor = computed(() => props.companyImage ? 'white' : props.color);
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* Ensure the image fits inside the div while maintaining aspect ratio */
 }
 
 .profile-picture-container {

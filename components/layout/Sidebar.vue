@@ -151,7 +151,7 @@ const sidebarOpen = ref(false);
         </TransitionRoot>
 
         <!-- Static sidebar for desktop -->
-        <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl :flex-col">
+        <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-56 xl :flex-col">
 
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 drop-shadow">
@@ -264,7 +264,7 @@ const sidebarOpen = ref(false);
             </div>
         </div>
 
-        <div class="xl:pl-72">
+        <div class="xl:pl-56">
             <div
                 class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 xl:px-8">
                 <button type="button" class="-m-2.5 p-2.5 text-gray-700 xl:hidden" @click="sidebarOpen = true">
