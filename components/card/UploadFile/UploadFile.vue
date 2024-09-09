@@ -46,10 +46,22 @@ const handleChange = (type: 'company' | 'profile' | 'cover', { coordinates, imag
     emit('update:imageData', { type, image, coordinates });
 };
 
+const prefix = computed(() => {
+    if (props.title === 'Company') {
+        return 'Logo'
+    }
+    else if (props.title === 'Profile') {
+        return 'Picture'
+    }
+    else if (props.title == 'Cover') {
+        return 'Photo'
+    }
+});
+
 </script>
 
 <template>
-    <AddModal :title="`Add ${props.title}`" :open="props.isOpen">
+    <AddModal :title="`Add ${props.title} ${prefix}`" :open="props.isOpen">
         <div v-if="props.title === 'Company'">
             <ImageUploader type="company" :aspectRatio="16 / 9" :initialImage="companyImg ?? undefined"
                 @update:image="handleImageUpdate('Company', $event)" @change="handleChange('company', $event)" />
