@@ -18,10 +18,6 @@ export function useFetchFields() {
     }
   };
 
-  onMounted(() => {
-    fetchData();
-  });
-
   return {
     cards,
   };

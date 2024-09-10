@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { email, numeric, required, url } from '@vuelidate/validators';
+import { email, required, url } from '@vuelidate/validators';
 import { ref, computed } from 'vue';
 import { useNewCardStore } from '~/store/newCardStore';
 
 const { addOrUpdateGeneralField, generalField, deleteField } = useNewCardStore();
 
 const props = defineProps<{
-    buttonText?: string[];
+    suggestedLabels?: string | null;
     edit_data: boolean;
     id?: number | null;
     type: string
 }>();
+
+console.log(props.suggestedLabels)
 
 const currentField = findFieldById(generalField, props.id ?? null);
 
@@ -118,11 +120,11 @@ const onDeleteField = () => {
                 {{ v$.title.$errors[0].$message }}
             </span>
 
-            <Suggestion v-if="props.buttonText" :current="selectedSuggestion"
+            <Suggestion v-if="props.suggestedLabels" :current="selectedSuggestion"
                 title="Here are some suggestions for your label:" @update:label="suggestionUpdate($event)"
-                :buttonText="props.buttonText" />
+                :suggested-labels="props.suggestedLabels" />
         </div>
-        <ModalFooterButton :-on-cancel="closeModal" :-on-delete="onDeleteField" :edit_data="props.edit_data"
-            :disabled="v$.value.$invalid" :-on-save="saveField" />
+        <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.edit_data"
+            :disabled="v$.value.$invalid" :on-save="saveField" />
     </div>
 </template>

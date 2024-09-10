@@ -6,7 +6,7 @@ import { useNewCardStore } from '~/store/newCardStore';
 const { addOrUpdateMessagingField, messagingField, deleteField } = useNewCardStore();
 
 const props = defineProps<{
-    buttonText?: string[];
+    suggestedLabels?: string | null;
     edit_data: boolean;
     id?: number | null;
     type: string
@@ -36,7 +36,7 @@ const MessagingRules = computed(() => {
         value: {},
     };
 
-    if (['WhatsApp', 'Signal'].includes(props.type)) {
+    if (['Whatsapp', 'Signal'].includes(props.type)) {
         rules.value = { required };
     } else if (props.type === 'Discord') {
         rules.url = { required };
@@ -44,7 +44,7 @@ const MessagingRules = computed(() => {
         rules.username = { required };
     }
 
-    if (['WhatsApp', 'Skype', 'Signal', 'Discord', 'Telegram'].includes(props.type)) {
+    if (['Whatsapp', 'Skype', 'Signal', 'Discord', 'Telegram'].includes(props.type)) {
         rules.title = { required };
     }
 
@@ -83,9 +83,9 @@ const onDeleteField = () => {
 
 <template>
     <div class="flex flex-col gap-4">
-        <FloatingLabelInput v-if="['WhatsApp', 'Signal'].includes(props.type)" v-model="MessagingForm.value"
+        <FloatingLabelInput v-if="['Whatsapp', 'Signal'].includes(props.type)" v-model="MessagingForm.value"
             label="Value" input-name="Value" placeholder="Value" input-type="text" class="w-full" />
-        <span class="text-red-900 text-sm" v-if="v$.value.$error && ['WhatsApp', 'Signal'].includes(props.type)">
+        <span class="text-red-900 text-sm" v-if="v$.value.$error && ['Whatsapp', 'Signal'].includes(props.type)">
             {{ v$.value.$errors[0].$message }}
         </span>
 
@@ -101,18 +101,18 @@ const onDeleteField = () => {
             {{ v$.username.$errors[0].$message }}
         </span>
 
-        <FloatingLabelInput v-if="['WhatsApp', 'Signal', 'Skype', 'Discord', 'Telegram'].includes(props.type)"
+        <FloatingLabelInput v-if="['Whatsapp', 'Signal', 'Skype', 'Discord', 'Telegram'].includes(props.type)"
             v-model="MessagingForm.title" label="Title" input-name="Title" placeholder="Title" input-type="text"
             class="w-full" />
         <span class="text-red-900 text-sm"
-            v-if="v$.title.$error && ['WhatsApp', 'Signal', 'Skype', 'Discord', 'Telegram'].includes(props.type)">
+            v-if="v$.title.$error && ['Whatsapp', 'Signal', 'Skype', 'Discord', 'Telegram'].includes(props.type)">
             {{ v$.title.$errors[0].$message }}
         </span>
 
-        <Suggestion v-if="props.buttonText" :current="MessagingForm.title"
+        <Suggestion v-if="props.suggestedLabels" :current="MessagingForm.title"
             title="Here are some suggestions for your title:" @update:label="MessagingForm.title = $event"
-            :buttonText="props.buttonText" />
+            :suggested-labels="props.suggestedLabels" />
     </div>
-    <ModalFooterButton :-on-cancel="closeModal" :-on-delete="onDeleteField" :edit_data="props.edit_data"
-        :-on-save="saveField" />
+    <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.edit_data"
+        :on-save="saveField" />
 </template>

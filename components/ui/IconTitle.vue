@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
     text: string;
-    icon: any;
+    icon_url: any;
     foreground: string;
     background: string;
 }>();
@@ -10,7 +10,7 @@ const props = defineProps<{
 <template>
     <button type="button" :class="[`bg-${props.background}-100`]"
         class=" whitespace-nowrap p-1 border text-xs border-gray-300 rounded-xl flex flex-col items-center">
-        <component :is="props.icon" :class="[
+        <img :src="props.icon_url" :class="[
             `text-${props.foreground}-900`,
             `group-hover:text-${props.foreground}`,
             'text-center',

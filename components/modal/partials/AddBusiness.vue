@@ -6,7 +6,7 @@ import { useNewCardStore } from '~/store/newCardStore';
 const { addOrUpdateBusinessField, businessField, deleteField } = useNewCardStore();
 
 const props = defineProps<{
-    buttonText?: string[];
+    suggestedLabels?: string | null;
     edit_data: boolean;
     id?: number | null;
     type: string
@@ -92,10 +92,10 @@ const onDeleteField = () => {
             {{ v$.title.$errors[0].$message }}
         </span>
 
-        <Suggestion v-if="props.buttonText" :current="BusinessForm.title"
+        <Suggestion v-if="props.suggestedLabels" :current="BusinessForm.title"
             title="Here are some suggestions for your title:" @update:label="BusinessForm.title = $event"
-            :buttonText="props.buttonText" />
+            :suggested-labels="props.suggestedLabels" />
     </div>
-    <ModalFooterButton :-on-cancel="closeModal" :-on-delete="onDeleteField" :edit_data="props.edit_data"
-        :-on-save="saveField" />
+    <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.edit_data"
+        :on-save="saveField" />
 </template>

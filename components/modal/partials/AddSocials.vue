@@ -6,7 +6,7 @@ import { useNewCardStore } from '~/store/newCardStore';
 const { addOrUpdateSocialField, socialField, deleteField } = useNewCardStore();
 
 const props = defineProps<{
-    buttonText?: string[];
+    suggestedLabels?: string | null;
     edit_data: boolean;
     id?: number | null;
     type: string
@@ -36,7 +36,7 @@ const SocialsRules = computed(() => {
     if (['Threads', 'Yelp'].includes(props.type)) {
         rules.url = { required };
         rules.title = { required };
-    } else if (['Instagram', 'Twitter', 'LinkedIn', 'Facebook', 'YouTube', 'SnapChat', 'TikTok', 'Twitch'].includes(props.type)) {
+    } else if (['Instagram', 'X', 'LinkedIn', 'Facebook', 'Youtube', 'SnapChat', 'Tiktok', 'Twitch', 'Spotify'].includes(props.type)) {
         rules.username = { required };
         rules.title = { required };
     }
@@ -81,27 +81,27 @@ const onDeleteField = () => {
         </span>
 
         <FloatingLabelInput
-            v-if="['Instagram', 'Twitter', 'LinkedIn', 'Facebook', 'YouTube', 'SnapChat', 'TikTok', 'Twitch'].includes(props.type)"
+            v-if="['Instagram', 'X', 'LinkedIn', 'Facebook', 'Youtube', 'SnapChat', 'Tiktok', 'Twitch', 'Spotify'].includes(props.type)"
             v-model="SocialsForm.username" label="Username" input-name="Username" placeholder="Username"
             input-type="text" class="w-full" />
         <span class="text-red-900 text-sm"
-            v-if="v$.username.$error && ['Instagram', 'Twitter', 'LinkedIn', 'Facebook', 'YouTube', 'SnapChat', 'TikTok', 'Twitch'].includes(props.type)">
+            v-if="v$.username.$error && ['Instagram', 'X', 'LinkedIn', 'Facebook', 'Youtube', 'SnapChat', 'Tiktok', 'Twitch', 'Spotify'].includes(props.type)">
             {{ v$.username.$errors[0].$message }}
         </span>
 
         <FloatingLabelInput
-            v-if="['Twitter', 'Instagram', 'Threads', 'Yelp', 'LinkedIn', 'Facebook', 'YouTube', 'SnapChat', 'TikTok', 'Twitch'].includes(props.type)"
+            v-if="['X', 'Instagram', 'Threads', 'Yelp', 'LinkedIn', 'Facebook', 'Youtube', 'SnapChat', 'Tiktok', 'Twitch', 'Spotify'].includes(props.type)"
             v-model="SocialsForm.title" label="Title" input-name="Title" placeholder="Title" input-type="text"
             class="w-full" />
         <span class="text-red-900 text-sm"
-            v-if="v$.title.$error && ['Twitter', 'Instagram', 'Threads', 'Yelp', 'LinkedIn', 'Facebook', 'YouTube', 'SnapChat', 'TikTok', 'Twitch'].includes(props.type)">
+            v-if="v$.title.$error && ['X', 'Instagram', 'Threads', 'Yelp', 'LinkedIn', 'Facebook', 'Youtube', 'SnapChat', 'Tiktok', 'Twitch', 'Spotify'].includes(props.type)">
             {{ v$.title.$errors[0].$message }}
         </span>
 
-        <Suggestion v-if="props.buttonText" :current="SocialsForm.title"
+        <Suggestion v-if="props.suggestedLabels" :current="SocialsForm.title"
             title="Here are some suggestions for your title:" @update:label="SocialsForm.title = $event"
-            :buttonText="props.buttonText" />
+            :suggested-labels="props.suggestedLabels" />
     </div>
-    <ModalFooterButton :-on-cancel="closeModal" :-on-delete="onDeleteField" :edit_data="props.edit_data"
-        :-on-save="saveField" />
+    <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.edit_data"
+        :on-save="saveField" />
 </template>

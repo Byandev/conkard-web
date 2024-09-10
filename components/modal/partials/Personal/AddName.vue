@@ -9,6 +9,8 @@ interface Input {
   value: string;
 }
 
+console.log('AddName Component')
+
 const { addNameField, nameField } = useNewCardStore();
 
 const dynamicInputs = ref<Input[]>([

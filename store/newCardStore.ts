@@ -3,13 +3,13 @@ import { defineStore } from "pinia";
 export interface CardFields {
   personal: {
     name: {
-      first_name: string;
-      last_name: string;
       prefix: string;
+      first_name: string;
       preferred_name: string;
       middle_name: string;
-      maiden_name: string;
+      last_name: string;
       suffix: string;
+      maiden_name: string;
       pronoun: string;
     };
     accreditation: { id: number; value: string[] };

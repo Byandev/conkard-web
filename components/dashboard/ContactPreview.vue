@@ -10,7 +10,7 @@ const props = defineProps<{
     title?: string;
     group?: string;
     username?: string;
-    type: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'Twitter' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'WhatsApp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp';
+    type: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'Twitter' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'Whatsapp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp';
     OnUpdateEdit: (title: string, id: number) => void;
 }>();
 
@@ -29,7 +29,7 @@ const iconName = computed(() => {
         case 'TikTok': return 'akar-icons:tiktok-fill';
         case 'Twitch': return 'akar-icons:twitch-fill';
         case 'LinkedIn': return 'akar-icons:linkedin-fill';
-        case 'WhatsApp': return 'akar-icons:whatsapp-fill';
+        case 'Whatsapp': return 'mdi:whatsapp';
         case 'Signal': return 'bi:signal';
         case 'Discord': return 'akar-icons:discord-fill';
         case 'Skype': return 'mdi:skype';

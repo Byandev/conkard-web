@@ -7,6 +7,8 @@ const { addJobField, jobField } = useNewCardStore();
 
 let jobTitle = ref(jobField?.value || '');
 
+console.log('Job Title Content')
+
 const saveJobFields = () => {
     const jobFields = {
         value: jobTitle.value,

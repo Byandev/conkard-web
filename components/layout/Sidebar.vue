@@ -26,6 +26,7 @@ import {
 } from '@heroicons/vue/24/solid'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { authStore } from '~/store/auth';
+import { useNewCardStore } from '~/store/newCardStore';
 
 interface NavigationItem {
     name: string;
@@ -67,6 +68,27 @@ const isActiveRoute = (href: string) => {
 };
 
 const sidebarOpen = ref(false);
+
+const newCard = useNewCardStore();
+
+const { nameField } = storeToRefs(newCard);
+
+const saveCard = () => {
+
+    const concatenatedName = [
+        nameField.value?.prefix,
+        nameField.value?.first_name,
+        nameField.value?.preferred_name,
+        nameField.value?.middle_name,
+        nameField.value?.last_name,
+        nameField.value?.suffix,
+        nameField.value?.maiden_name,
+        nameField.value?.pronoun
+    ].filter(Boolean).join(' ');
+
+    console.log('Save the Card', concatenatedName);
+};
+
 </script>
 
 <template>
@@ -156,9 +178,9 @@ const sidebarOpen = ref(false);
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white pl-5 pr-3 pb-4 drop-shadow">
                 <div class="flex gap-2 h-16 shrink-0 items-center">
-                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=black"
+                    <img class="h-6 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=black"
                         alt="Your Company" />
-                    <h1 class=" text-2xl font-bold">Conkard</h1>
+                    <h1 class=" text-xl font-bold">Conkard</h1>
                 </div>
 
                 <!-- Profile dropdown -->
@@ -167,7 +189,7 @@ const sidebarOpen = ref(false);
                         id="user-menu-button">
                         <span class="sr-only">Open user menu</span>
                         <div class="flex flex-row items-center">
-                            <img class="h-8 w-8 rounded-full bg-gray-50"
+                            <img class="h-7 w-7 rounded-full bg-gray-50"
                                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                 alt="" />
                             <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{
@@ -295,7 +317,7 @@ const sidebarOpen = ref(false);
                     <div class="flex flex-row gap-x-4">
                         <Button text="Cancel" background="white" foreground="gray" />
                         <ButtonIconIconify icon="material-symbols:save-outline" text="Create" background="gray"
-                            foreground="white" />
+                            foreground="white" @click="saveCard" />
                     </div>
                 </div>
             </div>
