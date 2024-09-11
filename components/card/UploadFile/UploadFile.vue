@@ -22,7 +22,6 @@ const deleteImage = (type: 'company' | 'profile' | 'cover') => {
     } else if (type === 'cover') {
         coverImg.value = null;
     }
-
     emit('update:imageData', { type, image: null, coordinates: null });
     emit('update:isOpen', false)
 
@@ -76,9 +75,9 @@ const prefix = computed(() => {
             <ImageUploader type="cover" :aspectRatio="16 / 9" :initialImage="coverImg ?? undefined"
                 @update:image="handleImageUpdate('Cover', $event)" @change="handleChange('cover', $event)" />
         </div>
-        <ModalFooterButton :has-save="false" :edit_data="true" :OnSave="saveImage"
-            :OnDelete="() => deleteImage(props.title.toLowerCase() as 'company' | 'profile' | 'cover')"
-            :OnCancel="closeModal" />
+        <ModalFooterButton :has-save="false" :edit_data="true" :on-save="saveImage"
+            :on-delete="() => deleteImage(props.title.toLowerCase() as 'company' | 'profile' | 'cover')"
+            :on-cancel="closeModal" />
     </AddModal>
 </template>
 

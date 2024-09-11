@@ -121,8 +121,8 @@ const onDeleteField = () => {
             </span>
 
             <Suggestion v-if="props.suggestedLabels" :current="selectedSuggestion"
-                title="Here are some suggestions for your label:" @update:label="suggestionUpdate($event)"
-                :suggested-labels="props.suggestedLabels" />
+                :title="props.type == 'Company URL' ? 'Here are some suggestions for your title:' : 'Here are some suggestions for your label:'"
+                @update:label="suggestionUpdate($event)" :suggested-labels="props.suggestedLabels" />
         </div>
         <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.edit_data"
             :disabled="v$.value.$invalid" :on-save="saveField" />
