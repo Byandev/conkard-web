@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 export interface CardFields {
+  label: string;
   personal: {
     name: {
       prefix: string;
@@ -59,6 +60,7 @@ export interface CardFields {
 
 export const useNewCardStore = defineStore("newCard", () => {
   const fields = {
+    label: ref<CardFields["label"] | null>(null),
     nameField: ref<CardFields["personal"]["name"] | null>(null),
     jobField: ref<CardFields["personal"]["job"] | null>(null),
     departmentField: ref<CardFields["personal"]["department"] | null>(null),
@@ -119,6 +121,7 @@ export const useNewCardStore = defineStore("newCard", () => {
 
   return {
     ...fields,
+    addLabel: (value: CardFields["label"]) => addField("label", value),
     addNameField: (value: CardFields["personal"]["name"]) =>
       addField("nameField", value),
     addJobField: (value: CardFields["personal"]["job"]) =>

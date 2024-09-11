@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
+import { useNewCardStore } from '~/store/newCardStore';
 
 definePageMeta({
   layout: 'dashboard-layout',
 })
+
+const { addLabel, label } = useNewCardStore();
 
 const { fetchData, fieldTypes } = useFetchFieldTypes();
 
@@ -25,6 +28,7 @@ const coverPhotoCoordinates = ref<string>('')
 
 onMounted(async () => {
   await fetchData();
+  console.log(fieldTypes.value)
 });
 </script>
 
@@ -47,7 +51,8 @@ onMounted(async () => {
       </div>
       <div class="w-full md:max-w-[580px] flex flex-col gap-7">
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
-          <TextInput label="Label this card" input-name="card-label" placeholder="Label this card" input-type="text" />
+          <TextInput v-model="label" @update:model-value="addLabel($event)" label="Add Label" input-name="card-label"
+            placeholder="Label this card" input-type="text" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <AddImages @update:company-image="companyImage = $event"
