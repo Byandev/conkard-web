@@ -10,6 +10,7 @@ export function useFetchFields() {
     try {
       const response: { data: Card[] } = await $api("v1/cards");
       cards.value = response.data;
+      console.log(response);
       if (cards.value.length > 0) {
         await fetchCards(cards.value[0].id.toString());
       }
@@ -18,7 +19,10 @@ export function useFetchFields() {
     }
   };
 
+  onMounted(fetchData);
+
   return {
+    fetchData,
     cards,
   };
 }

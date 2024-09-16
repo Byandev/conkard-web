@@ -21,40 +21,27 @@ export interface CardFields {
   };
   general: {
     id: number | null;
-    title: string;
-    url: string;
-    type: string;
+    name: string;
     value: string;
     label: string;
   };
   socials: {
     id: number | null;
-    title: string;
-    url: string;
-    username: string;
-    type: string;
+    name: string;
+    value: string;
+    label: string;
   };
   messaging: {
     id: number | null;
-    title: string;
-    url: string;
-    username: string;
-    type: string;
+    name: string;
     value: string;
+    label: string;
   };
   business: {
     id: number | null;
-    title: string;
-    url: string;
-    username: string;
-    type: string;
-  };
-  payment: {
-    id: number | null;
-    title: string;
-    url: string;
-    username: string;
-    type: string;
+    name: string;
+    value: string;
+    label: string;
   };
 }
 
@@ -71,7 +58,6 @@ export const useNewCardStore = defineStore("newCard", () => {
     socialField: ref<CardFields["socials"][]>([]),
     messagingField: ref<CardFields["messaging"][]>([]),
     businessField: ref<CardFields["business"][]>([]),
-    paymentField: ref<CardFields["payment"][]>([]),
   };
 
   let uniqueId = 0;
@@ -142,8 +128,6 @@ export const useNewCardStore = defineStore("newCard", () => {
       addOrUpdateField("messagingField", value),
     addOrUpdateBusinessField: (value: CardFields["business"]) =>
       addOrUpdateField("businessField", value),
-    addOrUpdatePaymentField: (value: CardFields["payment"]) =>
-      addOrUpdateField("paymentField", value),
     deleteField,
   };
 });

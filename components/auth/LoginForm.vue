@@ -29,11 +29,14 @@ const { formRef, v$ } = useValidation(LoginForm, LoginRules);
 const { getSession } = useAuth()
 const { setToken } = useAuthState();
 
+const isLoading = ref(false);
+
 const submitForm = async () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
 
   try {
+    isLoading.value = true;
     const response = await signIn('/v1/auth/login', {
       method: 'POST',
       body: {
@@ -42,13 +45,16 @@ const submitForm = async () => {
       },
     });
 
-    setToken(response?.data?.access_token as string)
+    setToken(response?.data?.access_token as string);
 
-    await getSession()
+    await getSession();
 
-    await router.push("/dashboard/cards/personal")
+    await router.push("/dashboard/cards/personal");
   } catch (error) {
-    console.error(error as ApiErrorResponse)
+    console.error(error as ApiErrorResponse);
+  } finally {
+    isLoading.value = false;
+    console.log('Form submission attempt finished.');
   }
 };
 </script>
@@ -60,7 +66,7 @@ const submitForm = async () => {
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <img alt="Your Company" class="h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" />
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600">
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Not a member?
@@ -80,8 +86,8 @@ const submitForm = async () => {
                   <input id="email" v-model="formRef.email" autocomplete="email"
                     :class="{ 'ring-red-300': v$.email.$error, 'ring-gray-300': !v$.email.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    type="email" />
-                  <span class="text-red-900 text-sm" v-if="v$.email.$error">{{ v$.email.$errors[0].$message
+                    type="email">
+                  <span v-if="v$.email.$error" class="text-red-900 text-sm">{{ v$.email.$errors[0].$message
                     }}</span>
                 </div>
               </div>
@@ -92,8 +98,8 @@ const submitForm = async () => {
                   <input id="password" v-model="formRef.password" autocomplete="current-password"
                     :class="{ 'ring-red-300': v$.password.$error, 'ring-gray-300': !v$.password.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    type="password" />
-                  <span class="text-red-900 text-sm" v-if="v$.password.$error">{{
+                    type="password">
+                  <span v-if="v$.password.$error" class="text-red-900 text-sm">{{
                     v$.password.$errors[0].$message }}</span>
                 </div>
               </div>
@@ -101,7 +107,7 @@ const submitForm = async () => {
               <div class="flex items-center justify-between">
                 <div class="flex items-center">
                   <input id="remember-me" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    name="remember-me" type="checkbox" />
+                    name="remember-me" type="checkbox">
                   <label class="ml-3 block text-sm leading-6 text-gray-700" for="remember-me">Remember me</label>
                 </div>
 
@@ -111,11 +117,8 @@ const submitForm = async () => {
               </div>
 
               <div>
-                <button
-                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  type="submit">
-                  Sign in
-                </button>
+                <Button :is-wide="true" :is-loading="isLoading" text="Sign in" background="gray" foreground="white"
+                  type="submit" />
               </div>
             </form>
           </div>
@@ -154,7 +157,7 @@ const submitForm = async () => {
     </div>
     <div class="relative hidden w-0 flex-1 lg:block">
       <img alt="" class="absolute inset-0 h-full w-full object-cover"
-        src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" />
+        src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80">
     </div>
   </div>
 

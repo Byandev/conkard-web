@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useNewCardStore } from '~/store/newCardStore';
-import type { FieldType } from '~/types/models/FieldType';
+import type { Type } from '~/types/models/Card';
 import { computed } from 'vue';
 
 const newCardStore = useNewCardStore();
 
 const props = defineProps<{
-    fieldTypes: FieldType[];
+    fieldTypes: Type[];
 }>();
 
 const { nameField, jobField, departmentField, companyNameField } = storeToRefs(newCardStore);
@@ -43,19 +43,24 @@ const groupedFieldTypes = computed(() => {
         }
         acc[fieldType.category].push(fieldType);
         return acc;
-    }, {} as Record<string, FieldType[]>);
+    }, {} as Record<string, Type[]>);
 });
+
+const sentenceCaseCategory = (text: string) => {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
 </script>
 
 <template>
-    <CardTitle forId="add-details" text="Add your details" />
+    <CardTitle for-id="add-details" text="Add your details" />
     <div v-for="(fieldTypes, category) in groupedFieldTypes" :key="category" class="mt-5">
-        <CardSubtitle :forId="`add-details-${category}`" :text="category" />
+        <CardSubtitle :for-id="`add-details-${category}`" :text="sentenceCaseCategory(category)" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             <IconTitle v-for="(fieldType, index) in fieldTypes" :key="index"
-                class="disabled:opacity-40 disabled:cursor-not-allowed" @click="updateTitle(fieldType.name)"
-                foreground="gray" background="gray" :icon_url="fieldType.icon_url" :text="fieldType.name"
-                :disabled="isFieldDisabled(fieldType.name)" />
+                class="disabled:opacity-40 disabled:cursor-not-allowed" foreground="gray" background="gray"
+                :icon_url="fieldType.icon_url" :text="fieldType.name" :disabled="isFieldDisabled(fieldType.name)"
+                @click="updateTitle(fieldType.name)" />
         </div>
     </div>
 </template>

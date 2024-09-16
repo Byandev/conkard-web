@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import type { FieldType } from "~/types/models/FieldType";
 
 export function useFetchFieldTypes() {

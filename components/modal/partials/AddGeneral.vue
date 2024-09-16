@@ -7,46 +7,40 @@ const { addOrUpdateGeneralField, generalField, deleteField } = useNewCardStore()
 
 const props = defineProps<{
     suggestedLabels?: string | null;
-    edit_data: boolean;
+    editData: boolean;
     id?: number | null;
-    type: string
+    name: string;
 }>();
 
-console.log(props.suggestedLabels)
+console.log(props.name)
 
 const currentField = findFieldById(generalField, props.id ?? null);
 
 interface GeneralFormInterface {
-    title: string;
-    url: string;
     value: string;
     label: string;
 }
 
 const GeneralForm = ref<GeneralFormInterface>({
-    title: props.edit_data ? currentField?.title ?? '' : '',
-    url: props.edit_data ? currentField?.url ?? '' : '',
-    value: props.edit_data ? currentField?.value ?? '' : '',
-    label: props.edit_data ? currentField?.label ?? '' : ''
+    value: props.editData ? currentField?.value ?? '' : '',
+    label: props.editData ? currentField?.label ?? '' : ''
 });
 
 const GeneralFormRules = computed(() => {
     const rules: any = {
-        title: {},
-        url: {},
         value: {},
         label: {}
     };
 
-    if (props.type === 'Email') {
+    if (props.name === 'Email') {
         rules.value = { required, email };
         rules.label = { required };
-    } else if (props.type === 'Phone' || props.type === 'Address') {
+    } else if (props.name === 'Phone' || props.name === 'Address') {
         rules.value = { required };
         rules.label = { required };
-    } else if (['url', 'Link', 'Company URL'].includes(props.type)) {
-        rules.url = { required, url };
-        rules.title = { required };
+    } else if (['url', 'Link', 'Company URL'].includes(props.name)) {
+        rules.value = { required, url };
+        rules.label = { required };
     }
 
     return rules;
@@ -55,11 +49,11 @@ const GeneralFormRules = computed(() => {
 const { v$ } = useValidation(GeneralForm, GeneralFormRules);
 
 const suggestionUpdate = (selected: string) => {
-    props.type == 'Company URL' ? GeneralForm.value.title = selected : GeneralForm.value.label = selected;
+    return GeneralForm.value.label = selected;
 }
 
 const selectedSuggestion = computed(() => {
-    return props.type == 'Company URL' ? GeneralForm.value.title : GeneralForm.value.label;
+    return GeneralForm.value.label;
 });
 
 const saveField = () => {
@@ -70,9 +64,7 @@ const saveField = () => {
         label: GeneralForm.value.label,
         value: GeneralForm.value.value,
         id: props.id ?? null,
-        url: GeneralForm.value.url,
-        title: GeneralForm.value.title,
-        type: props.type
+        name: props.name
     });
     closeModal();
 };
@@ -92,39 +84,48 @@ const onDeleteField = () => {
 <template>
     <div>
         <div class="flex flex-col gap-4">
-            <FloatingLabelInput v-if="['Email', 'Phone', 'Address'].includes(props.type)" v-model="GeneralForm.value"
+            <FloatingLabelInput
+                v-if="['Email', 'Phone', 'Address'].includes(props.name)" v-model="GeneralForm.value"
                 label="Value" input-name="Value" placeholder="Value" input-type="text" class="w-full" />
-            <span class="text-red-900 text-sm"
-                v-if="v$.value.$error && ['Email', 'Phone', 'Address'].includes(props.type)">
+            <span
+                v-if="v$.value.$error && ['Email', 'Phone', 'Address'].includes(props.name)"
+                class="text-red-900 text-sm">
                 {{ v$.value.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['Email', 'Phone', 'Address'].includes(props.type)" v-model="GeneralForm.label"
+            <FloatingLabelInput
+                v-if="['Email', 'Phone', 'Address'].includes(props.name)" v-model="GeneralForm.label"
                 label="Label (Optional)" input-name="field-label" placeholder="Label (Optional)" input-type="text"
                 class="w-full" />
-            <span class="text-red-900 text-sm"
-                v-if="v$.label.$error && ['Email', 'Phone', 'Address'].includes(props.type)">
+            <span
+                v-if="v$.label.$error && ['Email', 'Phone', 'Address'].includes(props.name)"
+                class="text-red-900 text-sm">
                 {{ v$.label.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['url', 'Link', 'Company URL'].includes(props.type)" v-model="GeneralForm.url"
+            <FloatingLabelInput
+                v-if="['url', 'Link', 'Company URL'].includes(props.name)" v-model="GeneralForm.value"
                 label="URL" input-name="URL" placeholder="URL" input-type="text" class="w-full" />
-            <span class="text-red-900 text-sm"
-                v-if="v$.url.$error && ['url', 'Link', 'Company URL'].includes(props.type)">
-                {{ v$.url.$errors[0].$message }}
+            <span
+                v-if="v$.value.$error && ['url', 'Link', 'Company URL'].includes(props.name)"
+                class="text-red-900 text-sm">
+                {{ v$.value.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['Link', 'Company URL'].includes(props.type)" v-model="GeneralForm.title"
+            <FloatingLabelInput
+                v-if="['Link', 'Company URL'].includes(props.name)" v-model="GeneralForm.label"
                 label="Title" input-name="Title" placeholder="Title" input-type="text" class="w-full" />
-            <span class="text-red-900 text-sm" v-if="v$.title.$error && ['Link', 'Company URL'].includes(props.type)">
-                {{ v$.title.$errors[0].$message }}
+            <span v-if="v$.label.$error && ['Link', 'Company URL'].includes(props.name)" class="text-red-900 text-sm">
+                {{ v$.label.$errors[0].$message }}
             </span>
 
-            <Suggestion v-if="props.suggestedLabels" :current="selectedSuggestion"
-                :title="props.type == 'Company URL' ? 'Here are some suggestions for your title:' : 'Here are some suggestions for your label:'"
-                @update:label="suggestionUpdate($event)" :suggested-labels="props.suggestedLabels" />
+            <Suggestion
+                v-if="props.suggestedLabels" :current="selectedSuggestion"
+                :title="props.name == 'Company URL' ? 'Here are some suggestions for your title:' : 'Here are some suggestions for your label:'"
+                :suggested-labels="props.suggestedLabels" @update:label="suggestionUpdate($event)" />
         </div>
-        <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.edit_data"
+        <ModalFooterButton
+:on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.editData"
             :disabled="v$.value.$invalid" :on-save="saveField" />
     </div>
 </template>

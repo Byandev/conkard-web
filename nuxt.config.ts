@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/icon",
     "@vueform/nuxt",
+    "nuxt-svgo",
   ],
 
   auth: {

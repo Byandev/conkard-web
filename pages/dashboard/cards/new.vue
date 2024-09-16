@@ -28,7 +28,6 @@ const coverPhotoCoordinates = ref<string>('')
 
 onMounted(async () => {
   await fetchData();
-  console.log(fieldTypes.value)
 });
 </script>
 

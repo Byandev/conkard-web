@@ -33,6 +33,8 @@ const RegisterRules = {
 
 const { formRef, v$ } = useValidation(RegisterForm, RegisterRules);
 
+const isLoading = ref(false);
+
 const submitForm = async () => {
   console.log(RegisterForm.value)
 
@@ -40,6 +42,7 @@ const submitForm = async () => {
   if (v$.value.$invalid) return;
 
   try {
+    isLoading.value = true;
     const response = await signUp('/v1/auth/register', {
       method: 'POST',
       body: {
@@ -54,9 +57,12 @@ const submitForm = async () => {
 
     await getSession()
 
-    await router.push("/dashboard")
+    await router.push("/dashboard/cards/personal")
   } catch (error) {
     console.log(error as ApiErrorResponse)
+  } finally {
+    isLoading.value = false;
+    console.log('Form submission attempt finished.')
   }
 };
 </script>
@@ -67,7 +73,7 @@ const submitForm = async () => {
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <img alt="Your Company" class="h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600">
+            src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=600">
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Register an account</h2>
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Already a member?
@@ -88,7 +94,7 @@ const submitForm = async () => {
                     :class="{ 'ring-red-300': v$.name.$error, 'ring-gray-300': !v$.name.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="text">
-                  <span class="text-red-900 text-sm" v-if="v$.name.$error">{{
+                  <span v-if="v$.name.$error" class="text-red-900 text-sm">{{
                     v$.name.$errors[0].$message }}</span>
                 </div>
               </div>
@@ -100,7 +106,7 @@ const submitForm = async () => {
                     :class="{ 'ring-red-300': v$.email.$error, 'ring-gray-300': !v$.email.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="email">
-                  <span class="text-red-900 text-sm" v-if="v$.email.$error">{{
+                  <span v-if="v$.email.$error" class="text-red-900 text-sm">{{
                     v$.email.$errors[0].$message }}</span>
                 </div>
               </div>
@@ -112,7 +118,7 @@ const submitForm = async () => {
                     :class="{ 'ring-red-300': v$.password.$error, 'ring-gray-300': !v$.password.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="password">
-                  <span class="text-red-900 text-sm" v-if="v$.password.$error">{{
+                  <span v-if="v$.password.$error" class="text-red-900 text-sm">{{
                     v$.password.$errors[0].$message }}</span>
                 </div>
               </div>
@@ -125,16 +131,13 @@ const submitForm = async () => {
                     :class="{ 'ring-red-300': v$.password_confirmation.$error, 'ring-gray-300': !v$.password_confirmation.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="password">
-                  <span class="text-red-900 text-sm" v-if="v$.password_confirmation.$error">{{
+                  <span v-if="v$.password_confirmation.$error" class="text-red-900 text-sm">{{
                     v$.password_confirmation.$errors[0].$message }}</span>
                 </div>
               </div>
               <div>
-                <button
-                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  type="submit">
-                  Sign up
-                </button>
+                <Button :is-wide="true" :is-loading="isLoading" text="Sign up" background="gray" foreground="white"
+                  type="submit" />
               </div>
             </form>
           </div>

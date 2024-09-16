@@ -1,17 +1,69 @@
 <script setup lang="ts">
-import { EnvelopeIcon } from '@heroicons/vue/24/solid';
+import { ref, computed, watch } from 'vue';
 import type { Field } from '~/types/models/Card';
-import { computed } from 'vue';
 
 const props = defineProps<{
     currentCard: Field[] | null;
 }>();
 
-// Sort the cards by its order
-const sortedCards = computed(() => {
-    if (!props.currentCard) return [];
-    return [...props.currentCard].sort((a, b) => (a.type.order || 0) - (b.type.order || 0));
+interface ComponentData {
+    id: number | null;
+    value?: string | null;
+    label?: string | null;
+    name?: string | null;
+    category?: string | null;
+}
+
+const isFieldEmpty = (field: ComputedRef<Field | null>, keys: (keyof Field)[]) => computed(() => keys.every(key => !field.value?.[key]));
+
+const cardItem = ref<ComponentData[]>([]);
+
+const nameField = computed<Field | null>(() => {
+    return props.currentCard?.find(field => field.type.name === "Name") || null;
 });
+
+// Get the job title field
+const jobField = computed<Field | null>(() => {
+    return props.currentCard?.find(field => field.type.name === "Job Title") || null;
+});
+
+// Get the department title field
+const departmentField = computed<Field | null>(() => {
+    return props.currentCard?.find(field => field.type.name === "Department") || null;
+});
+
+// Get the company name field
+const companyNameField = computed<Field | null>(() => {
+    return props.currentCard?.find(field => field.type.name === "Company Name") || null;
+});
+
+const generalField = computed<Field[] | null>(() => {
+    const GeneralField = props.currentCard?.filter(field => field.type.category === "GENERAL") || null;
+    return GeneralField;
+});
+
+const isJobFieldEmpty = isFieldEmpty(jobField, ['value']);
+const isDepartmentFieldEmpty = isFieldEmpty(departmentField, ['value']);
+const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
+
+watch(
+    [generalField],
+    ([newGeneralField]) => {
+        console.log(newGeneralField)
+        cardItem.value = [
+            ...newGeneralField?.map(general => ({
+                id: general.id ?? null,
+                title: general.title ?? '',
+                url: general.url ?? '',
+                type: general.type.name ?? '',
+                value: general.value,
+                label: general.label,
+                category: 'General'
+            })) ?? []
+        ];
+    },
+    { immediate: true, deep: true }
+);
 </script>
 
 <template>
@@ -19,32 +71,28 @@ const sortedCards = computed(() => {
         <div
             class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:w-[440px] shadow drop-shadow-xl">
             <div class="px-4 py-5 sm:px-6 h-28 bg-orange-400 flex items-center justify-center">
-                <svg class="h-12 w-12 text-white"
-                    xmlns="http://conkard-api-dev.byandev.com/storage/images/icons/name.svg" viewBox="0 0 20 20"
+                <svg
+class="h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
-                    <path fill-rule="evenodd"
+                    <path
+fill-rule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12zm0-10a2 2 0 100-4 2 2 0 000 4z"
                         clip-rule="evenodd" />
                 </svg>
             </div>
             <div class="px-5 md:px-10 pb-7">
                 <div class="text-2xl md:text-3xl my-7 font-semibold">
-                    <div class="whitespace-nowrap">{{ sortedCards[0] ? sortedCards[0].value : 'No Name' }}</div>
+                    <div>{{ nameField?.value }}</div>
                 </div>
-                <div v-if="sortedCards.length > 1" class="flex gap-5 flex-col">
-                    <div v-for="(item, index) in sortedCards.slice(1)" :key="index"
-                        class="flex flex-row items-center gap-5">
-                        <div class="bg-gray-500 rounded-full p-2 inline-flex items-center justify-center">
-                            <EnvelopeIcon class="text-white h-6 w-6" />
-                        </div>
-                        <div>
-                            <div class="text-sm md:text-base">
-                                <div>
-                                    {{ item.value }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <FieldSection v-if="!isJobFieldEmpty" :field="jobField" :keys="['value']" />
+                <FieldSection v-if="!isDepartmentFieldEmpty" :field="departmentField" :keys="['value']" />
+                <FieldSection v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']" />
+
+                <div v-for="(item, index) in cardItem" :key="index">
+                    <ContactPreview 
+                        :id="item.id ?? 0" :color="'#FFA500'" :value="item.value ?? ''"
+                        :label="item.label ?? ''" :category="item.category ?? ''"
+                        :name="item.name ?? ''" />
                 </div>
             </div>
         </div>
