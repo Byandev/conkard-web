@@ -78,20 +78,20 @@ const { cardData } = useCardData();
 const handleSaveCard = async () => {
     console.log(cardData.value);
 
-    // try {
-    //     const response = await saveCard('/v1/cards', {
-    //         method: 'POST',
-    //         body: {
-    //             label: cardData.value.label,
-    //             fields: cardData.value.fields,
-    //         },
-    //     });
+    try {
+        const response = await saveCard('/v1/cards', {
+            method: 'POST',
+            body: {
+                label: cardData.value.label,
+                fields: cardData.value.fields,
+            },
+        });
 
-    //     console.log(response);
+        console.log(response);
 
-    // } catch (error) {
-    //     console.error(error as ApiErrorResponse)
-    // }
+    } catch (error) {
+        console.error(error as ApiErrorResponse)
+    }
 };
 </script>
 

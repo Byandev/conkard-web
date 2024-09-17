@@ -39,19 +39,19 @@ onMounted(async () => {
         <section class="grid grid-cols-1 gap-4">
           <CardPreview :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
             :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
-            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" @update:id="currentId = $event"
-            @update:title="ModalTitle = $event" :color="previewColor" @update:open="isModalOpen = $event"
+            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" :color="previewColor"
+            @update:id="currentId = $event" @update:title="ModalTitle = $event" @update:open="isModalOpen = $event"
             @update:is-edit="isEdit = $event" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
-            <ModalContent :field-types="fieldTypes" :id="currentId" :is-edit="isEdit" @update:open="isModalOpen = false"
-              :modal-title="ModalTitle" />
+            <ModalContent :id="currentId" :field-types="fieldTypes" :is-edit="isEdit" :modal-title="ModalTitle"
+              @update:open="isModalOpen = false" />
           </AddModal>
         </section>
       </div>
       <div class="w-full md:max-w-[580px] flex flex-col gap-7">
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
-          <TextInput v-model="label" @update:model-value="addLabel($event)" label="Add Label" input-name="card-label"
-            placeholder="Label this card" input-type="text" />
+          <TextInput v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
+            input-type="text" @update:model-value="addLabel($event)" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
           <AddImages @update:company-image="companyImage = $event"
