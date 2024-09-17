@@ -7,12 +7,16 @@ export default {
     "./plugins/**/*.{js,ts}",
     "./app.vue",
     "./error.vue",
+    "./vueform.config.ts", // or where `vueform.config.js` is located. Change `.js` to `.ts` if required.
+    "./node_modules/@vueform/vueform/themes/tailwind/**/*.vue",
+    "./node_modules/@vueform/vueform/themes/tailwind/**/*.js",
   ],
   theme: {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    require("@tailwindcss/forms"),
+    require("@vueform/vueform/tailwind"),
   ],
-}
-
+  darkMode: "class",
+};

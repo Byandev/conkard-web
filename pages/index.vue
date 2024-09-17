@@ -6,7 +6,7 @@ const welcomeMessage = ref('Welcome to Conkard!');
 definePageMeta({
   auth: {
     unauthenticatedOnly: true,
-    navigateAuthenticatedTo: '/dashboard',
+    navigateAuthenticatedTo: '/dashboard/cards/personal',
   },
 });
 </script>
