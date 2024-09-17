@@ -84,8 +84,9 @@ watch(
                 <FieldSection v-if="!isDepartmentFieldEmpty" :field="departmentField" :keys="['value']" />
                 <FieldSection v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']" />
                 <div v-for="(item, index) in cardItem" :key="index">
-                    <ContactPreview :id="item.id ?? 0" class="mt-5" :color="'#FFA500'" :value="item.value ?? ''"
-                        :label="item.label ?? ''" :category="item.category ?? ''" :name="item.name ?? ''" />
+                    <ContactPreview :id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
+                        :value="item.value ?? ''" :label="item.label ?? ''" :category="item.category ?? ''"
+                        :name="item.name ?? ''" />
                 </div>
             </div>
         </div>
