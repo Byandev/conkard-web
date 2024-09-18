@@ -6,15 +6,7 @@ const props = defineProps<{
     currentCard: Field[] | null;
 }>();
 
-interface ComponentData {
-    id: number | null;
-    value?: string | null;
-    label?: string | null;
-    name?: string | null;
-    category?: string | null;
-}
-
-const cardItem = ref<ComponentData[]>([]);
+const cardItem = ref<Field[]>([]);
 
 const getField = (name: string) => computed(() => props.currentCard?.find(field => field.type.name === name) || null);
 const getFieldsByCategory = (category: string) => computed(() => props.currentCard?.filter(field => field.type.category === category) || null);
@@ -37,7 +29,7 @@ const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
 watch(
     [generalField, socialField, messagingField, businessField],
     ([newGeneralField, newSocialField, newMessagingField, newBusinessField]) => {
-        console.log(newGeneralField);
+        console.log('General', newGeneralField);
         cardItem.value = [
             ...newGeneralField?.map(field => ({ ...field, category: 'General' })) ?? [],
             ...newSocialField?.map(field => ({ ...field, category: 'Social' })) ?? [],
@@ -70,8 +62,8 @@ watch(
                 <FieldSection v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']" />
                 <div v-for="(item, index) in cardItem" :key="index">
                     <ContactPreview :id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
-                        :value="item.value ?? ''" :label="item.label ?? ''" :category="item.category ?? ''"
-                        :name="item.name ?? ''" />
+                        :value="item.value ?? ''" :label="item.label ?? ''" :category="item.type.category ?? ''"
+                        :name="item.type.name ?? ''" />
                 </div>
             </div>
         </div>

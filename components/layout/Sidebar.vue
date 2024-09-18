@@ -305,8 +305,9 @@ const handleSaveCard = async () => {
                 <div v-if="isDashboardCardsPersonal"
                     class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between">
                     <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
-                        <NuxtLink to="/dashboard/cards/edit" class="flex gap-x-4 items-center">
-                            <ButtonIcon :icon="PencilSquareIcon" text="Edit" background="gray" foreground="white" />
+                        <NuxtLink to="/dashboard/cards/edit" class="p-0">
+                            <ButtonIcon class="h-full" :icon="PencilSquareIcon" text="Edit" background="gray"
+                                foreground="white" />
                         </NuxtLink>
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
