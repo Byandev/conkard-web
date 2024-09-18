@@ -13,6 +13,8 @@ const cardStore = useCardStore();
 const { currentCard } = storeToRefs(cardStore);
 
 console.log(currentCard);
+
+console.log('List of Cards', cards)
 </script>
 
 <template>

@@ -14,50 +14,35 @@ interface ComponentData {
     category?: string | null;
 }
 
-const isFieldEmpty = (field: ComputedRef<Field | null>, keys: (keyof Field)[]) => computed(() => keys.every(key => !field.value?.[key]));
-
 const cardItem = ref<ComponentData[]>([]);
 
-const nameField = computed<Field | null>(() => {
-    return props.currentCard?.find(field => field.type.name === "Name") || null;
-});
+const getField = (name: string) => computed(() => props.currentCard?.find(field => field.type.name === name) || null);
+const getFieldsByCategory = (category: string) => computed(() => props.currentCard?.filter(field => field.type.category === category) || null);
+const isFieldEmpty = (field: ComputedRef<Field | null>, keys: (keyof Field)[]) => computed(() => keys.every(key => !field.value?.[key]));
 
-// Get the job title field
-const jobField = computed<Field | null>(() => {
-    return props.currentCard?.find(field => field.type.name === "Job Title") || null;
-});
+const nameField = getField("Name");
+const jobField = getField("Job Title");
+const departmentField = getField("Department");
+const companyNameField = getField("Company Name");
 
-// Get the department title field
-const departmentField = computed<Field | null>(() => {
-    return props.currentCard?.find(field => field.type.name === "Department") || null;
-});
-
-// Get the company name field
-const companyNameField = computed<Field | null>(() => {
-    return props.currentCard?.find(field => field.type.name === "Company Name") || null;
-});
-
-const generalField = computed<Field[] | null>(() => {
-    const GeneralField = props.currentCard?.filter(field => field.type.category === "GENERAL") || null;
-    return GeneralField;
-});
+const generalField = getFieldsByCategory("GENERAL");
+const socialField = getFieldsByCategory("SOCIAL");
+const messagingField = getFieldsByCategory("MESSAGING");
+const businessField = getFieldsByCategory("BUSINESS");
 
 const isJobFieldEmpty = isFieldEmpty(jobField, ['value']);
 const isDepartmentFieldEmpty = isFieldEmpty(departmentField, ['value']);
 const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
 
 watch(
-    [generalField],
-    ([newGeneralField]) => {
-        console.log(newGeneralField)
+    [generalField, socialField, messagingField, businessField],
+    ([newGeneralField, newSocialField, newMessagingField, newBusinessField]) => {
+        console.log(newGeneralField);
         cardItem.value = [
-            ...newGeneralField?.map(general => ({
-                id: general.id ?? null,
-                name: general.type.name ?? '',
-                value: general.value,
-                label: general.label,
-                category: 'General'
-            })) ?? []
+            ...newGeneralField?.map(field => ({ ...field, category: 'General' })) ?? [],
+            ...newSocialField?.map(field => ({ ...field, category: 'Social' })) ?? [],
+            ...newMessagingField?.map(field => ({ ...field, category: 'Messaging' })) ?? [],
+            ...newBusinessField?.map(field => ({ ...field, category: 'Business' })) ?? []
         ];
     },
     { immediate: true, deep: true }
