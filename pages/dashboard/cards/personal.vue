@@ -9,12 +9,20 @@ definePageMeta({
 
 const { cards } = useFetchFields();
 const { fetchCards } = useCurrentCard();
-const cardStore = useCardStore();
-const { currentCard } = storeToRefs(cardStore);
+const { setLoading } = useCardStore();
+const { currentCard } = storeToRefs(useCardStore());
 
-console.log(currentCard);
+const handleCurrentCard = async (id: number, label: string) => {
+  try {
+    setLoading(true)
+    await fetchCards(id, label)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    setLoading(false)
+  }
+}
 
-console.log('List of Cards', cards)
 </script>
 
 <template>
@@ -28,7 +36,7 @@ console.log('List of Cards', cards)
         <div class="flex flex-col gap-3 justify-start items-start">
           <div v-for="card in cards" :key="card.id"
             class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full md:w-auto">
-            <h2 class="text-lg font-medium whitespace-nowrap" @click="fetchCards(card.id.toString())">
+            <h2 class="text-lg font-medium whitespace-nowrap" @click="handleCurrentCard(card.id, card.label)">
               {{ card.label }}
             </h2>
           </div>

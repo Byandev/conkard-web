@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import { useCardStore } from '~/store/cardStore';
 import type { Field } from '~/types/models/Card';
 
 const props = defineProps<{
@@ -7,6 +8,10 @@ const props = defineProps<{
 }>();
 
 const cardItem = ref<Field[]>([]);
+
+const cardStore = useCardStore();
+
+const { isLoading } = storeToRefs(cardStore);
 
 const getField = (name: string) => computed(() => props.currentCard?.find(field => field.type.name === name) || null);
 const getFieldsByCategory = (category: string) => computed(() => props.currentCard?.filter(field => field.type.category === category) || null);
@@ -29,7 +34,6 @@ const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
 watch(
     [generalField, socialField, messagingField, businessField],
     ([newGeneralField, newSocialField, newMessagingField, newBusinessField]) => {
-        console.log('General', newGeneralField);
         cardItem.value = [
             ...newGeneralField?.map(field => ({ ...field, category: 'General' })) ?? [],
             ...newSocialField?.map(field => ({ ...field, category: 'Social' })) ?? [],
@@ -53,7 +57,12 @@ watch(
                         clip-rule="evenodd" />
                 </svg>
             </div>
-            <div class="px-5 md:px-10 pb-7">
+            <div v-if="isLoading" class="animate-pulse px-5 md:px-10 my-7">
+                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
+                <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
+                <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+            </div>
+            <div v-else class=" px-5 md:px-10 pb-7">
                 <div class="text-2xl md:text-3xl mt-7 mb-3 font-semibold">
                     <div>{{ nameField?.value }}</div>
                 </div>

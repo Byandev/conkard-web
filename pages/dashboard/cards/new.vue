@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
+import { useCardStore } from '~/store/cardStore';
 import { useNewCardStore } from '~/store/newCardStore';
 
 definePageMeta({
@@ -8,7 +9,7 @@ definePageMeta({
 })
 
 const { addLabel, label } = useNewCardStore();
-
+const { setLoading } = useCardStore();
 const { fetchData, fieldTypes } = useFetchFieldTypes();
 
 const isModalOpen = ref(false)
@@ -26,8 +27,16 @@ const profilePictureCoordinates = ref<string>('')
 const coverPhoto = ref<string>('')
 const coverPhotoCoordinates = ref<string>('')
 
+
 onMounted(async () => {
-  await fetchData();
+  try {
+    setLoading(true)
+    await fetchData();
+  } catch (error) {
+    console.log('Error', error)
+  } finally {
+    setLoading(false)
+  }
 });
 </script>
 

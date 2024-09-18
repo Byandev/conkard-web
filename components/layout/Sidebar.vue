@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import {
     Dialog,
     DialogPanel,
@@ -29,6 +30,7 @@ import { authStore } from '~/store/auth';
 import type { ApiErrorResponse } from '~/types/api/response/error';
 import type { SaveCardResponse } from '~/types/api/response/saveCard';
 import { useCardData } from '~/composables/useCardData';
+import { useCardStore } from '~/store/cardStore';
 
 interface NavigationItem {
     name: string;
@@ -59,8 +61,10 @@ const userNavigation: UserNavigationItem[] = [
 ];
 
 const route = useRoute();
+const router = useRouter();
 
-const isDashboardCardsNeworEdit = computed(() => route.path === '/dashboard/cards/new' || route.path === '/dashboard/cards/edit');
+const isDashboardCardsEdit = computed(() => route.path === '/dashboard/cards/edit');
+const isDashboardCardsNew = computed(() => route.path === '/dashboard/cards/new');
 const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/cards/personal');
 
 const { user } = authStore();
@@ -78,21 +82,47 @@ const { cardData } = useCardData();
 const handleSaveCard = async () => {
     console.log(cardData.value);
 
-    try {
-        const response = await saveCard('/v1/cards', {
-            method: 'POST',
-            body: {
-                label: cardData.value.label,
-                fields: cardData.value.fields,
-            },
-        });
+    const cardStore = useCardStore();
 
-        console.log(response);
+    const { currentId } = storeToRefs(cardStore);
 
-    } catch (error) {
-        console.error(error as ApiErrorResponse)
+    if (isDashboardCardsNew.value) {
+        try {
+            const response = await saveCard('/v1/cards', {
+                method: 'POST',
+                body: {
+                    label: cardData.value.label,
+                    fields: cardData.value.fields,
+                },
+            });
+
+            console.log(response);
+
+        } catch (error) {
+            console.error(error as ApiErrorResponse)
+        }
+    }
+    else {
+        try {
+            const response = await saveCard(`/v1/cards/${currentId.value}`, {
+                method: 'PUT',
+                body: {
+                    label: cardData.value.label,
+                    fields: cardData.value.fields,
+                },
+            });
+
+            console.log(response);
+
+        } catch (error) {
+            console.error(error as ApiErrorResponse)
+        }
     }
 };
+
+const navigateDashboard = () => {
+    router.push('/dashboard/cards/personal');
+}; 
 </script>
 
 <template>
@@ -315,16 +345,17 @@ const handleSaveCard = async () => {
                 </div>
 
                 <!-- New Card Options -->
-                <div v-if="isDashboardCardsNeworEdit"
+                <div v-if="isDashboardCardsNew || isDashboardCardsEdit"
                     class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between overflow-x-auto">
                     <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
                         <ButtonIcon :icon="Cog8ToothIcon" text="Settings" background="white" foreground="gray" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
                     <div class="flex flex-row gap-x-4">
-                        <Button text="Cancel" background="white" foreground="gray" />
-                        <ButtonIconIconify icon="material-symbols:save-outline" text="Create" background="gray"
-                            foreground="white" @click="handleSaveCard" />
+                        <Button text="Cancel" background="white" foreground="gray" @click="navigateDashboard" />
+                        <ButtonIconIconify icon="material-symbols:save-outline"
+                            :text="isDashboardCardsNew ? 'Create' : 'Save'" background="gray" foreground="white"
+                            @click="handleSaveCard" />
                     </div>
                 </div>
             </div>

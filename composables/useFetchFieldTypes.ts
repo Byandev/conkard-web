@@ -1,13 +1,13 @@
 import { ref } from "vue";
-import type { FieldType } from "~/types/models/FieldType";
+import type { Type } from "~/types/models/Card";
 
 export function useFetchFieldTypes() {
-  const fieldTypes = ref<FieldType[]>([]);
+  const fieldTypes = ref<Type[]>([]);
   const { $api } = useNuxtApp();
 
   const fetchData = async () => {
     try {
-      const response: { data: FieldType[] } = await $api(
+      const response: { data: Type[] } = await $api(
         "v1/cards/field-types"
       );
       fieldTypes.value = response.data;

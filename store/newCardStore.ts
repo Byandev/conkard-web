@@ -20,25 +20,25 @@ export interface CardFields {
     headline: { value: string };
   };
   general: {
-    id: number | null;
+    id: number;
     name: string;
     value: string;
     label: string;
   };
   socials: {
-    id: number | null;
+    id: number;
     name: string;
     value: string;
     label: string;
   };
   messaging: {
-    id: number | null;
+    id: number;
     name: string;
     value: string;
     label: string;
   };
   business: {
-    id: number | null;
+    id: number;
     name: string;
     value: string;
     label: string;
@@ -63,7 +63,7 @@ export const useNewCardStore = defineStore("newCard", () => {
   let uniqueId = 0;
 
   const addField = <T>(field: keyof typeof fields, value: T) => {
-    (fields[field] as any).value = value;
+    (fields[field] as Ref<T>).value = value;
   };
 
   const addOrUpdateField = <T extends { id: number | null }>(

@@ -1,49 +1,78 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
 import { useNewCardStore } from '~/store/newCardStore';
-import { useCurrentCard } from '~/composables/useCurrentCard';
 import { useCardStore } from '~/store/cardStore';
+import { useCurrentCard } from '~/composables/useCurrentCard';
 
-definePageMeta({
-    layout: 'dashboard-layout',
-});
+definePageMeta({ layout: 'dashboard-layout' });
 
-const { addLabel, label } = useNewCardStore();
+interface Card {
+    id: number;
+    type: { name: string; category: string };
+    value: string;
+    label?: string | null;
+}
+
+const { addLabel, addJobField, addDepartmentField, addCompanyNameField, addOrUpdateGeneralField, addOrUpdateSocialField, addOrUpdateBusinessField, addOrUpdateMessagingField } = useNewCardStore();
+const { label } = storeToRefs(useNewCardStore())
 const { fetchData, fieldTypes } = useFetchFieldTypes();
+const { currentCard, currentId, currentLabel, setLoading, isLoading } = useCardStore();
 const { fetchCards } = useCurrentCard();
-const { currentCard } = useCardStore();
 
 const isModalOpen = ref(false);
 const ModalTitle = ref('Name');
 const isEdit = ref(true);
-const currentId = ref(0);
 const previewColor = ref('#FF5733');
 
 const companyImage = ref<string>('');
 const companyImageCoordinates = ref<string>('');
-
 const profilePicture = ref<string>('');
 const profilePictureCoordinates = ref<string>('');
-
 const coverPhoto = ref<string>('');
 const coverPhotoCoordinates = ref<string>('');
 
+const getJobEdit = computed(() => currentCard?.find(card => card.type.name === "Job Title"));
+const getDepartment = computed(() => currentCard?.find(card => card.type.name === "Department"));
+const getCompanyName = computed(() => currentCard?.find(card => card.type.name === "Company Name"));
+
+const getFieldsByCategory = (category: string) => computed(() => currentCard?.filter(card => card.type.category === category) || []);
+
+const getGeneral = getFieldsByCategory("GENERAL");
+const getSocial = getFieldsByCategory("SOCIAL");
+const getMessaging = getFieldsByCategory("MESSAGING");
+const getBusiness = getFieldsByCategory("BUSINESS");
+
+const mapAndAddFields = (fields: ReturnType<typeof getFieldsByCategory>, addFieldFunction: (field: { id: number; name: string; value: string; label: string }) => void) => {
+    fields.value?.map((field: Card) => ({
+        id: field.id,
+        name: field.type.name,
+        value: field.value,
+        label: field.label || ''
+    })).forEach(addFieldFunction);
+};
+
 onMounted(async () => {
-    await fetchData();
-    await fetchCards(currentId.value.toString());
-    const card = currentCard.value[0]; // Assuming currentCard is an array and we need the first element
-    if (card) {
-        companyImage.value = card.companyImage || '';
-        companyImageCoordinates.value = card.companyImageCoordinates || '';
-        profilePicture.value = card.profilePicture || '';
-        profilePictureCoordinates.value = card.profilePictureCoordinates || '';
-        coverPhoto.value = card.coverPhoto || '';
-        coverPhotoCoordinates.value = card.coverPhotoCoordinates || '';
-        previewColor.value = card.color || '#FF5733';
-        label.value = card.label || '';
+    try {
+        setLoading(true)
+        await fetchData();
+        await fetchCards(currentId ?? 0, currentLabel);
+    } catch (error) {
+        console.log('Error', error)
+    } finally {
+        setLoading(false)
     }
+
+    addLabel(currentLabel);
+    if (getJobEdit.value) addJobField({ value: getJobEdit.value.value || '' });
+    if (getDepartment.value) addDepartmentField({ value: getDepartment.value.value || " " });
+    if (getCompanyName.value) addCompanyNameField({ value: getCompanyName.value.value || " " });
+
+    if (getGeneral.value?.length) mapAndAddFields(getGeneral, addOrUpdateGeneralField);
+    if (getSocial.value?.length) mapAndAddFields(getSocial, addOrUpdateSocialField);
+    if (getMessaging.value?.length) mapAndAddFields(getMessaging, addOrUpdateMessagingField);
+    if (getBusiness.value?.length) mapAndAddFields(getBusiness, addOrUpdateBusinessField);
 });
 </script>
 
@@ -64,7 +93,12 @@ onMounted(async () => {
                     </AddModal>
                 </section>
             </div>
-            <div class="w-full md:max-w-[580px] flex flex-col gap-7">
+            <div v-if="isLoading" class="animate-pulse px-5 md:px-10 my-7">
+                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
+                <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
+                <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+            </div>
+            <div v-else class="w-full md:max-w-[580px] flex flex-col gap-7">
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
                     <TextInput v-model="label" label="Edit Label" input-name="card-label" placeholder="Label this card"
                         input-type="text" @update:model-value="addLabel($event)" />
@@ -89,5 +123,3 @@ onMounted(async () => {
         </div>
     </div>
 </template>
-
-<style scoped="true"></style>
