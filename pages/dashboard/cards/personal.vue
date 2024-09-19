@@ -2,6 +2,8 @@
 import { useFetchFields } from "~/composables/useFetchField";
 import { useCurrentCard } from "~/composables/useCurrentCard";
 import { useCardStore } from "~/store/cardStore";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 
 definePageMeta({
   layout: "dashboard-layout",
@@ -9,8 +11,8 @@ definePageMeta({
 
 const { cards } = useFetchFields();
 const { fetchCards } = useCurrentCard();
-const { setLoading } = useCardStore();
-const { currentCard } = storeToRefs(useCardStore());
+const { setLoading, isLoading } = useCardStore();
+const { currentCard, currentId } = storeToRefs(useCardStore());
 
 const handleCurrentCard = async (id: number, label: string) => {
   try {
@@ -23,6 +25,17 @@ const handleCurrentCard = async (id: number, label: string) => {
   }
 }
 
+onMounted(async () => {
+  try {
+    setLoading(true)
+    await fetchCards(cards.value[0].id, cards.value[0].label)
+  } catch (error) {
+    console.log('Error', error)
+  } finally {
+    setLoading(false)
+  }
+});
+
 </script>
 
 <template>
@@ -34,8 +47,14 @@ const handleCurrentCard = async (id: number, label: string) => {
           <CardDropdown />
         </section>
         <div class="flex flex-col gap-3 justify-start items-start">
-          <div v-for="card in cards" :key="card.id"
-            class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full md:w-auto">
+          <div v-if="isLoading" class="animate-pulse px-5 md:px-10 my-7">
+            <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
+            <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
+            <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+          </div>
+          <div v-else v-for="card in cards" :key="card.id"
+            class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full md:w-auto"
+            :class="currentId === card.id ? 'bg-gray-200' : ''">
             <h2 class="text-lg font-medium whitespace-nowrap" @click="handleCurrentCard(card.id, card.label)">
               {{ card.label }}
             </h2>

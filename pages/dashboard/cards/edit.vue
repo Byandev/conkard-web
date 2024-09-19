@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
 import { useNewCardStore } from '~/store/newCardStore';
@@ -53,16 +54,24 @@ const mapAndAddFields = (fields: ReturnType<typeof getFieldsByCategory>, addFiel
     })).forEach(addFieldFunction);
 };
 
+const router = useRouter();
+
 onMounted(async () => {
-    try {
-        setLoading(true)
-        await fetchData();
-        await fetchCards(currentId ?? 0, currentLabel);
-    } catch (error) {
-        console.log('Error', error)
-    } finally {
-        setLoading(false)
+    if (currentId) {
+        try {
+            setLoading(true);
+            fetchData();
+            await fetchCards(currentId, currentLabel);
+        } catch (error) {
+            console.log('Error', error);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    // Navigate to /dashboard/cards/personal on page reload when card is empty
+    if (currentCard.length === 0)
+        router.push('/dashboard/cards/personal');
 
     addLabel(currentLabel);
     if (getJobEdit.value) addJobField({ value: getJobEdit.value.value || '' });
@@ -73,6 +82,8 @@ onMounted(async () => {
     if (getSocial.value?.length) mapAndAddFields(getSocial, addOrUpdateSocialField);
     if (getMessaging.value?.length) mapAndAddFields(getMessaging, addOrUpdateMessagingField);
     if (getBusiness.value?.length) mapAndAddFields(getBusiness, addOrUpdateBusinessField);
+
+
 });
 </script>
 

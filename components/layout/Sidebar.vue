@@ -31,6 +31,7 @@ import type { ApiErrorResponse } from '~/types/api/response/error';
 import type { SaveCardResponse } from '~/types/api/response/saveCard';
 import { useCardData } from '~/composables/useCardData';
 import { useCardStore } from '~/store/cardStore';
+import { useNewCardStore } from '~/store/newCardStore';
 
 interface NavigationItem {
     name: string;
@@ -78,6 +79,7 @@ const sidebarOpen = ref(false);
 const { sendRequest: saveCard } = useSubmit<SaveCardResponse, ApiErrorResponse>()
 
 const { cardData } = useCardData();
+const newCardStore = useNewCardStore();
 
 const handleSaveCard = async () => {
     console.log(cardData.value);
@@ -100,6 +102,8 @@ const handleSaveCard = async () => {
 
         } catch (error) {
             console.error(error as ApiErrorResponse)
+        } finally {
+            navigateDashboard();
         }
     }
     else {
@@ -116,11 +120,14 @@ const handleSaveCard = async () => {
 
         } catch (error) {
             console.error(error as ApiErrorResponse)
+        } finally {
+            navigateDashboard();
         }
     }
 };
 
 const navigateDashboard = () => {
+    newCardStore.resetCard();
     router.push('/dashboard/cards/personal');
 }; 
 </script>
