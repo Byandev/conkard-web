@@ -43,19 +43,19 @@ export interface CardFields {
   };
 }
 
-export const useNewCardStore = defineStore("newCard", () => {
+export const useNewCardStore = defineStore('newCard', () => {
   const initialState = {
-    label: null as CardFields["label"] | null,
-    nameField: null as CardFields["personal"]["name"] | null,
-    jobField: null as CardFields["personal"]["job"] | null,
-    departmentField: null as CardFields["personal"]["department"] | null,
-    companyNameField: null as CardFields["personal"]["company"] | null,
-    accreditationField: [] as CardFields["personal"]["accreditation"][],
-    headlineField: null as CardFields["personal"]["headline"] | null,
-    generalField: [] as CardFields["general"][],
-    socialField: [] as CardFields["socials"][],
-    messagingField: [] as CardFields["messaging"][],
-    businessField: [] as CardFields["business"][],
+    label: null as CardFields['label'] | null,
+    nameField: null as CardFields['personal']['name'] | null,
+    jobField: null as CardFields['personal']['job'] | null,
+    departmentField: null as CardFields['personal']['department'] | null,
+    companyNameField: null as CardFields['personal']['company'] | null,
+    accreditationField: [] as CardFields['personal']['accreditation'][],
+    headlineField: null as CardFields['personal']['headline'] | null,
+    generalField: [] as CardFields['general'][],
+    socialField: [] as CardFields['socials'][],
+    messagingField: [] as CardFields['messaging'][],
+    businessField: [] as CardFields['business'][],
   };
 
   const fields = {
@@ -118,37 +118,44 @@ export const useNewCardStore = defineStore("newCard", () => {
   };
 
   const resetCard = () => {
-    console.log("Resetting card");
-    Object.keys(fields).forEach((key) => {
-      console.log(`Resetting field: ${key}`);
-      (fields[key as keyof typeof fields] as Ref<any>).value = initialState[key as keyof typeof initialState];
-      console.log(`New value for ${key}:`, (fields[key as keyof typeof fields] as Ref<any>).value);
-    });
+    console.log('Before reset:', JSON.stringify(fields, null, 2));
+    fields.label.value = initialState.label;
+    fields.nameField.value = initialState.nameField;
+    fields.jobField.value = initialState.jobField;
+    fields.departmentField.value = initialState.departmentField;
+    fields.companyNameField.value = initialState.companyNameField;
+    fields.accreditationField.value = [...initialState.accreditationField];
+    fields.headlineField.value = initialState.headlineField;
+    fields.generalField.value = [...initialState.generalField];
+    fields.socialField.value = [...initialState.socialField];
+    fields.messagingField.value = [...initialState.messagingField];
+    fields.businessField.value = [...initialState.businessField];
+    console.log('After reset:', JSON.stringify(fields, null, 2));
   };
 
   return {
     ...fields,
-    addLabel: (value: CardFields["label"]) => addField("label", value),
-    addNameField: (value: CardFields["personal"]["name"]) =>
-      addField("nameField", value),
-    addJobField: (value: CardFields["personal"]["job"]) =>
-      addField("jobField", value),
-    addDepartmentField: (value: CardFields["personal"]["department"]) =>
-      addField("departmentField", value),
-    addCompanyNameField: (value: CardFields["personal"]["company"]) =>
-      addField("companyNameField", value),
-    addAccreditationField: (value: CardFields["personal"]["accreditation"][]) =>
-      addField("accreditationField", value),
-    addHeadlineField: (value: CardFields["personal"]["headline"]) =>
-      addField("headlineField", value),
-    addOrUpdateGeneralField: (value: CardFields["general"]) =>
-      addOrUpdateField("generalField", value),
-    addOrUpdateSocialField: (value: CardFields["socials"]) =>
-      addOrUpdateField("socialField", value),
-    addOrUpdateMessagingField: (value: CardFields["messaging"]) =>
-      addOrUpdateField("messagingField", value),
-    addOrUpdateBusinessField: (value: CardFields["business"]) =>
-      addOrUpdateField("businessField", value),
+    addLabel: (value: CardFields['label']) => addField('label', value),
+    addNameField: (value: CardFields['personal']['name']) =>
+      addField('nameField', value),
+    addJobField: (value: CardFields['personal']['job']) =>
+      addField('jobField', value),
+    addDepartmentField: (value: CardFields['personal']['department']) =>
+      addField('departmentField', value),
+    addCompanyNameField: (value: CardFields['personal']['company']) =>
+      addField('companyNameField', value),
+    addAccreditationField: (value: CardFields['personal']['accreditation'][]) =>
+      addField('accreditationField', value),
+    addHeadlineField: (value: CardFields['personal']['headline']) =>
+      addField('headlineField', value),
+    addOrUpdateGeneralField: (value: CardFields['general']) =>
+      addOrUpdateField('generalField', value),
+    addOrUpdateSocialField: (value: CardFields['socials']) =>
+      addOrUpdateField('socialField', value),
+    addOrUpdateMessagingField: (value: CardFields['messaging']) =>
+      addOrUpdateField('messagingField', value),
+    addOrUpdateBusinessField: (value: CardFields['business']) =>
+      addOrUpdateField('businessField', value),
     deleteField,
     resetCard,
   };

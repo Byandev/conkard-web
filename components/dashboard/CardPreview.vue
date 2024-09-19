@@ -24,25 +24,27 @@ interface ComponentData {
 }
 
 const newCard = useNewCardStore();
-
 const cardStore = useCardStore();
-
 const { isLoading } = storeToRefs(cardStore);
 
 const { generalField, messagingField, businessField, nameField, jobField, socialField, departmentField, companyNameField, accreditationField, headlineField } = storeToRefs(newCard);
 
 const cardItem = ref<ComponentData[]>([]);
 
+const updateCardItem = () => {
+  cardItem.value = [
+    ...generalField.value.map(general => ({ id: general.id ?? null, name: general.name, value: general.value, label: general.label, category: 'General' })),
+    ...socialField.value.map(social => ({ id: social.id ?? null, name: social.name, value: social.value, category: 'Social' })),
+    ...messagingField.value.map(messaging => ({ id: messaging.id ?? null, name: messaging.name, value: messaging.value, category: 'Messaging' })),
+    ...businessField.value.map(business => ({ id: business.id ?? null, name: business.name, value: business.value, label: business.label, category: 'Business' })),
+  ];
+  console.log("cardItem", cardItem.value);
+};
+
+// Watch for changes in newCard fields and update cardItem
 watch(
   [generalField, socialField, messagingField, businessField],
-  ([newGeneralField, newSocialField, newMessagingField, newBusinessField]) => {
-    cardItem.value = [
-      ...newGeneralField.map(general => ({ id: general.id ?? null, name: general.name, value: general.value, label: general.label, category: 'General' })),
-      ...newSocialField.map(social => ({ id: social.id ?? null, name: social.name, value: social.value, category: 'Social' })),
-      ...newMessagingField.map(messaging => ({ id: messaging.id ?? null, name: messaging.name, value: messaging.value, category: 'Messaging' })),
-      ...newBusinessField.map(business => ({ id: business.id ?? null, name: business.name, value: business.value, label: business.label, category: 'Business' })),
-    ];
-  },
+  updateCardItem,
   { immediate: true, deep: true }
 );
 
@@ -70,7 +72,6 @@ const updateEdit = (title: string, id: number) => {
 };
 
 const bgColor = computed(() => props.coverPhoto ? 'white' : props.color);
-
 
 </script>
 

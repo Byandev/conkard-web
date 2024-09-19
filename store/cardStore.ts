@@ -28,6 +28,13 @@ export const useCardStore = defineStore("card", () => {
     currentLabel.value = label;
   }
 
+  const resetCurrentCard = () => {
+    currentCard.value = [];
+    currentId.value = undefined;
+    currentLabel.value = '';
+    console.log("Current Card reset", currentCard);
+  }
+
   return {
     currentCard,
     setCurrentCard,
@@ -36,6 +43,7 @@ export const useCardStore = defineStore("card", () => {
     setLoading,
     isLoading,
     setCurrentLabel,
-    currentLabel
+    currentLabel,
+    resetCurrentCard
   };
 });

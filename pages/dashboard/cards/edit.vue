@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
 import { useNewCardStore } from '~/store/newCardStore';
@@ -16,8 +14,9 @@ interface Card {
     label?: string | null;
 }
 
-const { addLabel, addJobField, addDepartmentField, addCompanyNameField, addOrUpdateGeneralField, addOrUpdateSocialField, addOrUpdateBusinessField, addOrUpdateMessagingField, resetCard } = useNewCardStore();
-const { label } = storeToRefs(useNewCardStore())
+const newCardStore = useNewCardStore();
+const { addLabel, addJobField, addDepartmentField, addCompanyNameField, addOrUpdateGeneralField, addOrUpdateSocialField, addOrUpdateBusinessField, addOrUpdateMessagingField } = newCardStore;
+const { label } = storeToRefs(newCardStore);
 const { fetchData, fieldTypes } = useFetchFieldTypes();
 const { currentCard, currentId, currentLabel, setLoading, isLoading } = useCardStore();
 const { fetchCards } = useCurrentCard();
@@ -57,7 +56,6 @@ const mapAndAddFields = (fields: ReturnType<typeof getFieldsByCategory>, addFiel
 const router = useRouter();
 
 onMounted(async () => {
-    resetCard();
     if (currentId) {
         try {
             setLoading(true);
@@ -71,7 +69,7 @@ onMounted(async () => {
     }
 
     // Navigate to /dashboard/cards/personal on page reload when card is empty
-    if (currentCard.length === 0)
+    if (currentCard.length === 0 && currentId == null)
         router.push('/dashboard/cards/personal');
 
     addLabel(currentLabel);
@@ -83,8 +81,6 @@ onMounted(async () => {
     if (getSocial.value?.length) mapAndAddFields(getSocial, addOrUpdateSocialField);
     if (getMessaging.value?.length) mapAndAddFields(getMessaging, addOrUpdateMessagingField);
     if (getBusiness.value?.length) mapAndAddFields(getBusiness, addOrUpdateBusinessField);
-
-
 });
 </script>
 
