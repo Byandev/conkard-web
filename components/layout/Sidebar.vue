@@ -288,12 +288,12 @@ const navigateDashboard = () => {
                 </Menu>
 
                 <nav class="flex flex-1 flex-col">
-                    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                    <ul role="list" class="flex flex-1 flex-col gap-y-3">
                         <li>
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li v-for="item in navigation" :key="item.name">
                                     <NuxtLink :to="item.href"
-                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex items-center gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
+                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex items-center gap-x-3 rounded-md p-2 text-xs font-medium leading-6']">
                                         <component :is="item.icon"
                                             :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
                                             aria-hidden="true" />
@@ -319,12 +319,16 @@ const navigateDashboard = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li class="mt-auto">
+
+                        <!-- Horizontal Separator -->
+                        <div class="h-px w-full bg-gray-900/10" aria-hidden="true" />
+
+                        <li class="mt-auto border border-gray-400 px-5 rounded-md">
                             <a href="#"
-                                class="group -mx-2 flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white">
-                                <Cog6ToothIcon class="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                                class="group -mx-2 flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-700 hover:text-white">
+                                <Cog6ToothIcon class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-white"
                                     aria-hidden="true" />
-                                Settings
+                                Upgrade Plan
                             </a>
                         </li>
                     </ul>
