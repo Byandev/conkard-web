@@ -170,14 +170,14 @@ const navigateDashboard = () => {
                                         alt="Your Company">
                                 </div>
                                 <nav class="flex flex-1 flex-col">
-                                    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                                    <ul role="list" class="flex flex-1 flex-col gap-y-3">
                                         <li>
                                             <ul role="list" class="-mx-2 space-y-1">
                                                 <li v-for="item in navigation" :key="item.name">
                                                     <a :href="item.href"
-                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-white' : 'text-indigo-200 hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
+                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                                         <component :is="item.icon"
-                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-indigo-200 group-hover:text-white', 'h-5 w-5 shrink-0']"
+                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-white group-hover:text-white', 'h-5 w-5 shrink-0']"
                                                             aria-hidden="true" />
                                                         {{ item.name }}
                                                     </a>
@@ -199,14 +199,15 @@ const navigateDashboard = () => {
                                                 </li>
 
                                             </ul>
+                                            <div class="h-px w-full bg-white my-2" aria-hidden="true" />
                                         </li>
-                                        <li class="mt-auto">
+                                        <li class="mt-auto border border-gray-400 px-5 rounded-md">
                                             <a href="#"
-                                                class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white">
+                                                class="group -mx-2 flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-700 hover:text-white">
                                                 <Cog6ToothIcon
-                                                    class="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                                                    class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-white"
                                                     aria-hidden="true" />
-                                                Settings
+                                                Upgrade Plan
                                             </a>
                                         </li>
                                     </ul>
