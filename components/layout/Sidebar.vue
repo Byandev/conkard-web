@@ -371,8 +371,8 @@ const navigateDashboard = () => {
                     <div class="flex flex-row gap-x-4">
                         <Button text="Cancel" background="white" foreground="gray" @click="navigateDashboard" />
                         <ButtonIconIconify icon="material-symbols:save-outline"
-                            :text="isDashboardCardsNew ? 'Create' : 'Save'" background="gray" foreground="white"
-                            @click="handleSaveCard" />
+                            :text="isDashboardCardsNew ? 'Create' : 'Save'" background="gray"
+                            :foreground="isDashboardCardsNew ? 'text-black' : 'text-white'" @click="handleSaveCard" />
                     </div>
                 </div>
             </div>
