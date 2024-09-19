@@ -53,9 +53,10 @@ onMounted(async () => {
             <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
           </div>
           <div v-else v-for="card in cards" :key="card.id"
-            class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full md:w-auto"
+            class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full"
             :class="currentId === card.id ? 'bg-gray-200' : ''">
-            <h2 class="text-lg font-medium whitespace-nowrap" @click="handleCurrentCard(card.id, card.label)">
+            <h2 class="text-lg text-center font-medium whitespace-nowrap"
+              @click="handleCurrentCard(card.id, card.label)">
               {{ card.label }}
             </h2>
           </div>
