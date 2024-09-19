@@ -353,12 +353,12 @@ const navigateDashboard = () => {
                     class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between">
                     <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
                         <NuxtLink to="/dashboard/cards/edit" class="p-0">
-                            <ButtonIcon class="h-full" :icon="PencilSquareIcon" text="Edit" background="gray"
+                            <ButtonIcon class="h-full" :icon="PencilSquareIcon" text="Edit" background="black"
                                 foreground="white" />
                         </NuxtLink>
-                        <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
+                        <ButtonIcon :icon="TrashIcon" text="Delete" background="gray" foreground="gray" />
                     </div>
-                    <ButtonIcon :icon="ArrowUpTrayIcon" text="Share card" background="gray" foreground="white" />
+                    <ButtonIconIconify icon="lucide:share" text="Share card" background="black" foreground="white" />
                 </div>
 
                 <!-- New Card Options -->
@@ -369,10 +369,11 @@ const navigateDashboard = () => {
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
                     <div class="flex flex-row gap-x-4">
-                        <Button text="Cancel" background="white" foreground="gray" @click="navigateDashboard" />
+                        <Button :text="isDashboardCardsNew ? 'Cancel' : 'Discard changes'" background="white"
+                            foreground="gray" @click="navigateDashboard" />
                         <ButtonIconIconify icon="material-symbols:save-outline"
-                            :text="isDashboardCardsNew ? 'Create' : 'Save'" background="gray"
-                            :foreground="isDashboardCardsNew ? 'text-black' : 'text-white'" @click="handleSaveCard" />
+                            :text="isDashboardCardsNew ? 'Create' : 'Save'" background="black" foreground="white"
+                            @click="handleSaveCard" />
                     </div>
                 </div>
             </div>
