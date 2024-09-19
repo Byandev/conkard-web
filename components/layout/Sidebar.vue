@@ -222,8 +222,8 @@ const navigateDashboard = () => {
         <div class="hidden 2xl:fixed 2xl:inset-y-0 2xl:z-50 2xl:flex 2xl:w-56 2xl:flex-col">
 
             <!-- Sidebar component, swap this element with another sidebar if you like -->
-            <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white pl-5 pr-3 pb-4 drop-shadow">
-                <div class="flex gap-2 h-16 shrink-0 items-center">
+            <div class="pt-5 flex grow flex-col gap-y-5 overflow-y-auto bg-white pl-5 pr-5 pb-4 drop-shadow">
+                <div class="flex gap-2 h-14 shrink-0 items-center">
                     <img class="h-6 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=black"
                         alt="Your Company">
                     <h1 class=" text-xl font-bold">Conkard</h1>
@@ -232,7 +232,7 @@ const navigateDashboard = () => {
                 <!-- Profile dropdown -->
                 <Menu as="div" class="relative items-center">
                     <MenuButton id="user-menu-button"
-                        class="flex border-2 rounded-lg w-full items-center p-2.5 justify-between">
+                        class="flex border-2 rounded-md w-full items-center px-2 py-2 justify-between">
                         <span class="sr-only">Open user menu</span>
                         <div class="flex flex-row items-center">
                             <img class="h-7 w-7 rounded-full bg-gray-50"
