@@ -31,6 +31,8 @@ import type { ApiErrorResponse } from '~/types/api/response/error';
 import type { SaveCardResponse } from '~/types/api/response/saveCard';
 import { useCardData } from '~/composables/useCardData';
 import { useCardStore } from '~/store/cardStore';
+import { useNewCardStore } from '~/store/newCardStore';
+import type { ImageDataResponse } from '~/types/api/response/uploadImage';
 
 interface NavigationItem {
     name: string;
@@ -63,6 +65,8 @@ const userNavigation: UserNavigationItem[] = [
 const route = useRoute();
 const router = useRouter();
 
+const { imageField } = storeToRefs(useNewCardStore());
+
 const isDashboardCardsEdit = computed(() => route.path === '/dashboard/cards/edit');
 const isDashboardCardsNew = computed(() => route.path === '/dashboard/cards/new');
 const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/cards/personal');
@@ -76,6 +80,7 @@ const isActiveRoute = (href: string) => {
 const sidebarOpen = ref(false);
 
 const { sendRequest: saveCard } = useSubmit<SaveCardResponse, ApiErrorResponse>()
+const { sendRequest: uploadImage } = useSubmit<ImageDataResponse, ApiErrorResponse>()
 
 const { cardData } = useCardData();
 
@@ -83,44 +88,47 @@ const handleSaveCard = async () => {
     console.log(cardData.value);
 
     const cardStore = useCardStore();
-
     const { currentId } = storeToRefs(cardStore);
+    const isNewCard = isDashboardCardsNew.value;
+    const url = isNewCard ? '/v1/cards' : `/v1/cards/${currentId.value}`;
+    const method = isNewCard ? 'POST' : 'PUT';
 
-    if (isDashboardCardsNew.value) {
-        try {
-            const response = await saveCard('/v1/cards', {
-                method: 'POST',
-                body: {
-                    label: cardData.value.label,
-                    fields: cardData.value.fields,
-                },
-            });
+    console.log(imageField);
 
+    try {
+        const response = await saveCard(url, {
+            method,
+            body: {
+                label: cardData.value.label,
+                fields: cardData.value.fields,
+            },
+        });
+
+        if (isNewCard) {
+            const cardId = response.data.id;
+            await Promise.all(imageField.value.map(async (item) => {
+                console.log(item.image);
+                try {
+                    const formData = new FormData();
+                    formData.append('type', item.type);
+                    formData.append('image', item.image);
+
+                    const imageResponse = await uploadImage(`/v1/cards/${cardId}/images`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    console.log(imageResponse);
+                } catch (uploadError) {
+                    console.error('Error uploading image:', uploadError);
+                }
+            }));
+        } else {
             console.log(response);
-
-        } catch (error) {
-            console.error(error as ApiErrorResponse)
-        } finally {
-            navigateDashboard();
         }
-    }
-    else {
-        try {
-            const response = await saveCard(`/v1/cards/${currentId.value}`, {
-                method: 'PUT',
-                body: {
-                    label: cardData.value.label,
-                    fields: cardData.value.fields,
-                },
-            });
-
-            console.log(response);
-
-        } catch (error) {
-            console.error(error as ApiErrorResponse)
-        } finally {
-            navigateDashboard();
-        }
+    } catch (error) {
+        console.error(error as ApiErrorResponse);
+    } finally {
+        navigateDashboard();
     }
 };
 

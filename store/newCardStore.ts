@@ -1,5 +1,9 @@
 export interface CardFields {
   label: string;
+  image: {
+    type: string;
+    image: File;
+  };
   personal: {
     name: {
       prefix: string;
@@ -56,6 +60,7 @@ export const useNewCardStore = defineStore('newCard', () => {
     socialField: [] as CardFields['socials'][],
     messagingField: [] as CardFields['messaging'][],
     businessField: [] as CardFields['business'][],
+    imageField: [] as CardFields['image'][],
   };
 
   const fields = {
@@ -70,6 +75,7 @@ export const useNewCardStore = defineStore('newCard', () => {
     socialField: ref(initialState.socialField),
     messagingField: ref(initialState.messagingField),
     businessField: ref(initialState.businessField),
+    imageField: ref(initialState.imageField),
   };
 
   let uniqueId = 0;
@@ -118,7 +124,6 @@ export const useNewCardStore = defineStore('newCard', () => {
   };
 
   const resetCard = () => {
-    console.log('Before reset:', JSON.stringify(fields, null, 2));
     fields.label.value = initialState.label;
     fields.nameField.value = initialState.nameField;
     fields.jobField.value = initialState.jobField;
@@ -130,7 +135,11 @@ export const useNewCardStore = defineStore('newCard', () => {
     fields.socialField.value = [...initialState.socialField];
     fields.messagingField.value = [...initialState.messagingField];
     fields.businessField.value = [...initialState.businessField];
-    console.log('After reset:', JSON.stringify(fields, null, 2));
+    fields.imageField.value = [...initialState.imageField];
+  };
+
+  const addImage = (image: CardFields['image']) => {
+    fields.imageField.value.push(image);
   };
 
   return {
@@ -156,6 +165,7 @@ export const useNewCardStore = defineStore('newCard', () => {
       addOrUpdateField('messagingField', value),
     addOrUpdateBusinessField: (value: CardFields['business']) =>
       addOrUpdateField('businessField', value),
+    addImage,
     deleteField,
     resetCard,
   };

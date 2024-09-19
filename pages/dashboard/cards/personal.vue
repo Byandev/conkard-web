@@ -10,20 +10,20 @@ definePageMeta({
 
 const { cards } = useFetchFields();
 const { fetchCards } = useCurrentCard();
-const { setLoading, isLoading } = useCardStore();
+const { setLoading } = useCardStore();
+const { isLoading } = storeToRefs(useCardStore());
 const { currentCard, currentId } = storeToRefs(useCardStore());
 
 const handleCurrentCard = async (id: number, label: string) => {
   try {
-    setLoading(true)
-    await fetchCards(id, label)
+    setLoading(true);
+    await fetchCards(id, label);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
-}
-
+};
 </script>
 
 <template>
@@ -34,11 +34,11 @@ const handleCurrentCard = async (id: number, label: string) => {
           <h1 class="text-3xl font-normal">Cards</h1>
           <CardDropdown />
         </section>
-        <div class="flex flex-col gap-3 justify-start items-start">
-          <div v-if="isLoading" class="animate-pulse px-5 md:px-10 my-7">
-            <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
-            <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
-            <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+        <div class="flex flex-col gap-3 justify-start items-start w-full">
+          <div v-if="isLoading && cards.length == 0" class="animate-pulse px-5 w-[265px]">
+            <div class="h-10 bg-gray-200 rounded w-full mb-4" />
+            <div class="h-10 bg-gray-200 rounded w-full mb-4" />
+            <div class="h-10 bg-gray-200 rounded w-full mb-4" />
           </div>
           <div v-else v-for="card in cards" :key="card.id"
             class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full"
