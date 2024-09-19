@@ -3,7 +3,7 @@
         <div class="flex justify-center items-center">
             <MenuButton
                 class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white text-sm font-semibold text-gray-900 shadow-sm ring-inset ring-gray-300 hover:bg-gray-50 p-2">
-                <PlusCircleIcon class="h-7 w-7 text-gray-700" aria-hidden="true" />
+                <PlusCircleIcon class="h-7 w-7 text-gray-500" aria-hidden="true" />
             </MenuButton>
         </div>
 
