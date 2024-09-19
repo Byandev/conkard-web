@@ -16,7 +16,7 @@ interface Card {
     label?: string | null;
 }
 
-const { addLabel, addJobField, addDepartmentField, addCompanyNameField, addOrUpdateGeneralField, addOrUpdateSocialField, addOrUpdateBusinessField, addOrUpdateMessagingField } = useNewCardStore();
+const { addLabel, addJobField, addDepartmentField, addCompanyNameField, addOrUpdateGeneralField, addOrUpdateSocialField, addOrUpdateBusinessField, addOrUpdateMessagingField, resetCard } = useNewCardStore();
 const { label } = storeToRefs(useNewCardStore())
 const { fetchData, fieldTypes } = useFetchFieldTypes();
 const { currentCard, currentId, currentLabel, setLoading, isLoading } = useCardStore();
@@ -57,6 +57,7 @@ const mapAndAddFields = (fields: ReturnType<typeof getFieldsByCategory>, addFiel
 const router = useRouter();
 
 onMounted(async () => {
+    resetCard();
     if (currentId) {
         try {
             setLoading(true);
