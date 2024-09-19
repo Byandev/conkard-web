@@ -66,9 +66,10 @@ watch(
                 <div class="text-2xl md:text-3xl mt-7 mb-3 font-semibold">
                     <div>{{ nameField?.value }}</div>
                 </div>
-                <FieldSection v-if="!isJobFieldEmpty" :field="jobField" :keys="['value']" />
-                <FieldSection v-if="!isDepartmentFieldEmpty" :field="departmentField" :keys="['value']" />
-                <FieldSection v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']" />
+                <FieldSection :is-view="false" v-if="!isJobFieldEmpty" :field="jobField" :keys="['value']" />
+                <FieldSection :is-view="false" v-if="!isDepartmentFieldEmpty" :field="departmentField"
+                    :keys="['value']" />
+                <FieldSection :is-view="false" v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']" />
                 <div v-for="(item, index) in cardItem" :key="index">
                     <ContactPreview :id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
                         :value="item.value ?? ''" :label="item.label ?? ''" :category="item.type.category ?? ''"
