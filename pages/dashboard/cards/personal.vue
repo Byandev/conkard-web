@@ -30,8 +30,8 @@ const handleCurrentCard = async (id: number, label: string) => {
   <div class="h-full">
     <div class="flex flex-col md:flex-row h-full gap-3">
       <section class="flex flex-col gap-7 w-full md:w-auto">
-        <section class="flex flex-row items-start justify-start md:justify-start gap-2 mt-10">
-          <h1 class="text-3xl font-normal">Cards</h1>
+        <section class="flex flex-row items-center justify-center md:justify-start gap-2 mt-10">
+          <h2 class="font-normal">Cards</h2>
           <CardDropdown />
         </section>
         <div class="flex flex-col gap-3 justify-start items-start w-full">
@@ -43,7 +43,7 @@ const handleCurrentCard = async (id: number, label: string) => {
           <div v-else v-for="card in cards" :key="card.id"
             class="px-10 py-2 hover:cursor-pointer hover:bg-gray-100 rounded-md w-full"
             :class="currentId === card.id ? 'bg-gray-200' : ''">
-            <h2 class="text-lg text-center font-medium whitespace-nowrap"
+            <h2 class="text-lg text-start font-normal whitespace-nowrap"
               @click="handleCurrentCard(card.id, card.label)">
               {{ card.label }}
             </h2>
@@ -60,4 +60,68 @@ const handleCurrentCard = async (id: number, label: string) => {
   </div>
 </template>
 
-<style scoped="true"></style>
+<style scoped>
+:root {
+  --base-font-size: 16px;
+}
+
+h1 {
+  font-size: 2rem;
+  /* 32px */
+}
+
+h2 {
+  font-size: 1.5rem;
+  /* 24px */
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  /* 18px */
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  /* 30px */
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: #f7fafc;
+}
+
+.bg-gray-200 {
+  background-color: #edf2f7;
+}
+
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+</style>
