@@ -20,7 +20,7 @@ import {
     IdentificationIcon,
     PhotoIcon,
     TrashIcon,
-    ShareIcon,
+    ArrowUpTrayIcon,
     ShoppingBagIcon,
     XMarkIcon,
     Cog8ToothIcon
@@ -358,7 +358,7 @@ const navigateDashboard = () => {
                         </NuxtLink>
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
-                    <ButtonIcon :icon="ShareIcon" text="Share card" background="gray" foreground="white" />
+                    <ButtonIcon :icon="ArrowUpTrayIcon" text="Share card" background="gray" foreground="white" />
                 </div>
 
                 <!-- New Card Options -->
