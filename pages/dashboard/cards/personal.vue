@@ -3,7 +3,6 @@ import { useFetchFields } from "~/composables/useFetchField";
 import { useCurrentCard } from "~/composables/useCurrentCard";
 import { useCardStore } from "~/store/cardStore";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
 
 definePageMeta({
   layout: "dashboard-layout",
@@ -24,17 +23,6 @@ const handleCurrentCard = async (id: number, label: string) => {
     setLoading(false)
   }
 }
-
-onMounted(async () => {
-  try {
-    setLoading(true)
-    await fetchCards(cards.value[0].id, cards.value[0].label)
-  } catch (error) {
-    console.log('Error', error)
-  } finally {
-    setLoading(false)
-  }
-});
 
 </script>
 

@@ -7,6 +7,7 @@ export function useFetchFields() {
   const { $api } = useNuxtApp();
   const { fetchCards } = useCurrentCard();
   const { setLoading } = useCardStore();
+  const { currentCard } = useCardStore();
 
   const fetchData = async () => {
     try {
@@ -14,7 +15,8 @@ export function useFetchFields() {
       const response: { data: Card[] } = await $api("v1/cards");
       cards.value = response.data;
       console.log(response);
-      if (cards.value.length > 0) {
+      console.log(currentCard.length === 0 );
+      if (currentCard.length === 0 ) {
         await fetchCards(cards.value[0].id, cards.value[0].label);
       }
     } catch (error) {
