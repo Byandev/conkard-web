@@ -49,10 +49,10 @@ const handleCurrentCard = async (id: number, label: string) => {
           </div>
         </div>
       </section>
-      <div class="p-4 md:p-10 w-full">
-        <Tabs />
+      <div class="p-4 md:p-5 w-full">
+        <Tabs class="ml-5" />
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-          <DashboardCard v-if="currentCard.length > 0" :current-card="currentCard" class="m-6 w-full md:w-96" />
+          <DashboardCard v-if="currentCard.length > 0" :current-card="currentCard" class="mt-5 w-full md:w-96" />
         </section>
       </div>
     </div>
