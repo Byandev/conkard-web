@@ -62,7 +62,8 @@ onMounted(() => {
             </div>
           </div>
           <div v-if="!isLoading" class="flex justify-center space-x-2">
-            <button v-if="cards.length != 0" v-for="page in totalPages" :key="page" @click="fetchData(page)"
+            <button v-if="cards.length != 0 && cards.length > 10" v-for="page in totalPages" :key="page"
+              @click="fetchData(page)"
               :class="['px-4 py-2 rounded-full transition-colors duration-300', { 'bg-gray-300 hover:bg-gray-400': currentPage !== page, 'bg-orange-500 text-white': currentPage === page }]">
               {{ page }}
             </button>
