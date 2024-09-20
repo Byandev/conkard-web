@@ -17,7 +17,7 @@ const { currentCard, currentId } = storeToRefs(useCardStore());
 const handleCurrentCard = async (id: number, label: string) => {
   try {
     setLoading(true);
-    await fetchCards(id, label);
+    await fetchCards(id);
   } catch (error) {
     console.log(error);
   } finally {

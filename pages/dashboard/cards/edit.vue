@@ -60,7 +60,7 @@ onMounted(async () => {
         try {
             setLoading(true);
             fetchData();
-            await fetchCards(currentId, currentLabel);
+            await fetchCards(currentId);
         } catch (error) {
             console.log('Error', error);
         } finally {

@@ -3,7 +3,7 @@ import { useCardStore } from "~/store/cardStore";
 import { useNewCardStore } from "~/store/newCardStore";
 
 export function useCurrentCard(): {
-  fetchCards: (id: number, label: string) => Promise<void>;
+  fetchCards: (id: number) => Promise<void>;
 } {
   const { $api } = useNuxtApp();
   const {setCurrentLabel, setCurrentCard, setCurrentId, resetCurrentCard} = useCardStore();

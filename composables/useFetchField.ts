@@ -17,10 +17,10 @@ export function useFetchFields() {
       cards.value = response.data;
 
       if (currentCard.length === 0 ) {
-        await fetchCards(cards.value[0].id, cards.value[0].label);
+        await fetchCards(cards.value[0].id);
       }
       else{
-        await fetchCards(currentId.value ?? 0, currentLabel.value);
+        await fetchCards(currentId.value ?? 0);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
