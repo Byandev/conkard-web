@@ -47,9 +47,14 @@ onMounted(() => {
               <div class="bg-gray-200 rounded w-full h-[28px] mb-4" />
               <div class="bg-gray-200 rounded w-full h-[28px] mb-4" />
             </div>
-            <div v-else-if="cards.length === 0" class="text-center text-gray-500 w-[235px]">
-              <p>You don't have any cards!</p>
-              <p>Click the button below (or the + in the sidebar) to create a personal card.</p>
+            <div v-else-if="cards.length === 0"
+              class="flex flex-col items-center justify-center text-center text-gray-500 w-full p-5 border-2 border-dashed rounded-lg">
+              <p class="text-lg font-semibold mb-2">You don't have any cards!</p>
+              <p class="mb-4">Click the button below (or the +) to create a personal card.</p>
+              <NuxtLink to="/dashboard/cards/new"
+                class="px-4 py-2 bg-gray-900 text-white rounded hover:bg-blue-600 transition-colors duration-300">Create
+                Card</NuxtLink>
+
             </div>
             <div v-else class="w-[235px]">
               <div v-for="card in cards" :key="card.id"
@@ -61,8 +66,8 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <div v-if="!isLoading" class="flex justify-center space-x-2">
-            <button v-if="cards.length != 0 && cards.length > 10" v-for="page in totalPages" :key="page"
+          <div class="flex justify-center space-x-2">
+            <button v-if="cards.length != 0 && totalPages > 1" v-for="page in totalPages" :key="page"
               @click="fetchData(page)"
               :class="['px-4 py-2 rounded-full transition-colors duration-300', { 'bg-gray-300 hover:bg-gray-400': currentPage !== page, 'bg-orange-500 text-white': currentPage === page }]">
               {{ page }}
