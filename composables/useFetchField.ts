@@ -4,24 +4,28 @@ import type { Card } from "~/types/models/Card";
 
 export function useFetchFields() {
   const cards = ref<Card[]>([]);
+  const currentPage = ref(1);
+  const totalPages = ref(1);
   const { $api } = useNuxtApp();
   const { fetchCards } = useCurrentCard();
   const { setLoading } = useCardStore();
-  const { currentCard } = useCardStore();
-  const { currentId, currentLabel } = storeToRefs(useCardStore());
+  const { currentId } = storeToRefs(useCardStore());
 
-  const fetchData = async () => {
+    const fetchData = async (page = 1) => {
     try {
       setLoading(true);
-      const response: { data: Card[] } = await $api("v1/cards");
+      const response: { data: Card[], meta: { current_page: number, last_page: number } } = await $api(`v1/cards?page=${page}`);
       cards.value = response.data;
-
-      if (currentCard.length === 0 ) {
+      currentPage.value = response.meta.current_page;
+      totalPages.value = response.meta.last_page;
+  
+      if (cards.value.length > 0) {
         await fetchCards(cards.value[0].id);
-      }
-      else{
+      }else{
         await fetchCards(currentId.value ?? 0);
       }
+
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -29,8 +33,14 @@ export function useFetchFields() {
     }
   };
 
+  onMounted(() => {
+    fetchData();
+  });
+
   return {
     fetchData,
     cards,
+    currentPage,
+    totalPages,
   };
 }

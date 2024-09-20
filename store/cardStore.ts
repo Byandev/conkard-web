@@ -6,7 +6,7 @@ export const useCardStore = defineStore("card", () => {
   const currentCard = ref<Field[]>([]);
   const currentId = ref<number>();
   const currentLabel = ref<string>('')
-  const isLoading = ref<boolean>(false);
+  const isLoading = ref<boolean>(true);
 
   const setCurrentId = (id: number) => {
     currentId.value = id;
