@@ -47,6 +47,10 @@ onMounted(() => {
               <div class="bg-gray-200 rounded w-full h-[28px] mb-4" />
               <div class="bg-gray-200 rounded w-full h-[28px] mb-4" />
             </div>
+            <div v-else-if="cards.length === 0" class="text-center text-gray-500 w-[235px]">
+              <p>You don't have any cards!</p>
+              <p>Click the button below (or the + in the sidebar) to create a personal card.</p>
+            </div>
             <div v-else class="w-[235px]">
               <div v-for="card in cards" :key="card.id"
                 class="w-full px-2 py-2 mb-2 hover:cursor-pointer hover:bg-gray-100 rounded-md transition-all duration-300"
@@ -57,14 +61,14 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <div v-if="!isLoading && cards.length > 0" class="flex justify-center space-x-2">
-            <button v-for="page in totalPages" :key="page" @click="fetchData(page)"
+          <div v-if="!isLoading" class="flex justify-center space-x-2">
+            <button v-if="cards.length != 0" v-for="page in totalPages" :key="page" @click="fetchData(page)"
               :class="['px-4 py-2 rounded-full transition-colors duration-300', { 'bg-gray-300 hover:bg-gray-400': currentPage !== page, 'bg-orange-500 text-white': currentPage === page }]">
               {{ page }}
             </button>
           </div>
         </section>
-        <div class="p-4 md:p-5 w-full">
+        <div v-if="cards.length != 0" class="p-4 md:p-5 w-full">
           <Tabs class="ml-5" />
           <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <DashboardCard :current-card="currentCard" class="mt-5 w-full md:w-96 animate-fade-in" />
