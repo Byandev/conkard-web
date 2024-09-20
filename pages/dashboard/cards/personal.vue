@@ -8,7 +8,7 @@ definePageMeta({
   layout: "dashboard-layout",
 });
 
-const { cards } = useFetchFields();
+const { cards, fetchData } = useFetchFields();
 const { fetchCards } = useCurrentCard();
 const { setLoading } = useCardStore();
 const { isLoading } = storeToRefs(useCardStore());
@@ -24,6 +24,8 @@ const handleCurrentCard = async (id: number, label: string) => {
     setLoading(false);
   }
 };
+
+onMounted(fetchData);
 </script>
 
 <template>

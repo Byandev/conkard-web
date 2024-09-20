@@ -38,7 +38,6 @@ const updateCardItem = () => {
     ...messagingField.value.map(messaging => ({ id: messaging.id ?? null, name: messaging.name, value: messaging.value, category: 'Messaging' })),
     ...businessField.value.map(business => ({ id: business.id ?? null, name: business.name, value: business.value, label: business.label, category: 'Business' })),
   ];
-  console.log("cardItem", cardItem.value);
 };
 
 // Watch for changes in newCard fields and update cardItem

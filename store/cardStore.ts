@@ -9,22 +9,18 @@ export const useCardStore = defineStore("card", () => {
   const isLoading = ref<boolean>(false);
 
   const setCurrentId = (id: number) => {
-    console.log("Setting current ID:", id);
     currentId.value = id;
   }
 
   const setCurrentCard = (fields: Field[]) => {
-    console.log("Setting current card:", fields);
     currentCard.value = fields;
   };
 
   const setLoading = (state: boolean) => {
-      console.log('State Change', state)
       isLoading.value = state;
   }
 
   const setCurrentLabel = (label: string) => {
-    console.log('new label', label)
     currentLabel.value = label;
   }
 
@@ -32,7 +28,6 @@ export const useCardStore = defineStore("card", () => {
     currentCard.value = [];
     currentId.value = undefined;
     currentLabel.value = '';
-    console.log("Current Card reset", currentCard);
   }
 
   return {

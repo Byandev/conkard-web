@@ -9,18 +9,23 @@ export function useCurrentCard(): {
   const {setCurrentLabel, setCurrentCard, setCurrentId, resetCurrentCard} = useCardStore();
   const { resetCard } = useNewCardStore();
 
-  const fetchCards = async (id: number, label: string) => {
+  const fetchCards = async (id: number) => {
     try {
-      console.log("Fetching data for card with ID:", id);
-      const response: { data: { fields: Field[] } } = await $api(
+      const response: { data: { 
+        label: string,
+        fields: Field[] } } = await $api(
         `v1/cards/${id}`
       );
+
+      //Reset the current card and new card store
       resetCurrentCard();
       resetCard();
-      const fields: Field[] = response.data.fields;
-      setCurrentLabel(label)
-      setCurrentCard(fields);
+
+      //Setting new card store data
+      setCurrentLabel(response.data.label)
+      setCurrentCard(response.data.fields);
       setCurrentId(id);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
