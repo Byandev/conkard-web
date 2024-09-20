@@ -41,7 +41,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-full">
+  <div class="h-full animate-fade-in">
     <Tabs class="ml-10" />
     <div class="flex flex-col md:flex-row w-fit h-full gap-5 p-4 md:py-10 md:px-3">
       <div class="flex flex-col gap-7 w-full md:w-1/8">
@@ -57,12 +57,12 @@ onMounted(async () => {
           </AddModal>
         </section>
       </div>
-      <div class="w-full md:max-w-[580px] flex flex-col gap-7">
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+      <div class="w-full md:max-w-[580px] flex flex-col gap-7 transition-all duration-300">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <TextInput v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
             input-type="text" @update:model-value="addLabel($event)" />
         </section>
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <AddImages @update:company-image="companyImage = $event"
             @update:company-image-coordinates="companyImageCoordinates = $event"
             @update:profile-image="profilePicture = $event"
@@ -70,10 +70,10 @@ onMounted(async () => {
             @update:cover-image="coverPhoto = $event"
             @update:cover-image-coordinates="coverPhotoCoordinates = $event" />
         </section>
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <ChooseTheme @update:theme="previewColor = $event" />
         </section>
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl">
+        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <AddDetails :field-types="fieldTypes" @update:id="currentId = $event" @update:is-edit="isEdit = $event"
             @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
         </section>
@@ -82,4 +82,22 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped="true"></style>
+<style scoped>
+@tailwind utilities;
+
+@layer utilities {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s forwards;
+  }
+}
+</style>
