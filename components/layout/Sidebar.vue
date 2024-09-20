@@ -349,9 +349,8 @@ const navigateDashboard = () => {
                 <div class="h-6 w-px bg-gray-900/10 2xl:hidden" aria-hidden="true" />
 
                 <!-- Home Dashboard Option -->
-                <div v-if="isDashboardCardsPersonal"
-                    class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between">
-                    <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
+                <div v-if="isDashboardCardsPersonal" class="flex flex-1 gap-x-2 self-stretch py-2 justify-between">
+                    <div class="flex flex-row gap-x-2 self-stretch">
                         <NuxtLink to="/dashboard/cards/edit" class="p-0">
                             <ButtonIcon class="h-full" :icon="PencilSquareIcon" text="Edit" background="black"
                                 foreground="white" />
@@ -363,12 +362,12 @@ const navigateDashboard = () => {
 
                 <!-- New Card Options -->
                 <div v-if="isDashboardCardsNew || isDashboardCardsEdit"
-                    class="flex flex-1 gap-x-4 self-stretch 2xl:gap-x-6 py-2 justify-between overflow-x-auto">
-                    <div class="flex flex-row gap-x-4 self-stretch 2xl:gap-x-6">
+                    class="flex flex-1 gap-x-2 self-stretch py-2 justify-between overflow-x-auto">
+                    <div class="flex flex-row gap-x-2 self-stretch">
                         <ButtonIcon :icon="Cog8ToothIcon" text="Settings" background="white" foreground="gray" />
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="white" foreground="gray" />
                     </div>
-                    <div class="flex flex-row gap-x-4">
+                    <div class="flex flex-row gap-x-2">
                         <Button :text="isDashboardCardsNew ? 'Cancel' : 'Discard changes'" background="white"
                             foreground="gray" @click="navigateDashboard" />
                         <ButtonIconIconify icon="material-symbols:save-outline"
