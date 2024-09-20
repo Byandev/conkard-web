@@ -324,9 +324,9 @@ const navigateDashboard = () => {
                         <div class="h-px w-full bg-gray-900/10" aria-hidden="true" />
 
                         <li
-                            class="mt-auto border border-gray-400 px-5 rounded-md hover:border-gray-700 hover:bg-gray-100">
+                            class="mt-auto border border-gray-400 px-5 rounded-md hover:border-gray-700 hover:bg-gray-100 group">
                             <a href="#"
-                                class="group -mx-2 flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:text-red-400 whitespace-nowrap">
+                                class="-mx-2 flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:text-red-400 whitespace-nowrap">
                                 <Cog6ToothIcon class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-red-300"
                                     aria-hidden="true" />
                                 Upgrade account
