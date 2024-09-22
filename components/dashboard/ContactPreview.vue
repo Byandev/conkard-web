@@ -21,7 +21,7 @@ import TelegramIcon from '@/assets/icons/telegram.svg';
 import GitHubIcon from '@/assets/icons/github.svg';
 import CalendlyIcon from '@/assets/icons/calendly.svg';
 import PayPalIcon from '@/assets/icons/paypal.svg';
-import VenmoIcon from '@/assets/icons/venmo.svg';   
+import VenmoIcon from '@/assets/icons/venmo.svg';
 import CashAppIcon from '@/assets/icons/cashapp.svg';
 import ThreadsIcon from '@/assets/icons/threads.svg';
 import YelpIcon from '@/assets/icons/yelp.svg';
@@ -34,9 +34,12 @@ const props = defineProps<{
     value?: string;
     label?: string;
     category?: string;
+    isClickable?: boolean;
     name: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'X' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'Whatsapp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp' | 'Spotify' | string;
     onUpdateEdit?: (title: string, id: number) => void;
 }>();
+
+console.log(props.name);
 
 const iconName = computed(() => {
     switch (props.name) {
@@ -72,16 +75,21 @@ const iconName = computed(() => {
 </script>
 
 <template>
-    <div
-        class="flex flex-row items-center gap-3"
+    <div class="flex flex-row items-center gap-3"
         @click="props.onUpdateEdit && props.onUpdateEdit(props.name, props.id)">
         <div class="flex items-center justify-center w-11 h-11 rounded-full" :style="{ backgroundColor: props.color }">
-            <component
-                :is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
+            <component :is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
                 aria-hidden="true" />
         </div>
-        <div v-if="['Company URL', 'Link' , 'Calendly'].includes(props.name)" class="flex flex-col">
-            <h1 class="text-1xl font-normal text-black">{{ props.label }}</h1>
+        <div v-if="['Company URL', 'Link', 'Calendly'].includes(props.name)" class="flex flex-col">
+            <h1 class="text-1xl font-normal text-black">
+                <template v-if="props.isClickable">
+                    <a :href="props.value" target="_blank" rel="noopener noreferrer">{{ props.label }}</a>
+                </template>
+                <template v-else>
+                    {{ props.label }}
+                </template>
+            </h1>
         </div>
         <div v-else class="flex flex-col">
             <h1 class="text-1xl font-semibold text-black">{{ props.value }}</h1>

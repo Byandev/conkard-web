@@ -1,76 +1,18 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import 'vue-advanced-cropper/dist/style.css';
-import { useSubmit } from "~/composables/useSubmit";
-import type { ApiErrorResponse } from '~/types/api/response/error';
-import type { ImageDataResponse } from '~/types/api/response/uploadImage';
 
 const props = defineProps<{
     title: string;
     isOpen: boolean;
 }>();
 
-const router = useRouter();
-const { sendRequest: uploadImage } = useSubmit<ImageDataResponse, ApiErrorResponse>()
-
 const emit = defineEmits(['update:isOpen', 'update:imageData']);
-
-const isLoading = ref(false);
 
 const companyImg = ref<File | null>(null);
 const profileImg = ref<File | null>(null);
 const coverImg = ref<File | null>(null);
 
-
 const closeModal = () => emit('update:isOpen', false);
-
-const saveImage = async () => {
-    const typeMap: Record<'Company' | 'Profile' | 'Cover', string> = {
-        'Company': 'CARD_COMPANY_LOGO',
-        'Profile': 'CARD_PROFILE_PICTURE',
-        'Cover': 'CARD_COVER_PHOTO'
-    };
-
-    const imageMap: Record<'Company' | 'Profile' | 'Cover', File | null> = {
-        'Company': companyImg.value,
-        'Profile': profileImg.value,
-        'Cover': coverImg.value
-    };
-
-    const title = props.title as 'Company' | 'Profile' | 'Cover';
-    const type = typeMap[title];
-    const image = imageMap[title];
-
-    console.log("title", image?.type);
-
-    if (!image) {
-        console.error(`${props.title} image is required.`);
-        return;
-    }
-
-    console.log("type", type);
-    console.log("image", image);
-
-    try {
-        isLoading.value = true;
-        const response = await uploadImage('/v1/cards/1/images', {
-            method: 'POST',
-            body: {
-                type,
-                image,
-            },
-        });
-
-        console.log(response);
-        await router.push("/dashboard/cards/personal");
-    } catch (error) {
-        console.error(error as ApiErrorResponse);
-    } finally {
-        isLoading.value = false;
-        console.log('Form submission attempt finished.');
-    }
-};
 
 const deleteImage = (type: 'company' | 'profile' | 'cover') => {
     console.log(type)
@@ -124,22 +66,23 @@ const prefix = computed(() => {
 <template>
     <AddModal :title="`Add ${props.title} ${prefix}`" :open="props.isOpen">
         <div v-if="props.title === 'Company'">
-            <ImageUploader type="company" :aspect-ratio="16 / 9" :initial-image="companyImg ?? undefined"
+            <ImageUploader :on-delete="() => deleteImage('company')" :on-cancel="closeModal" type="company"
+                :aspect-ratio="16 / 9" :initial-image="companyImg ?? undefined"
                 @update:image="handleImageUpdate('Company', $event)" @change="handleChange('company', $event)" />
         </div>
 
         <div v-if="props.title === 'Profile'">
-            <ImageUploader type="profile" :aspect-ratio="1 / 1" :initial-image="profileImg ?? undefined"
+            <ImageUploader :on-delete="() => deleteImage('profile')" :on-cancel="closeModal" type="profile"
+                :aspect-ratio="1 / 1" :initial-image="profileImg ?? undefined"
                 @update:image="handleImageUpdate('Profile', $event)" @change="handleChange('profile', $event)" />
         </div>
 
         <div v-if="props.title === 'Cover'">
-            <ImageUploader type="cover" :aspect-ratio="16 / 9" :initial-image="coverImg ?? undefined"
+            <ImageUploader :on-delete="() => deleteImage('cover')" :on-cancel="closeModal" type="cover"
+                :aspect-ratio="16 / 9" :initial-image="coverImg ?? undefined"
                 @update:image="handleImageUpdate('Cover', $event)" @change="handleChange('cover', $event)" />
         </div>
-        <ModalFooterButton :edit_data="true" :on-save="saveImage"
-            :on-delete="() => deleteImage(props.title.toLowerCase() as 'company' | 'profile' | 'cover')"
-            :on-cancel="closeModal" />
+
     </AddModal>
 </template>
 

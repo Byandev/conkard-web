@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     field?: any;
     keys?: string[];
     placeholder?: string;
     isAccreditation?: boolean;
     isNameField?: boolean;
     isHeadlineField?: boolean;
-}>();
+    isView?: boolean;
+}>(), {
+    isView: true
+});
 
 const displayValue = computed(() => {
     if (props.isAccreditation) {
@@ -28,7 +31,8 @@ const accreditationWords = computed(() => {
 </script>
 
 <template>
-    <section class="hover:cursor-pointer w-full my-2 flex flex-row items-center justify-between group">
+    <section class="w-full my-2 flex flex-row items-center justify-between group"
+        :class="props.isView ? 'hover:cursor-pointer' : ''">
         <div>
             <template v-if="props.isNameField">
                 <div class="flex flex-wrap gap-2 text-3xl my-2">
@@ -59,7 +63,7 @@ const accreditationWords = computed(() => {
             <h1 v-else-if="displayValue" class="text-3xl font-normal text-black">{{ displayValue }}</h1>
             <h1 v-else class="text-3xl font-bold text-gray-300">{{ placeholder }}</h1>
         </div>
-        <Icon name="lucide:edit" size="20"
+        <Icon v-if="props.isView" name="lucide:edit" size="20"
             class="text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute right-5" />
     </section>
 </template>

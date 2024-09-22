@@ -9,8 +9,6 @@ export interface Type {
 }
 
 export interface Field {
-  title: string;
-  url: string;
   id: number;
   card_id: number;
   label: string | null;

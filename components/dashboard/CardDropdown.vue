@@ -1,9 +1,9 @@
 <template>
     <Menu as="div" class="relative inline-block text-left">
-        <div>
+        <div class="flex justify-center items-center">
             <MenuButton
-                class="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-inset ring-gray-300 hover:bg-gray-50">
-                <PlusCircleIcon class="h-7 w-7 text-gray-700" aria-hidden="true" />
+                class="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white text-sm font-semibold text-gray-900 shadow-sm ring-inset ring-gray-300 hover:bg-gray-50 p-2">
+                <PlusCircleIcon class="h-7 w-7 text-gray-500" aria-hidden="true" />
             </MenuButton>
         </div>
 

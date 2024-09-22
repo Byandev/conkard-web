@@ -12,7 +12,11 @@ export default {
     "./node_modules/@vueform/vueform/themes/tailwind/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
+      },
+    },
   },
   plugins: [
     require("@tailwindcss/forms"),

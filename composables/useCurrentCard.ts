@@ -1,20 +1,31 @@
 import type { Field } from "~/types/models/Card";
 import { useCardStore } from "~/store/cardStore";
+import { useNewCardStore } from "~/store/newCardStore";
 
 export function useCurrentCard(): {
-  fetchCards: (id: string) => Promise<void>;
+  fetchCards: (id: number) => Promise<void>;
 } {
   const { $api } = useNuxtApp();
-  const cardStore = useCardStore();
+  const {setCurrentLabel, setCurrentCard, setCurrentId, resetCurrentCard} = useCardStore();
+  const { resetCard } = useNewCardStore();
 
-  const fetchCards = async (id: string) => {
+  const fetchCards = async (id: number) => {
     try {
-      console.log("Fetching data for card with ID:", id);
-      const response: { data: { fields: Field[] } } = await $api(
+      const response: { data: { 
+        label: string,
+        fields: Field[] } } = await $api(
         `v1/cards/${id}`
       );
-      const fields: Field[] = response.data.fields;
-      cardStore.setCurrentCard(fields);
+
+      //Reset the current card and new card store
+      resetCurrentCard();
+      resetCard();
+
+      //Setting new card store data
+      setCurrentLabel(response.data.label)
+      setCurrentCard(response.data.fields);
+      setCurrentId(id);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
