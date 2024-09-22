@@ -78,18 +78,22 @@ const bgColor = computed(() => props.coverPhoto ? 'white' : props.color);
   <div class="grid grid-cols-1 gap-4">
     <div
       class="w-[440px] divide-y divide-gray-200 overflow-hidden rounded-xl bg-white md:min-w-[100px] shadow drop-shadow-xl">
-      <div class="px-4 py-5 sm:px-6 flex items-center justify-center"
+      <div
+class="px-4 py-5 sm:px-6 flex items-center justify-center"
         :class="props.coverPhoto ? 'h-[248px]' : 'h-[100px]'" :style="{ backgroundColor: bgColor }">
         <div>
-          <Preview v-if="props?.coverPhoto" :width="440" :height="248" :image="props?.coverPhoto"
+          <Preview
+v-if="props?.coverPhoto" :width="440" :height="248" :image="props?.coverPhoto"
             :coordinates="props?.coverPhotoCoordinates" class="preview" />
         </div>
         <div class="absolute left-0 profile-picture-container" :class="props.coverPhoto ? 'mt-52' : ' mt-24'">
-          <Preview v-if="props?.profilePicture" :width="118" :height="118" :image="props?.profilePicture"
+          <Preview
+v-if="props?.profilePicture" :width="118" :height="118" :image="props?.profilePicture"
             :coordinates="props.profilePictureCoordinates" class="profile-picture" />
         </div>
         <div class="absolute right-5" :class="props.coverPhoto ? 'mt-52' : ' mt-24'">
-          <Preview v-if="props?.companyImage" :width="157" :height="88" :image="props?.companyImage"
+          <Preview
+v-if="props?.companyImage" :width="157" :height="88" :image="props?.companyImage"
             :coordinates="props.companyImageCoordinates" class="preview" />
         </div>
       </div>
@@ -100,27 +104,34 @@ const bgColor = computed(() => props.coverPhoto ? 'white' : props.color);
       </div>
       <div v-else class="px-5 md:px-5 pb-5">
         <div v-if="props?.profilePicture || props?.companyImage" class=" mt-16" />
-        <FieldSection v-if="!isNameFieldEmpty" :field="nameField"
+        <FieldSection
+v-if="!isNameFieldEmpty" :field="nameField"
           :keys="['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']"
           :is-name-field="true" @click="updateTitle('Name')" />
         <FieldSection v-else placeholder="Name" @click="updateTitle('Name')" />
         <FieldSection v-if="!isJobFieldEmpty" :field="jobField" :keys="['value']" @click="updateTitle('Job Title')" />
-        <FieldSection v-if="!isDepartmentFieldEmpty" :field="departmentField" :keys="['value']"
+        <FieldSection
+v-if="!isDepartmentFieldEmpty" :field="departmentField" :keys="['value']"
           @click="updateTitle('Department')" />
-        <FieldSection v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']"
+        <FieldSection
+v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']"
           @click="updateTitle('Company Name')" />
-        <FieldSection v-if="!isHeadlineFieldEmpty" :is-headline-field="true" :field="headlineField" :keys="['value']"
+        <FieldSection
+v-if="!isHeadlineFieldEmpty" :is-headline-field="true" :field="headlineField" :keys="['value']"
           @click="updateTitle('Headline')" />
-        <FieldSection v-if="!isAccreditationFieldEmpty" :field="accreditationField" is-accreditation
+        <FieldSection
+v-if="!isAccreditationFieldEmpty" :field="accreditationField" is-accreditation
           @click="updateTitle('Accreditation')" />
         <draggable v-model="cardItem" class="flex flex-col gap-3" item-key="id">
           <template #item="{ element }">
             <transition-group name="list" tag="div">
               <div :key="element.id" class="flex flex-row items-center group hover:cursor-pointer -ml-5">
-                <Icon name="ph:dots-six-vertical-bold"
+                <Icon
+name="ph:dots-six-vertical-bold"
                   class="text-black opacity-0 group-hover:opacity-100 text-center h-5 w-5 shrink-0"
                   aria-hidden="true" />
-                <ContactPreview :id="element.id" :color="props.color" :title="element.title" :url="element.url"
+                <ContactPreview
+:id="element.id" :color="props.color" :title="element.title" :url="element.url"
                   :name="element.name" :value="element.value" :username="element.username" :label="element.label"
                   :category="element.category" :on-update-edit="updateEdit" />
               </div>

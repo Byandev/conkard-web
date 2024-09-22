@@ -33,7 +33,8 @@ const filteredEmail = computed<EmailData>(() => {
 <template>
     <div class="flex flex-row items-center gap-3">
         <div class="flex items-center justify-center w-11 h-11 bg-red-500 rounded-full">
-            <Icon name="uiw:mail" :class="[
+            <Icon
+name="uiw:mail" :class="[
                 `text-white`,
                 `group-hover:text-red`,
                 'text-center',

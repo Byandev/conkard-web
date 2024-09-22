@@ -1,4 +1,4 @@
-import {FetchError} from "ofetch";
+import type {FetchError} from "ofetch";
 
 export interface ApiErrorResponse extends FetchError {
     data: {

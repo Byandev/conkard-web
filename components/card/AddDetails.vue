@@ -57,7 +57,8 @@ const sentenceCaseCategory = (text: string) => {
     <div v-for="(fieldTypes, category) in groupedFieldTypes" :key="category" class="mt-5">
         <CardSubtitle :for-id="`add-details-${category}`" :text="sentenceCaseCategory(category)" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-            <IconTitle v-for="(fieldType, index) in fieldTypes" :key="index"
+            <IconTitle
+v-for="(fieldType, index) in fieldTypes" :key="index"
                 class="disabled:opacity-40 disabled:cursor-not-allowed" foreground="gray" background="gray"
                 :icon_url="fieldType.icon_url" :text="fieldType.name" :disabled="isFieldDisabled(fieldType.name)"
                 @click="updateTitle(fieldType.name)" />

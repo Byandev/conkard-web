@@ -14,7 +14,8 @@
                     <rect x="8" y="8" width="6" height="2" rx="1" fill="#3BB54A" />
                     <rect x="8" y="15" width="6" height="2" rx="1" fill="#3BB54A" />
                     <defs>
-                        <linearGradient id="paint0_linear" x1="16.9996" y1="10.4791" x2="47.0156" y2="10.4791"
+                        <linearGradient
+id="paint0_linear" x1="16.9996" y1="10.4791" x2="47.0156" y2="10.4791"
                             gradientUnits="userSpaceOnUse">
                             <stop stop-color="#009217" />
                             <stop offset="1" stop-color="#00FF29" />

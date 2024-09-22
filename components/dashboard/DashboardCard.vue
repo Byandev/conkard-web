@@ -50,9 +50,11 @@ watch(
         <div
             class="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white w-full md:w-[440px] shadow drop-shadow-xl">
             <div class="px-4 py-5 sm:px-6 h-28 bg-orange-400 flex items-center justify-center">
-                <svg class="h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                <svg
+class="h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
-                    <path fill-rule="evenodd"
+                    <path
+fill-rule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12zm0-10a2 2 0 100-4 2 2 0 000 4z"
                         clip-rule="evenodd" />
                 </svg>
@@ -66,12 +68,14 @@ watch(
                 <div class="text-2xl md:text-3xl mt-7 mb-3 font-semibold">
                     <div>{{ nameField?.value }}</div>
                 </div>
-                <FieldSection :is-view="false" v-if="!isJobFieldEmpty" :field="jobField" :keys="['value']" />
-                <FieldSection :is-view="false" v-if="!isDepartmentFieldEmpty" :field="departmentField"
+                <FieldSection v-if="!isJobFieldEmpty" :is-view="false" :field="jobField" :keys="['value']" />
+                <FieldSection
+v-if="!isDepartmentFieldEmpty" :is-view="false" :field="departmentField"
                     :keys="['value']" />
-                <FieldSection :is-view="false" v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']" />
+                <FieldSection v-if="!isCompanyNameEmpty" :is-view="false" :field="companyNameField" :keys="['value']" />
                 <div v-for="(item, index) in cardItem" :key="index">
-                    <ContactPreview :id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
+                    <ContactPreview
+:id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
                         :value="item.value ?? ''" :label="item.label ?? ''" :category="item.type.category ?? ''"
                         :name="item.type.name ?? ''" />
                 </div>

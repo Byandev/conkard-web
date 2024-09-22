@@ -65,7 +65,8 @@ const submitForm = async () => {
     <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
-          <img alt="Your Company" class="h-10 w-auto"
+          <img
+alt="Your Company" class="h-10 w-auto"
             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600">
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
           <p class="mt-2 text-sm leading-6 text-gray-500">
@@ -83,7 +84,8 @@ const submitForm = async () => {
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
                 <div class="mt-2">
-                  <input id="email" v-model="formRef.email" autocomplete="email"
+                  <input
+id="email" v-model="formRef.email" autocomplete="email"
                     :class="{ 'ring-red-300': v$.email.$error, 'ring-gray-300': !v$.email.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="email">
@@ -95,7 +97,8 @@ const submitForm = async () => {
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
                 <div class="mt-2">
-                  <input id="password" v-model="formRef.password" autocomplete="current-password"
+                  <input
+id="password" v-model="formRef.password" autocomplete="current-password"
                     :class="{ 'ring-red-300': v$.password.$error, 'ring-gray-300': !v$.password.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="password">
@@ -106,7 +109,8 @@ const submitForm = async () => {
 
               <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                  <input id="remember-me" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  <input
+id="remember-me" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                     name="remember-me" type="checkbox">
                   <label class="ml-3 block text-sm leading-6 text-gray-700" for="remember-me">Remember me</label>
                 </div>
@@ -117,7 +121,8 @@ const submitForm = async () => {
               </div>
 
               <div>
-                <Button :is-wide="true" :is-loading="isLoading" text="Sign in" background="gray" foreground="white"
+                <Button
+:is-wide="true" :is-loading="isLoading" text="Sign in" background="gray" foreground="white"
                   type="submit" />
               </div>
             </form>
@@ -156,7 +161,8 @@ const submitForm = async () => {
       </div>
     </div>
     <div class="relative hidden w-0 flex-1 lg:block">
-      <img alt="" class="absolute inset-0 h-full w-full object-cover"
+      <img
+alt="" class="absolute inset-0 h-full w-full object-cover"
         src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80">
     </div>
   </div>

@@ -75,10 +75,12 @@ const iconName = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-row items-center gap-3"
+    <div
+class="flex flex-row items-center gap-3"
         @click="props.onUpdateEdit && props.onUpdateEdit(props.name, props.id)">
         <div class="flex items-center justify-center w-11 h-11 rounded-full" :style="{ backgroundColor: props.color }">
-            <component :is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
+            <component
+:is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
                 aria-hidden="true" />
         </div>
         <div v-if="['Company URL', 'Link', 'Calendly'].includes(props.name)" class="flex flex-col">

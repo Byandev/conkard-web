@@ -31,7 +31,8 @@ const accreditationWords = computed(() => {
 </script>
 
 <template>
-    <section class="w-full my-2 flex flex-row items-center justify-between group"
+    <section
+class="w-full my-2 flex flex-row items-center justify-between group"
         :class="props.isView ? 'hover:cursor-pointer' : ''">
         <div>
             <template v-if="props.isNameField">
@@ -53,7 +54,8 @@ const accreditationWords = computed(() => {
             </template>
             <template v-else-if="props.isAccreditation">
                 <div class="mb-7 flex flex-wrap gap-2">
-                    <span v-for="(word, index) in accreditationWords" :key="index"
+                    <span
+v-for="(word, index) in accreditationWords" :key="index"
                         class="bg-gray-200 rounded-lg px-2 py-1 text-black hover:bg-gray-300">{{ word }}</span>
                 </div>
             </template>
@@ -63,7 +65,8 @@ const accreditationWords = computed(() => {
             <h1 v-else-if="displayValue" class="text-3xl font-normal text-black">{{ displayValue }}</h1>
             <h1 v-else class="text-3xl font-bold text-gray-300">{{ placeholder }}</h1>
         </div>
-        <Icon v-if="props.isView" name="lucide:edit" size="20"
+        <Icon
+v-if="props.isView" name="lucide:edit" size="20"
             class="text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute right-5" />
     </section>
 </template>

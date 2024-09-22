@@ -75,32 +75,38 @@ const onDeleteField = () => {
 <template>
     <form @submit.prevent="saveField">
         <div class="flex flex-col gap-4">
-            <FloatingLabelInput v-if="['PayPal', 'Venmo'].includes(props.type)" v-model="PaymentForm.url" label="URL"
+            <FloatingLabelInput
+v-if="['PayPal', 'Venmo'].includes(props.type)" v-model="PaymentForm.url" label="URL"
                 input-name="URL" placeholder="URL" input-type="text" class="w-full" />
-            <span class="text-red-900 text-sm" v-if="v$.url.$error && ['PayPal', 'Venmo'].includes(props.type)">
+            <span v-if="v$.url.$error && ['PayPal', 'Venmo'].includes(props.type)" class="text-red-900 text-sm">
                 {{ v$.url.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['Cash App'].includes(props.type)" v-model="PaymentForm.username" label="Username"
+            <FloatingLabelInput
+v-if="['Cash App'].includes(props.type)" v-model="PaymentForm.username" label="Username"
                 input-name="Username" placeholder="Username" input-type="text" class="w-full" />
-            <span class="text-red-900 text-sm" v-if="v$.username.$error && ['Cash App'].includes(props.type)">
+            <span v-if="v$.username.$error && ['Cash App'].includes(props.type)" class="text-red-900 text-sm">
                 {{ v$.username.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['PayPal', 'Venmo', 'Cash App'].includes(props.type)" v-model="PaymentForm.title"
+            <FloatingLabelInput
+v-if="['PayPal', 'Venmo', 'Cash App'].includes(props.type)" v-model="PaymentForm.title"
                 label="Title" input-name="Title" placeholder="Title" input-type="text" class="w-full" />
-            <span class="text-red-900 text-sm"
-                v-if="v$.title.$error && ['PayPal', 'Venmo', 'Cash App'].includes(props.type)">
+            <span
+v-if="v$.title.$error && ['PayPal', 'Venmo', 'Cash App'].includes(props.type)"
+                class="text-red-900 text-sm">
                 {{ v$.title.$errors[0].$message }}
             </span>
 
 
 
-            <Suggestion v-if="props.buttonText" :current="PaymentForm.title"
-                title="Here are some suggestions for your title:" @update:label="PaymentForm.title = $event"
-                :buttonText="props.buttonText" />
+            <Suggestion
+v-if="props.buttonText" :current="PaymentForm.title"
+                title="Here are some suggestions for your title:" :button-text="props.buttonText"
+                @update:label="PaymentForm.title = $event" />
         </div>
-        <ModalFooterButton :-on-cancel="closeModal" :-on-delete="onDeleteField" :edit_data="props.edit_data"
+        <ModalFooterButton
+:-on-cancel="closeModal" :-on-delete="onDeleteField" :edit_data="props.edit_data"
             :-on-save="saveField" />
     </form>
 </template>

@@ -115,12 +115,14 @@ const closeModal = () => {
   <div class="flex flex-col gap-5">
     <!-- Dynamically show added inputs -->
     <div v-for="(input, index) in addedInputs" :key="index" class="flex items-center w-full">
-      <FloatingLabelInput v-model="input.value" :label="input.label" :input-name="input.name" :placeholder="input.label"
+      <FloatingLabelInput
+v-model="input.value" :label="input.label" :input-name="input.name" :placeholder="input.label"
         input-type="text" class="w-full" />
     </div>
     <!-- Add buttons for other inputs -->
     <div class="flex flex-wrap gap-2">
-      <button v-for="(input, index) in dynamicInputs.filter(
+      <button
+v-for="(input, index) in dynamicInputs.filter(
         (di) => !addedInputs.some((ai) => ai.name === di.name),
       )" :key="index"
         class="gap-2 rounded-xl inline-flex justify-center bg-white border-2 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-gray-100"
@@ -130,12 +132,14 @@ const closeModal = () => {
       </button>
     </div>
     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row justify-end">
-      <button ref="cancelButtonRef" type="button"
+      <button
+ref="cancelButtonRef" type="button"
         class="mt-3 p-4 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
         @click="closeModal">
         Cancel
       </button>
-      <button type="button"
+      <button
+type="button"
         class="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 sm:ml-3 sm:w-auto"
         @click="saveNameFields">
         Save

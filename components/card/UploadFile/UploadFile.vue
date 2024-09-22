@@ -66,19 +66,22 @@ const prefix = computed(() => {
 <template>
     <AddModal :title="`Add ${props.title} ${prefix}`" :open="props.isOpen">
         <div v-if="props.title === 'Company'">
-            <ImageUploader :on-delete="() => deleteImage('company')" :on-cancel="closeModal" type="company"
+            <ImageUploader
+:on-delete="() => deleteImage('company')" :on-cancel="closeModal" type="company"
                 :aspect-ratio="16 / 9" :initial-image="companyImg ?? undefined"
                 @update:image="handleImageUpdate('Company', $event)" @change="handleChange('company', $event)" />
         </div>
 
         <div v-if="props.title === 'Profile'">
-            <ImageUploader :on-delete="() => deleteImage('profile')" :on-cancel="closeModal" type="profile"
+            <ImageUploader
+:on-delete="() => deleteImage('profile')" :on-cancel="closeModal" type="profile"
                 :aspect-ratio="1 / 1" :initial-image="profileImg ?? undefined"
                 @update:image="handleImageUpdate('Profile', $event)" @change="handleChange('profile', $event)" />
         </div>
 
         <div v-if="props.title === 'Cover'">
-            <ImageUploader :on-delete="() => deleteImage('cover')" :on-cancel="closeModal" type="cover"
+            <ImageUploader
+:on-delete="() => deleteImage('cover')" :on-cancel="closeModal" type="cover"
                 :aspect-ratio="16 / 9" :initial-image="coverImg ?? undefined"
                 @update:image="handleImageUpdate('Cover', $event)" @change="handleChange('cover', $event)" />
         </div>

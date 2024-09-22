@@ -45,14 +45,16 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
 <template>
     <div class="max-w-screen-lg w-full mx-auto p-4">
         <div class="flex flex-col md:flex-row justify-between h-12 items-center">
-            <CardTitle forId="add-images" text="Add Images" />
+            <CardTitle for-id="add-images" text="Add Images" />
             <Button text="Change Layout" background="white" foreground="black" class="mt-2 md:mt-0" />
         </div>
         <div class="mt-5 flex flex-col md:flex-row justify-between gap-5">
-            <VerticalButtonIcon v-if="!companyImg" @click="updateModalState('Company')" background="gray"
-                foreground="gray" :icon="PlusIcon" text="Company Logo" />
+            <VerticalButtonIcon
+v-if="!companyImg" background="gray" foreground="gray"
+                :icon="PlusIcon" text="Company Logo" @click="updateModalState('Company')" />
             <div v-else class="relative " @click="updateModalState('Company')">
-                <Preview :width="160" :height="90" :image="companyImg" :coordinates="companyImageCoordinates"
+                <Preview
+:width="160" :height="90" :image="companyImg" :coordinates="companyImageCoordinates"
                     class="preview rounded-lg" />
                 <div
                     class="absolute inset-0 text-center rounded-lg flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 hover:opacity-100 transition-opacity hover:cursor-pointer duration-300">
@@ -61,10 +63,12 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
                 </div>
             </div>
 
-            <VerticalButtonIcon v-if="!profileImg" @click="updateModalState('Profile')" background="gray"
-                foreground="gray" :icon="PlusIcon" text="Profile Picture" />
+            <VerticalButtonIcon
+v-if="!profileImg" background="gray" foreground="gray"
+                :icon="PlusIcon" text="Profile Picture" @click="updateModalState('Profile')" />
             <div v-else class="relative" @click="updateModalState('Profile')">
-                <Preview :width="90" :height="90" :image="profileImg" :coordinates="profileImageCoordinates"
+                <Preview
+:width="90" :height="90" :image="profileImg" :coordinates="profileImageCoordinates"
                     class="preview rounded-lg" />
                 <div
                     class="absolute inset-0 text-center rounded-lg flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 hover:opacity-100 transition-opacity hover:cursor-pointer duration-300">
@@ -73,10 +77,12 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
                 </div>
             </div>
 
-            <VerticalButtonIcon v-if="!coverImg" @click="updateModalState('Cover')" background="gray" foreground="gray"
-                :icon="PlusIcon" text="Cover Photo" />
+            <VerticalButtonIcon
+v-if="!coverImg" background="gray" foreground="gray" :icon="PlusIcon"
+                text="Cover Photo" @click="updateModalState('Cover')" />
             <div v-else class="relative" @click="updateModalState('Cover')">
-                <Preview :width="160" :height="90" :image="coverImg" :coordinates="coverImageCoordinates"
+                <Preview
+:width="160" :height="90" :image="coverImg" :coordinates="coverImageCoordinates"
                     class="preview rounded-lg" />
                 <div
                     class="absolute inset-0 rounded-lg text-center flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 hover:opacity-100 transition-opacity hover:cursor-pointer duration-300">
@@ -85,8 +91,9 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
                 </div>
             </div>
 
-            <UploadFile @update:imageData="handleImageData($event)" :title="modalTitle" :isOpen="isModalOpen"
-                @update:isOpen="isModalOpen = $event" />
+            <UploadFile
+:title="modalTitle" :is-open="isModalOpen" @update:image-data="handleImageData($event)"
+                @update:is-open="isModalOpen = $event" />
         </div>
     </div>
 </template>

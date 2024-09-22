@@ -2,10 +2,10 @@
     <div>
         <h2 class="text-xl font-medium leading-6 text-gray-900">Choose a Theme</h2>
         <div class="grid grid-cols-12 gap-1">
-            <div v-for="theme in themes" :key="theme.id"
+            <div
+v-for="theme in themes" :key="theme.id"
                 :class="['mt-5 w-6 h-6 cursor-pointer rounded-lg', { 'ring-2 ring-offset-2 ring-blue-500': theme.id === selectedThemeId }]"
-                :style="{ backgroundColor: theme.color }" @click="selectTheme(theme)">
-            </div>
+                :style="{ backgroundColor: theme.color }" @click="selectTheme(theme)"/>
         </div>
     </div>
 </template>

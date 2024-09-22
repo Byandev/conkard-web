@@ -33,7 +33,8 @@ const filteredPhone = computed<PhoneData>(() => {
 <template>
     <div class="flex flex-row items-center gap-3">
         <div class="flex items-center justify-center w-11 h-11 bg-red-500 rounded-full">
-            <Icon name="ic:baseline-phone" :class="[
+            <Icon
+name="ic:baseline-phone" :class="[
                 `text-white`,
                 `group-hover:text-red`,
                 'text-center',

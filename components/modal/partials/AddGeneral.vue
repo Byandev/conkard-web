@@ -84,39 +84,48 @@ const onDeleteField = () => {
 <template>
     <div>
         <div class="flex flex-col gap-4">
-            <FloatingLabelInput v-if="['Email', 'Phone', 'Address'].includes(props.name)" v-model="GeneralForm.value"
+            <FloatingLabelInput
+v-if="['Email', 'Phone', 'Address'].includes(props.name)" v-model="GeneralForm.value"
                 label="Value" input-name="Value" placeholder="Value" input-type="text" class="w-full" />
-            <span v-if="v$.value.$error && ['Email', 'Phone', 'Address'].includes(props.name)"
+            <span
+v-if="v$.value.$error && ['Email', 'Phone', 'Address'].includes(props.name)"
                 class="text-red-900 text-sm">
                 {{ v$.value.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['Email', 'Phone', 'Address'].includes(props.name)" v-model="GeneralForm.label"
+            <FloatingLabelInput
+v-if="['Email', 'Phone', 'Address'].includes(props.name)" v-model="GeneralForm.label"
                 label="Label (Optional)" input-name="field-label" placeholder="Label (Optional)" input-type="text"
                 class="w-full" />
-            <span v-if="v$.label.$error && ['Email', 'Phone', 'Address'].includes(props.name)"
+            <span
+v-if="v$.label.$error && ['Email', 'Phone', 'Address'].includes(props.name)"
                 class="text-red-900 text-sm">
                 {{ v$.label.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['url', 'Link', 'Company URL'].includes(props.name)" v-model="GeneralForm.value"
+            <FloatingLabelInput
+v-if="['url', 'Link', 'Company URL'].includes(props.name)" v-model="GeneralForm.value"
                 label="URL" input-name="URL" placeholder="URL" input-type="text" class="w-full" />
-            <span v-if="v$.value.$error && ['url', 'Link', 'Company URL'].includes(props.name)"
+            <span
+v-if="v$.value.$error && ['url', 'Link', 'Company URL'].includes(props.name)"
                 class="text-red-900 text-sm">
                 {{ v$.value.$errors[0].$message }}
             </span>
 
-            <FloatingLabelInput v-if="['Link', 'Company URL'].includes(props.name)" v-model="GeneralForm.label"
+            <FloatingLabelInput
+v-if="['Link', 'Company URL'].includes(props.name)" v-model="GeneralForm.label"
                 label="Title" input-name="Title" placeholder="Title" input-type="text" class="w-full" />
             <span v-if="v$.label.$error && ['Link', 'Company URL'].includes(props.name)" class="text-red-900 text-sm">
                 {{ v$.label.$errors[0].$message }}
             </span>
 
-            <Suggestion v-if="props.suggestedLabels" :current="selectedSuggestion"
+            <Suggestion
+v-if="props.suggestedLabels" :current="selectedSuggestion"
                 :title="props.name == 'Company URL' ? 'Here are some suggestions for your title:' : 'Here are some suggestions for your label:'"
                 :suggested-labels="props.suggestedLabels" @update:label="suggestionUpdate($event)" />
         </div>
-        <ModalFooterButton :on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.editData"
+        <ModalFooterButton
+:on-cancel="closeModal" :on-delete="onDeleteField" :edit_data="props.editData"
             :disabled="v$.value.$invalid" :on-save="saveField" />
     </div>
 </template>

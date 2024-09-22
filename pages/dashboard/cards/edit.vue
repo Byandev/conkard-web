@@ -90,13 +90,15 @@ onMounted(async () => {
         <div class="flex flex-col md:flex-row w-fit h-full gap-5 p-4 md:py-10 md:px-3">
             <div class="flex flex-col gap-7 w-full md:w-1/8">
                 <section class="grid grid-cols-1 gap-4">
-                    <CardPreview :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
+                    <CardPreview
+:company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
                         :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
                         :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" :color="previewColor"
                         @update:id="currentId = $event" @update:title="ModalTitle = $event"
                         @update:open="isModalOpen = $event" @update:is-edit="isEdit = $event" />
                     <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
-                        <ModalContent :id="currentId" :field-types="fieldTypes" :is-edit="isEdit"
+                        <ModalContent
+:id="currentId" :field-types="fieldTypes" :is-edit="isEdit"
                             :modal-title="ModalTitle" @update:open="isModalOpen = false" />
                     </AddModal>
                 </section>
@@ -108,11 +110,13 @@ onMounted(async () => {
             </div>
             <div v-else class="w-full md:max-w-[580px] flex flex-col gap-7 transition-all duration-300">
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-                    <TextInput v-model="label" label="Edit Label" input-name="card-label" placeholder="Label this card"
+                    <TextInput
+v-model="label" label="Edit Label" input-name="card-label" placeholder="Label this card"
                         input-type="text" @update:model-value="addLabel($event)" />
                 </section>
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-                    <AddImages @update:company-image="companyImage = $event"
+                    <AddImages
+@update:company-image="companyImage = $event"
                         @update:company-image-coordinates="companyImageCoordinates = $event"
                         @update:profile-image="profilePicture = $event"
                         @update:profile-image-coordinates="profilePictureCoordinates = $event"
@@ -123,7 +127,8 @@ onMounted(async () => {
                     <ChooseTheme @update:theme="previewColor = $event" />
                 </section>
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-                    <AddDetails :field-types="fieldTypes" @update:id="currentId = $event"
+                    <AddDetails
+:field-types="fieldTypes" @update:id="currentId = $event"
                         @update:is-edit="isEdit = $event" @update:title="ModalTitle = $event"
                         @update:open="isModalOpen = $event" />
                 </section>

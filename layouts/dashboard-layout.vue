@@ -10,7 +10,7 @@
       <a href="https://www.blinq.me" class="text-blue-500 underline">Download the App</a>
     </div>
     <Sidebar class="hidden lg:block">
-      <slot></slot>
+      <slot/>
     </Sidebar>
   </div>
 </template>

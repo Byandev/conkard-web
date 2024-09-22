@@ -8,9 +8,11 @@ const props = defineProps<{
 </script>
 
 <template>
-    <button type="button" :class="[`bg-${props.background}-100`]"
+    <button
+type="button" :class="[`bg-${props.background}-100`]"
         class=" whitespace-nowrap p-2 border text-sm border-gray-300 rounded-xl flex flex-col items-center">
-        <Icon :name="props.icon" :class="[
+        <Icon
+:name="props.icon" :class="[
             `text-${props.foreground}-900`,
             `group-hover:text-${props.foreground}`,
             'text-center',
