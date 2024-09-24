@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useNewCardStore } from '~/store/newCardStore';
+import { useCardStore } from '~/store/cardStore';
 import type { Type } from '~/types/models/Card';
 import { computed } from 'vue';
 
-const newCardStore = useNewCardStore();
+const newCardStore = useCardStore();
 
 const props = defineProps<{
     fieldTypes: Type[];
 }>();
 
-const { nameField, jobField, departmentField, companyNameField } = storeToRefs(newCardStore);
+const { personalFields } = storeToRefs(newCardStore);
 
 const emit = defineEmits(['update:title', 'update:open', 'update:isEdit', 'update:id']);
 
@@ -24,13 +24,13 @@ const updateTitle = (title: string) => {
 const isFieldDisabled = (fieldName: string) => {
     switch (fieldName) {
         case 'Name':
-            return nameField.value !== null;
+            return personalFields.value.find((field: any) => field?.type?.name === 'Name') !== undefined;
         case 'Job Title':
-            return jobField.value !== null;
+            return personalFields.value.find((field: any) => field?.type?.name === 'Job Title') !== undefined;
         case 'Department':
-            return departmentField.value !== null;
+            return personalFields.value.find((field: any) => field?.type?.name === 'Department') !== undefined;
         case 'Company Name':
-            return companyNameField.value !== null;
+            return personalFields.value.find((field: any) => field?.type?.name === 'Company Name') !== undefined;
         default:
             return false;
     }

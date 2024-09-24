@@ -20,6 +20,8 @@ export interface Field {
 }
 
 export interface Card {
+  value: string;
+  type: any;
   id: number;
   user_id: number;
   label: string;

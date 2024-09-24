@@ -57,7 +57,7 @@ const submitForm = async () => {
 
     await getSession()
 
-    await router.push("/dashboard/cards/personal")
+    await router.push("/dashboard/")
   } catch (error) {
     console.log(error as ApiErrorResponse)
   } finally {

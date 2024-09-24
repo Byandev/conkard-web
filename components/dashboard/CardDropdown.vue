@@ -20,7 +20,7 @@ enter-active-class="transition ease-out duration-100"
                 <div class="py-1">
                     <MenuItem v-slot="{ active }">
                     <NuxtLink
-to="/dashboard/cards/new"
+to="/cards/create"
                         :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">
                         Me
                     </NuxtLink>

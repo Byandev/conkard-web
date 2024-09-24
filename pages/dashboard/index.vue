@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useFetchFields } from "~/composables/useFetchField";
-import { useCurrentCard } from "~/composables/useCurrentCard";
+import { useCardFieldTypes } from "~/composables/useCardFieldTypes";
 import { useCardStore } from "~/store/cardStore";
 import { storeToRefs } from "pinia";
 
@@ -8,8 +7,7 @@ definePageMeta({
   layout: "dashboard-layout",
 });
 
-const { fetchData, cards, currentPage, totalPages } = useFetchFields();
-const { fetchCards } = useCurrentCard();
+const { fetchData, cards, currentPage, totalPages, fetchCards } = useCardFieldTypes();
 const { setLoading } = useCardStore();
 const { isLoading } = storeToRefs(useCardStore());
 const { currentCard, currentId } = storeToRefs(useCardStore());
@@ -69,9 +67,9 @@ v-for="card in cards" :key="card.id"
               </div>
             </div>
           </div>
-          <div class="flex justify-center space-x-2">
+          <div v-if="cards.length != 0 && totalPages > 1" class="flex justify-center space-x-2">
             <button
-v-for="page in totalPages" v-if="cards.length != 0 && totalPages > 1" :key="page"
+v-for="page in totalPages" :key="page"
               :class="['px-4 py-2 rounded-full transition-colors duration-300', { 'bg-gray-300 hover:bg-gray-400': currentPage !== page, 'bg-orange-500 text-white': currentPage === page }]"
               @click="fetchData(page)">
               {{ page }}

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
-import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
-import { useNewCardStore } from '~/store/newCardStore';
+import { useCardFieldTypes } from '~/composables/useCardFieldTypes.js';
 import { useCardStore } from '~/store/cardStore';
-import { useCurrentCard } from '~/composables/useCurrentCard';
 
 definePageMeta({ layout: 'dashboard-layout' });
 
@@ -14,12 +12,11 @@ interface Card {
     label?: string | null;
 }
 
-const newCardStore = useNewCardStore();
-const { addLabel, addJobField, addDepartmentField, addCompanyNameField, addOrUpdateGeneralField, addOrUpdateSocialField, addOrUpdateBusinessField, addOrUpdateMessagingField } = newCardStore;
-const { label } = storeToRefs(newCardStore);
-const { fetchData, fieldTypes } = useFetchFieldTypes();
+const cardStore = useCardStore();
+const { addField } = cardStore;
+const { label } = storeToRefs(cardStore);
+const { fetchData, fieldTypes, fetchCards } = useCardFieldTypes();
 const { currentCard, currentId, currentLabel, setLoading, isLoading } = useCardStore();
-const { fetchCards } = useCurrentCard();
 
 const isModalOpen = ref(false);
 const ModalTitle = ref('Name');
@@ -70,17 +67,17 @@ onMounted(async () => {
 
     // Navigate to /dashboard/cards/personal on page reload when card is empty
     if (currentCard.length === 0 && currentId == null)
-        router.push('/dashboard/cards/personal');
+        router.push('/dashboard/');
 
-    addLabel(currentLabel);
-    if (getJobEdit.value) addJobField({ value: getJobEdit.value.value || '' });
-    if (getDepartment.value) addDepartmentField({ value: getDepartment.value.value || " " });
-    if (getCompanyName.value) addCompanyNameField({ value: getCompanyName.value.value || " " });
-
-    if (getGeneral.value?.length) mapAndAddFields(getGeneral, addOrUpdateGeneralField);
-    if (getSocial.value?.length) mapAndAddFields(getSocial, addOrUpdateSocialField);
-    if (getMessaging.value?.length) mapAndAddFields(getMessaging, addOrUpdateMessagingField);
-    if (getBusiness.value?.length) mapAndAddFields(getBusiness, addOrUpdateBusinessField);
+        addField('label', currentLabel);
+    if (getJobEdit.value) addField('personalFields', {type: getJobEdit , label: getJobEdit.value.label, value: getJobEdit.value.value || '' });
+    if (getDepartment.value) addField('personalFields', {type: getDepartment.value.type, label: getDepartment.value.label, value: getDepartment.value.value || " " });
+    if (getCompanyName.value) addField('personalFields', { type: getCompanyName.value.type, label: getCompanyName.value.label, value: getCompanyName.value.value || " " });
+    
+    if (getGeneral.value?.length) mapAndAddFields(getGeneral, field => addField('generalFields', field));
+    if (getSocial.value?.length) mapAndAddFields(getSocial, field => addField('socialFields', field));
+    if (getMessaging.value?.length) mapAndAddFields(getMessaging, field => addField('messagingFields', field));
+    if (getBusiness.value?.length) mapAndAddFields(getBusiness, field => addField('businessFields', field));
 });
 </script>
 
@@ -112,7 +109,7 @@ onMounted(async () => {
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
                     <TextInput
 v-model="label" label="Edit Label" input-name="card-label" placeholder="Label this card"
-                        input-type="text" @update:model-value="addLabel($event)" />
+                        input-type="text" @update:model-value="addField('label',$event)" />
                 </section>
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
                     <AddImages

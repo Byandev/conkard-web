@@ -28,9 +28,8 @@ import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 import { authStore } from '~/store/auth';
 import type { ApiErrorResponse } from '~/types/api/response/error';
 import type { SaveCardResponse } from '~/types/api/response/saveCard';
-import { useCardData } from '~/composables/useCardData';
+import { useCards } from '~/composables/useCards';
 import { useCardStore } from '~/store/cardStore';
-import { useNewCardStore } from '~/store/newCardStore';
 import type { ImageDataResponse } from '~/types/api/response/uploadImage';
 
 interface NavigationItem {
@@ -45,7 +44,7 @@ interface UserNavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-    { name: 'Cards', href: '/dashboard/cards/personal', icon: IdentificationIcon },
+    { name: 'Cards', href: '/dashboard/', icon: IdentificationIcon },
     { name: 'Email Signature', href: '#', icon: EnvelopeIcon },
     { name: 'Virtual Backgrounds', href: '#', icon: PhotoIcon },
     { name: 'Accessories', href: '#', icon: ShoppingBagIcon },
@@ -64,11 +63,11 @@ const userNavigation: UserNavigationItem[] = [
 const route = useRoute();
 const router = useRouter();
 
-const { imageField } = storeToRefs(useNewCardStore());
+const { imageFields } = storeToRefs(useCardStore());
 
-const isDashboardCardsEdit = computed(() => route.path === '/dashboard/cards/edit');
-const isDashboardCardsNew = computed(() => route.path === '/dashboard/cards/new');
-const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/cards/personal');
+const isDashboardCardsEdit = computed(() => route.path === '/cards/edit');
+const isDashboardCardsNew = computed(() => route.path === '/cards/create');
+const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/');
 
 const { user } = authStore();
 
@@ -81,7 +80,7 @@ const sidebarOpen = ref(false);
 const { sendRequest: saveCard } = useSubmit<SaveCardResponse, ApiErrorResponse>()
 const { sendRequest: uploadImage } = useSubmit<ImageDataResponse, ApiErrorResponse>()
 
-const { cardData } = useCardData();
+const { cardData } = useCards();
 
 const handleSaveCard = async () => {
     console.log(cardData.value);
@@ -92,47 +91,48 @@ const handleSaveCard = async () => {
     const url = isNewCard ? '/v1/cards' : `/v1/cards/${currentId.value}`;
     const method = isNewCard ? 'POST' : 'PUT';
 
-    console.log(imageField);
+    console.log(imageFields);
+    console.log(cardData.value);
 
-    try {
-        const response = await saveCard(url, {
-            method,
-            body: {
-                label: cardData.value.label,
-                fields: cardData.value.fields,
-            },
-        });
+    // try {
+    //     const response = await saveCard(url, {
+    //         method,
+    //         body: {
+    //             label: cardData.value.label,
+    //             fields: cardData.value.fields,
+    //         },
+    //     });
 
-        if (isNewCard) {
-            const cardId = response.data.id;
-            await Promise.all(imageField.value.map(async (item) => {
-                console.log(item.image);
-                try {
-                    const formData = new FormData();
-                    formData.append('type', item.type);
-                    formData.append('image', item.image);
+    //     if (isNewCard) {
+    //         const cardId = response.data.id;
+    //         await Promise.all(imageFields.value.map(async (item) => {
+    //             console.log(item.image);
+    //             try {
+    //                 const formData = new FormData();
+    //                 formData.append('type', item.type);
+    //                 formData.append('image', item.image);
 
-                    const imageResponse = await uploadImage(`/v1/cards/${cardId}/images`, {
-                        method: 'POST',
-                        body: formData,
-                    });
-                    console.log(imageResponse);
-                } catch (uploadError) {
-                    console.error('Error uploading image:', uploadError);
-                }
-            }));
-        } else {
-            console.log(response);
-        }
-    } catch (error) {
-        console.error(error as ApiErrorResponse);
-    } finally {
-        navigateDashboard();
-    }
+    //                 const imageResponse = await uploadImage(`/v1/cards/${cardId}/images`, {
+    //                     method: 'POST',
+    //                     body: formData,
+    //                 });
+    //                 console.log(imageResponse);
+    //             } catch (uploadError) {
+    //                 console.error('Error uploading image:', uploadError);
+    //             }
+    //         }));
+    //     } else {
+    //         console.log(response);
+    //     }
+    // } catch (error) {
+    //     console.error(error as ApiErrorResponse);
+    // } finally {
+    //     navigateDashboard();
+    // }
 };
 
 const navigateDashboard = () => {
-    router.push('/dashboard/cards/personal');
+    router.push('/dashboard/');
 }; 
 </script>
 
@@ -376,7 +376,7 @@ class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-red-300"
                 <!-- Home Dashboard Option -->
                 <div v-if="isDashboardCardsPersonal" class="flex flex-1 gap-x-2 self-stretch py-2 justify-between">
                     <div class="flex flex-row gap-x-2 self-stretch">
-                        <NuxtLink to="/dashboard/cards/edit" class="p-0">
+                        <NuxtLink to="/cards/edit" class="p-0">
                             <ButtonIcon
 class="h-full" :icon="PencilSquareIcon" text="Edit" background="black"
                                 foreground="white" />

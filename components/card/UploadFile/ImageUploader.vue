@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
-import { useNewCardStore } from '~/store/newCardStore';
+import { useCardStore } from '~/store/cardStore';
 
 const props = defineProps<{
     type: 'company' | 'profile' | 'cover';
@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:image', 'change']);
 
-const { addImage } = useNewCardStore();
+const { addField } = useCardStore();
 
 const image = ref<File | null>(props.initialImage || null);
 const isDragging = ref(false);
@@ -78,7 +78,7 @@ const saveCroppedImage = async () => {
                 if (blob) {
                     const croppedFile = new File([blob], 'cropped-image.png', { type: 'image/png' });
                     console.log(croppedFile);
-                    addImage({
+                    addField("imageFields",{
                         type: typeImage.value,
                         image: croppedFile,
                     })

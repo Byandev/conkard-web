@@ -1,41 +1,41 @@
 <script setup lang="ts">
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
-import { useFetchFieldTypes } from '~/composables/useFetchFieldTypes';
+import { useCardFieldTypes } from '~/composables/useCardFieldTypes';
 import { useCardStore } from '~/store/cardStore';
-import { useNewCardStore } from '~/store/newCardStore';
+import { useFieldTypeStore } from '~/store/fieldTypeStore';
 
 definePageMeta({
   layout: 'dashboard-layout',
-})
+});
 
-const { addLabel, label } = useNewCardStore();
-const { setLoading } = useCardStore();
-const { fetchData, fieldTypes } = useFetchFieldTypes();
+const { addField, label } = useCardStore();
+const { setLoading,  } = useCardStore();
+const { fieldTypes } = useFieldTypeStore();
+const { fetchData } = useCardFieldTypes();
 
-const isModalOpen = ref(false)
-const ModalTitle = ref('Name')
-const isEdit = ref(false)
+const isModalOpen = ref(false);
+const ModalTitle = ref('x');
+const isEdit = ref(false);
 const currentId = ref(0);
-const previewColor = ref('#FF5733')
+const previewColor = ref('#FF5733');
 
-const companyImage = ref<string>('')
+const companyImage = ref<string>('');
 const companyImageCoordinates = ref<string>('');
 
-const profilePicture = ref<string>('')
-const profilePictureCoordinates = ref<string>('')
+const profilePicture = ref<string>('');
+const profilePictureCoordinates = ref<string>('');
 
-const coverPhoto = ref<string>('')
-const coverPhotoCoordinates = ref<string>('')
-
+const coverPhoto = ref<string>('');
+const coverPhotoCoordinates = ref<string>('');
 
 onMounted(async () => {
   try {
-    setLoading(true)
+    setLoading(true);
     await fetchData();
   } catch (error) {
-    console.log('Error', error)
+    console.log('Error', error);
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 });
 </script>
@@ -55,7 +55,7 @@ onMounted(async () => {
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
             <ModalContent
 :id="currentId" :field-types="fieldTypes" :is-edit="isEdit" :modal-title="ModalTitle"
-              @update:open="isModalOpen = false" />
+              :name="ModalTitle" @update:open="isModalOpen = false" />
           </AddModal>
         </section>
       </div>
@@ -63,7 +63,7 @@ onMounted(async () => {
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <TextInput
 v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
-            input-type="text" @update:model-value="addLabel($event)" />
+            input-type="text" @update:model-value="addField('label', { value: $event })" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <AddImages
@@ -78,9 +78,8 @@ v-model="label" label="Add Label" input-name="card-label" placeholder="Label thi
           <ChooseTheme @update:theme="previewColor = $event" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <AddDetails
-:field-types="fieldTypes" @update:id="currentId = $event" @update:is-edit="isEdit = $event"
-            @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
+          <!-- <AddDetails :field-types="fieldTypes" @update:id="currentId = $event" @update:is-edit="isEdit = $event"
+            @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" /> -->
         </section>
       </div>
     </div>
@@ -88,14 +87,13 @@ v-model="label" label="Add Label" input-name="card-label" placeholder="Label thi
 </template>
 
 <style scoped>
-@tailwind utilities;
+@import 'tailwindcss/utilities';
 
 @layer utilities {
   @keyframes fadeIn {
     from {
       opacity: 0;
     }
-
     to {
       opacity: 1;
     }
