@@ -10,8 +10,8 @@ definePageMeta({
 
 const { addField, label } = useCardStore();
 const { setLoading,  } = useCardStore();
-const { fieldTypes } = useFieldTypeStore();
-const { fetchData } = useCardFieldTypes();
+const { fieldTypes } = storeToRefs(useFieldTypeStore());
+const { fetchFieldTypesData } = useCardFieldTypes();
 
 const isModalOpen = ref(false);
 const ModalTitle = ref('x');
@@ -28,10 +28,10 @@ const profilePictureCoordinates = ref<string>('');
 const coverPhoto = ref<string>('');
 const coverPhotoCoordinates = ref<string>('');
 
-onMounted(async () => {
+onMounted( async () => {
   try {
     setLoading(true);
-    await fetchData();
+    fetchFieldTypesData();
   } catch (error) {
     console.log('Error', error);
   } finally {
@@ -54,7 +54,6 @@ onMounted(async () => {
             @update:is-edit="isEdit = $event" />
           <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
             <ModalContent
-:id="currentId" :field-types="fieldTypes" :is-edit="isEdit" :modal-title="ModalTitle"
               :name="ModalTitle" @update:open="isModalOpen = false" />
           </AddModal>
         </section>
@@ -78,8 +77,9 @@ v-model="label" label="Add Label" input-name="card-label" placeholder="Label thi
           <ChooseTheme @update:theme="previewColor = $event" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <!-- <AddDetails :field-types="fieldTypes" @update:id="currentId = $event" @update:is-edit="isEdit = $event"
-            @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" /> -->
+          <AddDetails
+:field-types="fieldTypes" @update:id="currentId = $event" @update:is-edit="isEdit = $event"
+            @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
         </section>
       </div>
     </div>

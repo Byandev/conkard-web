@@ -15,51 +15,45 @@ const props = defineProps<{
 }>();
 
 interface ComponentData {
-  id: number | null;
-  value?: string;
-  label?: string;
-  name?: string;
-  category?: string;
+  type: string;
+  label: string;
+  value: string;
+  category: string;
 }
 
 const newCard = useCardStore();
 const cardStore = useCardStore();
 const { isLoading } = storeToRefs(cardStore);
 
-const { generalFields, messagingFields, businessFields, socialFields } = storeToRefs(newCard);
+const {personalFields, generalFields, messagingFields, businessFields, socialFields } = storeToRefs(newCard);
 
 const cardItem = ref<ComponentData[]>([]);
 
 const updateCardItem = () => {
   cardItem.value = [
     ...generalFields.value.map((general: any) => ({
-      id: general?.id ?? null,
-      name: general?.type?.name ?? '',
-      value: general?.type?.value ?? '',
-      title: general?.type?.title ?? '',
-      category: 'General'
+      type: general.type ?? '',
+      label: general.label ?? '',
+      value: general.value ?? '',
+      category: general.category ?? ''
     })),
     ...socialFields.value.map((social: any) => ({
-      id: social.id ?? null,
-      name: social.type?.name ?? '',
+      type: social.type ?? '',
+      label: social.label ?? '',
       value: social.value ?? '',
-      title: social.type?.title ?? '',
-      category: social.type?.category ?? ''
+      category: social.category ?? ''
     })),
-    ...messagingFields.value.map((messaging:any) => ({
-      id: messaging.id ?? null,
-      name: messaging.type?.name ?? '',
+    ...messagingFields.value.map((messaging: any) => ({
+      type: messaging.type ?? '',
+      label: messaging.label ?? '',
       value: messaging.value ?? '',
-      title: messaging.type.title ?? '',
-      category: messaging.type?.category ?? ''
+      category: messaging.category ?? ''
     })),
     ...businessFields.value.map((business: any) => ({
-      id: business.id ?? null,
-      name: business.type?.name ?? '',
+      type: business.type ?? '',
       value: business.value ?? '',
       label: business.label ?? '',
-      title: business.type?.title ?? '',
-      category: business.type?.category ?? ''
+      category: business.category ?? ''
     })),
   ];
 };
@@ -71,21 +65,20 @@ watch(
   { immediate: true, deep: true }
 );
 
-const isFieldEmpty = (field: any, keys: string[]) => computed(() => keys.every(key => !field.value?.[key]));
-
-const nameField = ref({}); // Define the missing fields
-const jobField = ref({});
-const departmentField = ref({});
-const companyNameField = ref({});
-const accreditationField = ref([]);
-const headlineField = ref({});
-
-const isNameFieldEmpty = isFieldEmpty(nameField, ['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']);
-const isJobFieldEmpty = isFieldEmpty(jobField, ['value']);
-const isDepartmentFieldEmpty = isFieldEmpty(departmentField, ['value']);
-const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
-const isAccreditationFieldEmpty = computed(() => !accreditationField.value?.length);
-const isHeadlineFieldEmpty = isFieldEmpty(headlineField, ['value']);
+const getMatchedTypeAndCategory = (type: string, category: string) => {
+  return computed(() => {
+    const result = personalFields.value
+      .filter((item: any) => item.type === type && item.category === category)
+      .map((item: any) => ({
+        type: item.type,
+        label: item.label,
+        value: item.value,
+        category: item.category
+      }));
+    console.log(result[0]);
+    return result[0];
+  });
+};
 
 const emit = defineEmits(["update:title", "update:open", "update:isEdit", "update:id"]);
 
@@ -136,34 +129,33 @@ const bgColor = computed(() => props.coverPhoto ? 'white' : props.color);
       <div v-else class="px-5 md:px-5 pb-5">
         <div v-if="props?.profilePicture || props?.companyImage" class=" mt-16" />
         <FieldSection
-          v-if="!isNameFieldEmpty" :field="nameField"
-          :keys="['prefix', 'first_name', 'preferred_name', 'middle_name', 'last_name', 'suffix', 'maiden_name', 'pronoun']"
+           v-if="getMatchedTypeAndCategory('Name', 'PERSONAL').value"
+           :field="getMatchedTypeAndCategory('Name','PERSONAL').value"
+          :keys="['value']"
           :is-name-field="true" @click="updateTitle('Name')" />
         <FieldSection v-else placeholder="Name" @click="updateTitle('Name')" />
-        <FieldSection v-if="!isJobFieldEmpty" :field="jobField" :keys="['value']" @click="updateTitle('Job Title')" />
+        <FieldSection 
+          v-if = "getMatchedTypeAndCategory('Job Title', 'PERSONAL').value"
+          :field="getMatchedTypeAndCategory('Job Title', 'PERSONAL').value" :keys="['value']" @click="updateTitle('Job Title')" />
         <FieldSection
-          v-if="!isDepartmentFieldEmpty" :field="departmentField" :keys="['value']"
+          v-if="getMatchedTypeAndCategory('Department', 'PERSONAL').value"
+          :field="getMatchedTypeAndCategory('Department', 'PERSONAL').value" :keys="['value']"
           @click="updateTitle('Department')" />
         <FieldSection
-          v-if="!isCompanyNameEmpty" :field="companyNameField" :keys="['value']"
+          v-if="getMatchedTypeAndCategory('Company Name', 'PERSONAL').value"
+          :field="getMatchedTypeAndCategory('Company Name', 'PERSONAL').value" :keys="['value']"
           @click="updateTitle('Company Name')" />
-        <FieldSection
-          v-if="!isHeadlineFieldEmpty" :is-headline-field="true" :field="headlineField" :keys="['value']"
-          @click="updateTitle('Headline')" />
-        <FieldSection
-          v-if="!isAccreditationFieldEmpty" :field="accreditationField" is-accreditation
-          @click="updateTitle('Accreditation')" />
-        <draggable v-model="cardItem" class="flex flex-col gap-3" item-key="id">
-          <template #item="{ element }">
+        <draggable v-model="cardItem" class="flex flex-col gap-3" item-key="index">
+          <template #item="{ element, index }">
             <transition-group name="list" tag="div">
-              <div :key="element.id" class="flex flex-row items-center group hover:cursor-pointer -ml-5">
+              <div :key="index" class="flex flex-row items-center group hover:cursor-pointer -ml-5">
                 <Icon
                   name="ph:dots-six-vertical-bold"
                   class="text-black opacity-0 group-hover:opacity-100 text-center h-5 w-5 shrink-0"
                   aria-hidden="true" />
                 <ContactPreview
-                  :id="element.id" :color="props.color" :title="element.title" :url="element.url"
-                  :name="element.name" :value="element.value" :username="element.username" :label="element.label"
+                  :id="index" :color="props.color" :title="element.title" :url="element.url"
+                  :type="element.type" :value="element.value" :username="element.username" :label="element.label"
                   :category="element.category" :on-update-edit="updateEdit" />
               </div>
             </transition-group>

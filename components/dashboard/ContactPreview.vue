@@ -35,14 +35,12 @@ const props = defineProps<{
     label?: string;
     category?: string;
     isClickable?: boolean;
-    name: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'X' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'Whatsapp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp' | 'Spotify' | string;
+    type: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'X' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'Whatsapp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp' | 'Spotify' | string;
     onUpdateEdit?: (title: string, id: number) => void;
 }>();
 
-console.log(props.name);
-
 const iconName = computed(() => {
-    switch (props.name) {
+    switch (props.type) {
         case 'Email': return EmailIcon;
         case 'Phone': return PhoneIcon;
         case 'Company URL': return CompanyUrlIcon;
@@ -77,13 +75,13 @@ const iconName = computed(() => {
 <template>
     <div
 class="flex flex-row items-center gap-3"
-        @click="props.onUpdateEdit && props.onUpdateEdit(props.name, props.id)">
+        @click="props.onUpdateEdit && props.onUpdateEdit(props.type, props.id)">
         <div class="flex items-center justify-center w-11 h-11 rounded-full" :style="{ backgroundColor: props.color }">
             <component
 :is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
                 aria-hidden="true" />
         </div>
-        <div v-if="['Company URL', 'Link', 'Calendly'].includes(props.name)" class="flex flex-col">
+        <div v-if="['Company URL', 'Link', 'Calendly'].includes(props.type)" class="flex flex-col">
             <h1 class="text-1xl font-normal text-black">
                 <template v-if="props.isClickable">
                     <a :href="props.value" target="_blank" rel="noopener noreferrer">{{ props.label }}</a>

@@ -8,7 +8,7 @@ onMounted(() => {
     openState.value = props.open
 })
 
-var props = defineProps<{
+const props = defineProps<{
     open: boolean;
     title: string;
 }>()
@@ -37,7 +37,7 @@ as="template" enter="ease-out duration-300"
                             <header class="bg-white text-gray-700 px-4 py-4 rounded-t-lg border-b-2 border-gray-200">
                                 <h2 class="text-lg font-semibold">{{ props.title }}</h2>
                             </header>
-                            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 gap-5 flex flex-col">
+                            <div class="bg-white pb-4 pt-5 sm:pb-4 gap-5 flex flex-col">
                                 <slot/>
                             </div>
                         </DialogPanel>

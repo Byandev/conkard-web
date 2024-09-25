@@ -24,9 +24,7 @@ const handleCurrentCard = async (id: number) => {
 };
 
 onMounted(() => {
-  if (!currentId.value) {
-    fetchData();
-  }
+  fetchData();
 });
 </script>
 

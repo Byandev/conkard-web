@@ -1,4 +1,3 @@
-import { ref, onMounted } from "vue";
 import { useCardStore } from "~/store/cardStore";
 import { useFieldTypeStore } from "~/store/fieldTypeStore";
 import type { Card, Type } from "~/types/models/Card";
@@ -58,12 +57,9 @@ export function useCardFieldTypes() {
     await Promise.all([fetchCardsData(page), fetchFieldTypesData()]);
   };
 
-  onMounted(() => {
-    fetchData();
-  });
-
   return {
     fetchCards,
+    fetchFieldTypesData,
     fetchData,
     cards,
     currentPage,

@@ -6,28 +6,22 @@ const props = defineProps<{
   name: string;
 }>();
 
-const { fieldTypes } = useFieldTypeStore();
+const { fieldTypes } = storeToRefs(useFieldTypeStore());
 
 console.log(fieldTypes);
 
 const matchedFieldType = computed(() => {
-  const matchedField = fieldTypes.find(field => field.name === props.name);
-  return matchedField && Array.isArray(matchedField.suggested_labels)
-    ? matchedField.suggested_labels.join(', ')
+  const matchedField = fieldTypes.value.find(field => field.name === props.name);
+  return matchedField && matchedField.suggested_labels
+    ? matchedField.suggested_labels.split(', ').join(', ')
     : '';
 });
-
-console.log(matchedFieldType.value);
-
-const addField = (title: string, value: string) => {
-  console.log(`Title: ${title}, Value: ${value}`);
-};
 
 </script>
 
 <template>
-  <AddField 
-    :add-field="addField" 
+  <AddField
+    :name="props.name"
     :suggested-labels="matchedFieldType" 
   />
 </template>

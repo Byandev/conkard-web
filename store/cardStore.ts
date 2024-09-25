@@ -1,20 +1,25 @@
 import { defineStore } from "pinia";
-import { reactive, ref, toRefs } from "vue";
 import type { Field } from "~/types/models/Card";
 
 export interface CardFields {
   label: string;
   image: {
     type: string;
-  image: File;
+    image: File;
   };
-  fields: Field[];
+  fields: {
+    type: string;
+    label: string;
+    value: string;
+    category: string;
+  }[];
 }
 
 export const useCardStore = defineStore("card", () => {
   const state = reactive({
     currentCard: [] as Field[],
     currentId: undefined as number | undefined,
+    currentCategory: '',
     currentLabel: '',
     isLoading: true,
   });
@@ -40,16 +45,23 @@ export const useCardStore = defineStore("card", () => {
   };
 
   const addField = <T>(field: keyof typeof fields, value: T) => {
-    if (Array.isArray(fields[field].value)) {
+    console.log("Adding field:", field, value);
+    if (fields[field] && Array.isArray(fields[field].value)) {
       (fields[field].value as T[]).push(value);
-    } else {
+    } else if (fields[field]) {
       (fields[field] as Ref<T>).value = value;
+    } else {
+      console.error(`Field ${field} does not exist in fields object.`);
     }
   };
 
   const setCurrentId = (id: number) => {
     state.currentId = id;
   };
+
+  const setCurrentCategory = (category: string) => {
+    state.currentCategory = category;
+  }
 
   const setCurrentCard = (fields: Field[]) => {
     state.currentCard = fields;
@@ -74,6 +86,7 @@ export const useCardStore = defineStore("card", () => {
     ...fields,
     addField,
     setCurrentId,
+    setCurrentCategory,
     setCurrentCard,
     setLoading,
     setCurrentLabel,
