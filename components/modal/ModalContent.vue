@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { useFieldTypeStore } from '~/store/fieldTypeStore';
 import { computed } from 'vue';
-
-const props = defineProps<{
-  name: string;
-}>();
+import { useCardStore } from '~/store/cardStore';
 
 const { fieldTypes } = storeToRefs(useFieldTypeStore());
 
-console.log(fieldTypes);
+const { modalTitle } = storeToRefs(useCardStore());
 
 const matchedFieldType = computed(() => {
-  const matchedField = fieldTypes.value.find(field => field.name === props.name);
+  const matchedField = fieldTypes.value.find(field => field.name === modalTitle.value);
   return matchedField && matchedField.suggested_labels
     ? matchedField.suggested_labels.split(', ').join(', ')
     : '';
@@ -21,7 +18,7 @@ const matchedFieldType = computed(() => {
 
 <template>
   <AddField
-    :name="props.name"
+    :name="modalTitle"
     :suggested-labels="matchedFieldType" 
   />
 </template>

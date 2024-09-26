@@ -25,7 +25,7 @@ import VenmoIcon from '@/assets/icons/venmo.svg';
 import CashAppIcon from '@/assets/icons/cashapp.svg';
 import ThreadsIcon from '@/assets/icons/threads.svg';
 import YelpIcon from '@/assets/icons/yelp.svg';
-import SpotifyIcon from '@/assets/icons/spotify.svg'; // Import Spotify icon
+import SpotifyIcon from '@/assets/icons/spotify.svg';
 import DefaultIcon from '@/assets/icons/default.svg';
 
 const props = defineProps<{
@@ -35,12 +35,11 @@ const props = defineProps<{
     label?: string;
     category?: string;
     isClickable?: boolean;
-    type: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'X' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'Whatsapp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp' | 'Spotify' | string;
-    onUpdateEdit?: (title: string, id: number) => void;
+    name: 'Email' | 'Phone' | 'Company URL' | 'Link' | 'Address' | 'X' | 'Instagram' | 'Facebook' | 'YouTube' | 'SnapChat' | 'TikTok' | 'Twitch' | 'LinkedIn' | 'Whatsapp' | 'Signal' | 'Discord' | 'Skype' | 'Telegram' | 'GitHub' | 'Calendly' | 'PayPal' | 'Venmo' | 'Cash App' | 'Threads' | 'Yelp' | 'Spotify' | string;
 }>();
 
 const iconName = computed(() => {
-    switch (props.type) {
+    switch (props.name) {
         case 'Email': return EmailIcon;
         case 'Phone': return PhoneIcon;
         case 'Company URL': return CompanyUrlIcon;
@@ -66,22 +65,20 @@ const iconName = computed(() => {
         case 'Cash App': return CashAppIcon;
         case 'Threads': return ThreadsIcon;
         case 'Yelp': return YelpIcon;
-        case 'Spotify': return SpotifyIcon; // Add Spotify case
-        default: return DefaultIcon; // Default icon
+        case 'Spotify': return SpotifyIcon;
+        default: return DefaultIcon;
     }
 });
 </script>
 
 <template>
-    <div
-class="flex flex-row items-center gap-3"
-        @click="props.onUpdateEdit && props.onUpdateEdit(props.type, props.id)">
+    <div class="flex flex-row items-center gap-3 border-0 p-0">
         <div class="flex items-center justify-center w-11 h-11 rounded-full" :style="{ backgroundColor: props.color }">
             <component
-:is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
+                :is="iconName" class="text-white group-hover:text-red text-center h-7 w-7 shrink-0"
                 aria-hidden="true" />
         </div>
-        <div v-if="['Company URL', 'Link', 'Calendly'].includes(props.type)" class="flex flex-col">
+        <div v-if="['Company URL', 'Link', 'Calendly'].includes(props.name)" class="flex flex-col">
             <h1 class="text-1xl font-normal text-black">
                 <template v-if="props.isClickable">
                     <a :href="props.value" target="_blank" rel="noopener noreferrer">{{ props.label }}</a>

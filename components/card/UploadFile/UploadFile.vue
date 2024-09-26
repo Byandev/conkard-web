@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import 'vue-advanced-cropper/dist/style.css';
+import { useCardStore } from '~/store/cardStore';
 
 const props = defineProps<{
     title: string;
-    isOpen: boolean;
 }>();
 
-const emit = defineEmits(['update:isOpen', 'update:imageData']);
+interface Coordinates {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+
+const { setModalOpen } = useCardStore();
+
+const { isModalOpen } = toRefs(useCardStore());
+
+const emit = defineEmits(['update:imageData']);
 
 const companyImg = ref<File | null>(null);
 const profileImg = ref<File | null>(null);
 const coverImg = ref<File | null>(null);
 
-const closeModal = () => emit('update:isOpen', false);
+const closeModal = () => setModalOpen(false);
 
 const deleteImage = (type: 'company' | 'profile' | 'cover') => {
-    console.log(type)
     if (type === 'company') {
         companyImg.value = null;
     } else if (type === 'profile') {
@@ -24,7 +35,7 @@ const deleteImage = (type: 'company' | 'profile' | 'cover') => {
         coverImg.value = null;
     }
     emit('update:imageData', { type, image: null, coordinates: null });
-    emit('update:isOpen', false)
+    setModalOpen(false);
 
 };
 
@@ -37,13 +48,6 @@ const handleImageUpdate = (type: 'Company' | 'Profile' | 'Cover', image: File) =
         coverImg.value = image;
     }
 };
-
-interface Coordinates {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-}
 
 const handleChange = (type: 'company' | 'profile' | 'cover', { coordinates, image }: { coordinates: Coordinates; image: string }) => {
     emit('update:imageData', { type, image, coordinates });
@@ -64,24 +68,24 @@ const prefix = computed(() => {
 </script>
 
 <template>
-    <AddModal :title="`Add ${props.title} ${prefix}`" :open="props.isOpen">
+    <AddModal :title="`Add ${props.title} ${prefix}`" :open="isModalOpen">
         <div v-if="props.title === 'Company'">
             <ImageUploader
-:on-delete="() => deleteImage('company')" :on-cancel="closeModal" type="company"
+                :on-delete="() => deleteImage('company')" :on-cancel="closeModal" type="company"
                 :aspect-ratio="16 / 9" :initial-image="companyImg ?? undefined"
                 @update:image="handleImageUpdate('Company', $event)" @change="handleChange('company', $event)" />
         </div>
 
         <div v-if="props.title === 'Profile'">
             <ImageUploader
-:on-delete="() => deleteImage('profile')" :on-cancel="closeModal" type="profile"
+                :on-delete="() => deleteImage('profile')" :on-cancel="closeModal" type="profile"
                 :aspect-ratio="1 / 1" :initial-image="profileImg ?? undefined"
                 @update:image="handleImageUpdate('Profile', $event)" @change="handleChange('profile', $event)" />
         </div>
 
         <div v-if="props.title === 'Cover'">
             <ImageUploader
-:on-delete="() => deleteImage('cover')" :on-cancel="closeModal" type="cover"
+                :on-delete="() => deleteImage('cover')" :on-cancel="closeModal" type="cover"
                 :aspect-ratio="16 / 9" :initial-image="coverImg ?? undefined"
                 @update:image="handleImageUpdate('Cover', $event)" @change="handleChange('cover', $event)" />
         </div>

@@ -11,27 +11,24 @@ const props = defineProps<{
 
 const { personalFields } = storeToRefs(newCardStore);
 
-const emit = defineEmits(['update:title', 'update:open', 'update:isEdit', 'update:id']);
 
 const updateTitle = (title: string, category: string) => {
-    console.log('Update Title', title)
     newCardStore.setCurrentCategory(category);
-    emit('update:title', title);
-    emit('update:open', true);
-    emit('update:isEdit', false);
-    emit('update:id', null);
+    newCardStore.setModalTitle(title);
+    newCardStore.setModalOpen(true);
+    newCardStore.setEditing(false);
 };
 
 const isFieldDisabled = (fieldName: string) => {
     switch (fieldName) {
         case 'Name':
-            return personalFields.value.find((field: any) => field?.type?.name === 'Name') !== undefined;
+            return personalFields.value.find((field: Type) => field?.type?.name === 'Name') !== undefined;
         case 'Job Title':
-            return personalFields.value.find((field: any) => field?.type?.name === 'Job Title') !== undefined;
+            return personalFields.value.find((field: Type) => field?.type?.name === 'Job Title') !== undefined;
         case 'Department':
-            return personalFields.value.find((field: any) => field?.type?.name === 'Department') !== undefined;
+            return personalFields.value.find((field: Type) => field?.type?.name === 'Department') !== undefined;
         case 'Company Name':
-            return personalFields.value.find((field: any) => field?.type?.name === 'Company Name') !== undefined;
+            return personalFields.value.find((field: Type) => field?.type?.name === 'Company Name') !== undefined;
         default:
             return false;
     }

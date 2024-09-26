@@ -13,12 +13,6 @@ const { setLoading,  } = useCardStore();
 const { fieldTypes } = storeToRefs(useFieldTypeStore());
 const { fetchFieldTypesData } = useCardFieldTypes();
 
-const isModalOpen = ref(false);
-const ModalTitle = ref('x');
-const isEdit = ref(false);
-const currentId = ref(0);
-const previewColor = ref('#FF5733');
-
 const companyImage = ref<string>('');
 const companyImageCoordinates = ref<string>('');
 
@@ -47,26 +41,24 @@ onMounted( async () => {
       <div class="flex flex-col gap-7 w-full md:w-1/8">
         <section class="grid grid-cols-1 gap-4">
           <CardPreview
-:company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
+            :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
             :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
-            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" :color="previewColor"
-            @update:id="currentId = $event" @update:title="ModalTitle = $event" @update:open="isModalOpen = $event"
-            @update:is-edit="isEdit = $event" />
-          <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
-            <ModalContent
-              :name="ModalTitle" @update:open="isModalOpen = false" />
+            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates"
+           />
+          <AddModal>
+            <ModalContent/>
           </AddModal>
         </section>
       </div>
       <div class="w-full md:max-w-[580px] flex flex-col gap-7 transition-all duration-300">
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <TextInput
-v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
-            input-type="text" @update:model-value="addField('label', { value: $event })" />
+            v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
+            input-type="text" @update:model-value="addField('label', $event)" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <AddImages
-@update:company-image="companyImage = $event"
+            @update:company-image="companyImage = $event"
             @update:company-image-coordinates="companyImageCoordinates = $event"
             @update:profile-image="profilePicture = $event"
             @update:profile-image-coordinates="profilePictureCoordinates = $event"
@@ -74,12 +66,11 @@ v-model="label" label="Add Label" input-name="card-label" placeholder="Label thi
             @update:cover-image-coordinates="coverPhotoCoordinates = $event" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <ChooseTheme @update:theme="previewColor = $event" />
+          <ChooseTheme />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <AddDetails
-:field-types="fieldTypes" @update:id="currentId = $event" @update:is-edit="isEdit = $event"
-            @update:title="ModalTitle = $event" @update:open="isModalOpen = $event" />
+            :field-types="fieldTypes"/>
         </section>
       </div>
     </div>

@@ -2,21 +2,25 @@
 import { computed } from "vue";
 
 const props = withDefaults(defineProps<{
-    field?: any;
-    keys?: string[];
+    field: any;
+    keys: string[];
     placeholder?: string;
     isAccreditation?: boolean;
     isNameField?: boolean;
     isHeadlineField?: boolean;
     isView?: boolean;
 }>(), {
-    isView: true
+    isView: true,
+    placeholder: "Name",
+});
+
+watchEffect(() => {
+    if (props.field) {
+        console.log(props.field.type);
+    }
 });
 
 const displayValue = computed(() => {
-    if (props.isAccreditation) {
-        return props.field?.map((accreditation: any) => accreditation.value.join(", ")).join(", ");
-    }
     return props.keys?.map(key => props.field?.[key]).filter(Boolean).join(" ");
 });
 
@@ -27,8 +31,7 @@ const displayValue = computed(() => {
 class="w-full my-2 flex flex-row items-center justify-between group"
         :class="props.isView ? 'hover:cursor-pointer' : ''">
         <div>
-            <h1 v-if="displayValue" class="text-3xl font-normal text-black">{{ displayValue }}</h1>
-            <h1 v-else class="text-3xl font-bold text-gray-300">{{ placeholder }}</h1>
+            <h1 v-if="displayValue" class="text-black" :class="props.field.type == 'Name'? 'font-bold text-3xl': 'text-2xl'">{{ displayValue }}</h1>
         </div>
         <Icon
 v-if="props.isView" name="lucide:edit" size="20"

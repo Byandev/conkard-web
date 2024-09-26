@@ -94,41 +94,41 @@ const handleSaveCard = async () => {
     console.log(imageFields);
     console.log(cardData.value);
 
-    // try {
-    //     const response = await saveCard(url, {
-    //         method,
-    //         body: {
-    //             label: cardData.value.label,
-    //             fields: cardData.value.fields,
-    //         },
-    //     });
+    try {
+        const response = await saveCard(url, {
+            method,
+            body: {
+                label: cardData.value.label,
+                fields: cardData.value.fields,
+            },
+        });
 
-    //     if (isNewCard) {
-    //         const cardId = response.data.id;
-    //         await Promise.all(imageFields.value.map(async (item) => {
-    //             console.log(item.image);
-    //             try {
-    //                 const formData = new FormData();
-    //                 formData.append('type', item.type);
-    //                 formData.append('image', item.image);
+        if (isNewCard) {
+            const cardId = response.data.id;
+            await Promise.all(imageFields.value.map(async (item) => {
+                console.log(item.image);
+                try {
+                    const formData = new FormData();
+                    formData.append('type', item.type);
+                    formData.append('image', item.image);
 
-    //                 const imageResponse = await uploadImage(`/v1/cards/${cardId}/images`, {
-    //                     method: 'POST',
-    //                     body: formData,
-    //                 });
-    //                 console.log(imageResponse);
-    //             } catch (uploadError) {
-    //                 console.error('Error uploading image:', uploadError);
-    //             }
-    //         }));
-    //     } else {
-    //         console.log(response);
-    //     }
-    // } catch (error) {
-    //     console.error(error as ApiErrorResponse);
-    // } finally {
-    //     navigateDashboard();
-    // }
+                    const imageResponse = await uploadImage(`/v1/cards/${cardId}/images`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    console.log(imageResponse);
+                } catch (uploadError) {
+                    console.error('Error uploading image:', uploadError);
+                }
+            }));
+        } else {
+            console.log(response);
+        }
+    } catch (error) {
+        console.error(error as ApiErrorResponse);
+    } finally {
+        navigateDashboard();
+    }
 };
 
 const navigateDashboard = () => {
