@@ -18,19 +18,17 @@ export function useCards() {
   const isNotEmpty = (value: any) => value !== null && value !== undefined && value !== "";
   const getValuesByType = (fields: any[], name: string): string => {
     return fields
-      .filter((field: any) => field.type === name)
+      .filter((field: any) => field.name === name)
       .map((field: any) => field.value)
       .join(', ');
   };
 
   const getLabelByType = (fields: any[], name: string): string => {
     return fields
-      .filter((field: any) => field.type === name)
+      .filter((field: any) => field.name === name)
       .map((field: any) => field.label)
       .join(', ');
   };
-
-
 
   const cardData = computed(() => {
     const personalField = ["Name", "Job Title", "Department", "Company Name"]

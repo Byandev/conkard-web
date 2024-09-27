@@ -8,8 +8,8 @@ definePageMeta({
   layout: 'dashboard-layout',
 });
 
-const { addField, label } = useCardStore();
-const { setLoading,  } = useCardStore();
+const { label, isModalOpen, currentCategory } = storeToRefs(useCardStore());
+const { setLoading, addField, resetFields } = useCardStore();
 const { fieldTypes } = storeToRefs(useFieldTypeStore());
 const { fetchFieldTypesData } = useCardFieldTypes();
 
@@ -25,6 +25,7 @@ const coverPhotoCoordinates = ref<string>('');
 onMounted( async () => {
   try {
     setLoading(true);
+    resetFields();
     fetchFieldTypesData();
   } catch (error) {
     console.log('Error', error);
@@ -37,16 +38,15 @@ onMounted( async () => {
 <template>
   <div class="h-full animate-fade-in">
     <Tabs class="ml-10" />
-    <div class="flex flex-col md:flex-row w-fit h-full gap-5 p-4 md:py-10 md:px-3">
+    <div class="flex flex-col lg:flex-row w-full lg:w-fit h-full gap-5 p-4 md:py-10 md:px-3">
       <div class="flex flex-col gap-7 w-full md:w-1/8">
         <section class="grid grid-cols-1 gap-4">
           <CardPreview
             :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
             :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
-            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates"
-           />
-          <AddModal>
-            <ModalContent/>
+            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" />
+          <AddModal :open="isModalOpen && currentCategory != 'IMAGE'">
+            <ModalContent />
           </AddModal>
         </section>
       </div>
@@ -69,8 +69,7 @@ onMounted( async () => {
           <ChooseTheme />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <AddDetails
-            :field-types="fieldTypes"/>
+          <AddDetails :field-types="fieldTypes" />
         </section>
       </div>
     </div>

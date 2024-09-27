@@ -127,6 +127,7 @@ const handleSaveCard = async () => {
     } catch (error) {
         console.error(error as ApiErrorResponse);
     } finally {
+        cardStore.resetFields();
         navigateDashboard();
     }
 };

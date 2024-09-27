@@ -2,6 +2,7 @@
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useCardFieldTypes } from '~/composables/useCardFieldTypes.js';
 import { useCardStore } from '~/store/cardStore';
+import { useFieldTypeStore } from '~/store/fieldTypeStore';
 
 definePageMeta({ layout: 'dashboard-layout' });
 
@@ -14,14 +15,10 @@ interface Card {
 
 const cardStore = useCardStore();
 const { addField } = cardStore;
-const { label } = storeToRefs(cardStore);
-const { fetchData, fieldTypes, fetchCards } = useCardFieldTypes();
-const { currentCard, currentId, currentLabel, setLoading, isLoading } = useCardStore();
-
-const isModalOpen = ref(false);
-const ModalTitle = ref('Name');
-const isEdit = ref(true);
-const previewColor = ref('#FF5733');
+const { label, isModalOpen, currentLabel, currentCategory } = storeToRefs(cardStore);
+const { fieldTypes } = storeToRefs(useFieldTypeStore());
+const { fetchFieldTypesData, fetchCards } = useCardFieldTypes();
+const { currentCard, currentId, setLoading, isLoading } = useCardStore();
 
 const companyImage = ref<string>('');
 const companyImageCoordinates = ref<string>('');
@@ -30,6 +27,7 @@ const profilePictureCoordinates = ref<string>('');
 const coverPhoto = ref<string>('');
 const coverPhotoCoordinates = ref<string>('');
 
+const getName = computed(() => currentCard?.find(card => card.type.name === "Name"));
 const getJobEdit = computed(() => currentCard?.find(card => card.type.name === "Job Title"));
 const getDepartment = computed(() => currentCard?.find(card => card.type.name === "Department"));
 const getCompanyName = computed(() => currentCard?.find(card => card.type.name === "Company Name"));
@@ -46,7 +44,8 @@ const mapAndAddFields = (fields: ReturnType<typeof getFieldsByCategory>, addFiel
         id: field.id,
         name: field.type.name,
         value: field.value,
-        label: field.label || ''
+        label: field.label || '',
+        category: field.type.category
     })).forEach(addFieldFunction);
 };
 
@@ -56,8 +55,8 @@ onMounted(async () => {
     if (currentId) {
         try {
             setLoading(true);
-            fetchData();
             await fetchCards(currentId);
+            await fetchFieldTypesData()
         } catch (error) {
             console.log('Error', error);
         } finally {
@@ -69,10 +68,11 @@ onMounted(async () => {
     if (currentCard.length === 0 && currentId == null)
         router.push('/dashboard/');
 
-        addField('label', currentLabel);
-    if (getJobEdit.value) addField('personalFields', {type: getJobEdit , label: getJobEdit.value.label, value: getJobEdit.value.value || '' });
-    if (getDepartment.value) addField('personalFields', {type: getDepartment.value.type, label: getDepartment.value.label, value: getDepartment.value.value || " " });
-    if (getCompanyName.value) addField('personalFields', { type: getCompanyName.value.type, label: getCompanyName.value.label, value: getCompanyName.value.value || " " });
+    addField('label', currentLabel.value);
+    if (getName.value) addField('personalFields', {id: getName.value.id, name: getName.value.type.name, label: getName.value.label, value: getName.value.value || '' });
+    if (getJobEdit.value) addField('personalFields', {id: getJobEdit.value.id, name: getJobEdit.value.type.name , label: getJobEdit.value.label, value: getJobEdit.value.value || '' });
+    if (getDepartment.value) addField('personalFields', {id: getDepartment.value.id, name: getDepartment.value.type.name, label: getDepartment.value.label, value: getDepartment.value.value || " " });
+    if (getCompanyName.value) addField('personalFields', {id:getCompanyName.value.id, name: getCompanyName.value.type.name, label: getCompanyName.value.label, value: getCompanyName.value.value || " " });
     
     if (getGeneral.value?.length) mapAndAddFields(getGeneral, field => addField('generalFields', field));
     if (getSocial.value?.length) mapAndAddFields(getSocial, field => addField('socialFields', field));
@@ -88,32 +88,28 @@ onMounted(async () => {
             <div class="flex flex-col gap-7 w-full md:w-1/8">
                 <section class="grid grid-cols-1 gap-4">
                     <CardPreview
-:company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
+                        :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
                         :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
-                        :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" :color="previewColor"
-                        @update:id="currentId = $event" @update:title="ModalTitle = $event"
-                        @update:open="isModalOpen = $event" @update:is-edit="isEdit = $event" />
-                    <AddModal :title="ModalTitle" :open="isModalOpen" @update:open="isModalOpen = $event">
-                        <ModalContent
-:id="currentId" :field-types="fieldTypes" :is-edit="isEdit"
-                            :modal-title="ModalTitle" @update:open="isModalOpen = false" />
+                        :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" />
+                    <AddModal :open="isModalOpen && currentCategory != 'IMAGE' ">
+                        <ModalContent />
                     </AddModal>
                 </section>
             </div>
-            <div v-if="isLoading" class="animate-pulse px-5 md:px-10 my-7">
-                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
-                <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
-                <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+            <div v-if=" isLoading" class="animate-pulse px-5 md:px-10 my-7">
+                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
+                        <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
+                        <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
             </div>
             <div v-else class="w-full md:max-w-[580px] flex flex-col gap-7 transition-all duration-300">
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
                     <TextInput
-v-model="label" label="Edit Label" input-name="card-label" placeholder="Label this card"
+                        v-model="label" label="Edit Label" input-name="card-label" placeholder="Label this card"
                         input-type="text" @update:model-value="addField('label',$event)" />
                 </section>
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
                     <AddImages
-@update:company-image="companyImage = $event"
+                        @update:company-image="companyImage = $event"
                         @update:company-image-coordinates="companyImageCoordinates = $event"
                         @update:profile-image="profilePicture = $event"
                         @update:profile-image-coordinates="profilePictureCoordinates = $event"
@@ -121,13 +117,10 @@ v-model="label" label="Edit Label" input-name="card-label" placeholder="Label th
                         @update:cover-image-coordinates="coverPhotoCoordinates = $event" />
                 </section>
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-                    <ChooseTheme @update:theme="previewColor = $event" />
+                    <ChooseTheme/>
                 </section>
                 <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-                    <AddDetails
-:field-types="fieldTypes" @update:id="currentId = $event"
-                        @update:is-edit="isEdit = $event" @update:title="ModalTitle = $event"
-                        @update:open="isModalOpen = $event" />
+                    <AddDetails :field-types="fieldTypes" />
                 </section>
             </div>
         </div>

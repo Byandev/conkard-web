@@ -8,15 +8,17 @@ export function useCardFieldTypes() {
   const totalPages = ref(1);
   const { $api } = useNuxtApp();
   const { setFieldTypes } = useFieldTypeStore();
-  const { setLoading, setCurrentCard, setCurrentId } = useCardStore();
+  const { setLoading, setCurrentCard, setCurrentId, resetCurrentCard, resetFields,  setCurrentLabel } = useCardStore();
   const { currentId } = storeToRefs(useCardStore());
 
   const fetchCards = async (id: number) => {
     try {
+      resetFields();
+      resetCurrentCard();
       const response: { data: Card } = await $api(`v1/cards/${id}`);
-      // Handle the response data as needed
-      console.log("Fetched card:", response.data);
+      setCurrentLabel(response.data.label)
       setCurrentCard(response.data.fields);
+      console.log("Card Id", response.data.id);
       setCurrentId(response.data.id);
     } catch (error) {
       console.error("Error fetching card:", error);

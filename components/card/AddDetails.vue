@@ -14,21 +14,21 @@ const { personalFields } = storeToRefs(newCardStore);
 
 const updateTitle = (title: string, category: string) => {
     newCardStore.setCurrentCategory(category);
+    newCardStore.setEditing(false);
     newCardStore.setModalTitle(title);
     newCardStore.setModalOpen(true);
-    newCardStore.setEditing(false);
 };
 
 const isFieldDisabled = (fieldName: string) => {
     switch (fieldName) {
         case 'Name':
-            return personalFields.value.find((field: Type) => field?.type?.name === 'Name') !== undefined;
+            return personalFields.value.find((field: any) => field?.name === 'Name') !== undefined;
         case 'Job Title':
-            return personalFields.value.find((field: Type) => field?.type?.name === 'Job Title') !== undefined;
+            return personalFields.value.find((field: any) => field?.name === 'Job Title') !== undefined;
         case 'Department':
-            return personalFields.value.find((field: Type) => field?.type?.name === 'Department') !== undefined;
+            return personalFields.value.find((field: any) => field?.name === 'Department') !== undefined;
         case 'Company Name':
-            return personalFields.value.find((field: Type) => field?.type?.name === 'Company Name') !== undefined;
+            return personalFields.value.find((field: any) => field?.name === 'Company Name') !== undefined;
         default:
             return false;
     }
@@ -56,8 +56,8 @@ const sentenceCaseCategory = (text: string) => {
         <CardSubtitle :for-id="`add-details-${category}`" :text="sentenceCaseCategory(category)" />
         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             <IconTitle
-v-for="(fieldType, index) in fields" :key="index"
-                class="disabled:opacity-40 disabled:cursor-not-allowed" foreground="gray" background="gray"
+                v-for="(fieldType, index) in fields" :key="index"
+                class="disabled:cursor-not-allowed" foreground="gray" background="gray"
                 :icon_url="fieldType.icon_url" :text="fieldType.name" :disabled="isFieldDisabled(fieldType.name)"
                 @click="updateTitle(fieldType.name, fieldType.category)" />
         </div>

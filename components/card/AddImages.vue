@@ -6,7 +6,7 @@ import { useCardStore } from '~/store/cardStore';
 
 const { isModalOpen ,modalTitle } = storeToRefs(useCardStore());
 
-const { setModalOpen, setModalTitle } = useCardStore();
+const { setModalOpen, setModalTitle, setCurrentCategory } = useCardStore();
  
 const companyImg = ref<string | null>(null);
 const companyImageCoordinates = ref<any>(null)
@@ -53,7 +53,7 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
         <div class="mt-5 flex flex-col md:flex-row justify-between gap-5">
             <VerticalButtonIcon
                 v-if="!companyImg" background="gray" foreground="gray"
-                :icon="PlusIcon" text="Company Logo" @click="updateModalState('Company')" />
+                :icon="PlusIcon" text="Company Logo" @click="{ updateModalState('Company'); setCurrentCategory('IMAGE')}" />
             <div v-else class="relative " @click="updateModalState('Company')">
                 <Preview
                     :width="160" :height="90" :image="companyImg" :coordinates="companyImageCoordinates"
@@ -67,7 +67,7 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
 
             <VerticalButtonIcon
                 v-if="!profileImg" background="gray" foreground="gray"
-                :icon="PlusIcon" text="Profile Picture" @click="updateModalState('Profile')" />
+                :icon="PlusIcon" text="Profile Picture" @click="{ updateModalState('Profile'); setCurrentCategory('IMAGE') }" />
             <div v-else class="relative" @click="updateModalState('Profile')">
                 <Preview
                     :width="90" :height="90" :image="profileImg" :coordinates="profileImageCoordinates"
@@ -82,7 +82,7 @@ const handleImageData = ({ type, image, coordinates }: { type: string, image: st
             <VerticalButtonIcon
                 v-if="!coverImg" background="gray" foreground="gray" :icon="PlusIcon"
                 text="Cover Photo" @click="updateModalState('Cover')" />
-            <div v-else class="relative" @click="updateModalState('Cover')">
+            <div v-else class="relative" @click="{updateModalState('Cover'); setCurrentCategory('IMAGE') }">
                 <Preview
                     :width="160" :height="90" :image="coverImg" :coordinates="coverImageCoordinates"
                     class="preview rounded-lg" />

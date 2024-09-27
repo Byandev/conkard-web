@@ -146,6 +146,18 @@ export const useCardStore = defineStore("card", () => {
     state.currentLabel = '';
   };
 
+   const resetFields = () => {
+    console.log("Resetting fields to initial state:", initialState);
+    fields.label.value = initialState.label;
+    fields.imageFields.value = [...initialState.imageFields];
+    fields.personalFields.value = [...initialState.personalFields];
+    fields.generalFields.value = [...initialState.generalFields];
+    fields.socialFields.value = [...initialState.socialFields];
+    fields.messagingFields.value = [...initialState.messagingFields];
+    fields.businessFields.value = [...initialState.businessFields];
+    console.log("Fields after reset:", fields);
+  };
+
   return {
     ...toRefs(state),
     ...fields,
@@ -163,5 +175,6 @@ export const useCardStore = defineStore("card", () => {
     setEditing,
     setCurrentLabel,
     resetCurrentCard,
+    resetFields,
   };
 });

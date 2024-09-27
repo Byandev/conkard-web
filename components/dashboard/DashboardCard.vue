@@ -40,6 +40,7 @@ watch(
             ...newMessagingField?.map(field => ({ ...field, category: 'Messaging' })) ?? [],
             ...newBusinessField?.map(field => ({ ...field, category: 'Business' })) ?? []
         ];
+        console.log('Card value',cardItem.value);
     },
     { immediate: true, deep: true }
 );

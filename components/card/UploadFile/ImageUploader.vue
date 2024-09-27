@@ -92,7 +92,7 @@ const saveCroppedImage = async () => {
 
 <template>
     <div
-class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4 cursor-pointer hover:border-gray-400"
+        class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4 cursor-pointer hover:border-gray-400 mx-5"
         :class="{ 'border-blue-500': isDragging }" @dragover="handleDragOver" @dragleave="handleDragLeave"
         @drop="handleDrop">
         <input id="file-input" type="file" accept="image/jpeg, image/png" class="hidden" @change="handleInputChange">
@@ -104,11 +104,12 @@ class="flex flex-col items-center justify-center border-2 border-dashed border-g
         </label>
     </div>
     <Cropper
-v-if="image" ref="cropperRef" class="w-full h-auto" :src="imageUrl"
+        v-if="image" ref="cropperRef" class="w-full h-auto" :src="imageUrl"
         :stencil-props="{ aspectRatio: props.aspectRatio }" image-restriction="stencil" @change="handleChange" />
 
     <ModalFooterButton
-:edit_data="true" :on-save="saveCroppedImage" :on-delete="() => props.onDelete(props.type)"
+        class="mx-5"
+        :edit_data="true" :on-save="saveCroppedImage" :on-delete="() => props.onDelete(props.type)"
         :on-cancel="props.onCancel" />
 </template>
 

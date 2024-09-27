@@ -3,16 +3,10 @@ import { useCardStore } from '~/store/cardStore.js';
 import type { Category } from '~/types/enums/CategoryEnum';
 
 const props = defineProps<{
-  name: string;
-  suggestedLabels: string;
+  suggestedLabels?: string;
 }>();
-
-const fieldData = reactive({
-  value: '',
-  title: ''
-});
-
-const { value, title } = toRefs(fieldData);
+const label = ref<string>('');
+const value = ref<string>('');
 
 const cardStore = useCardStore();
 const { addField, setEditing, setModalOpen, updateField, deleteField } = cardStore;
@@ -21,25 +15,30 @@ const { currentCategory, isEditing, currentFieldId, personalFields, generalField
 
 const getFieldData = () => {
   if (isEditing.value) {
-    if (currentCategory.value === 'PERSONAL') {
-      const field = personalFields.value.find(field => field.id === currentFieldId.value);
-      fieldData.value = field.value;
-    } else if (currentCategory.value === 'GENERAL') {
-      const field = generalFields.value.find(field => field.id === currentFieldId.value);
-      fieldData.value = field.value;
-      fieldData.title = field.label;
-    } else if (currentCategory.value === 'SOCIAL') {
-      const field = socialFields.value.find(field => field.id === currentFieldId.value);
-      fieldData.value = field.value;
-      fieldData.title = field.label;
-    } else if (currentCategory.value === 'MESSAGING') {
-      const field = messagingFields.value.find(field => field.id === currentFieldId.value);
-      fieldData.value = field.value;
-      fieldData.title = field.label;
-    } else if (currentCategory.value === 'BUSINESS') {
-      const field = businessFields.value.find(field => field.id === currentFieldId.value);
-      fieldData.value = field.value;
-      fieldData.title = field.label;
+    let field: any;
+    switch (currentCategory.value) {
+      case 'PERSONAL':
+        field = personalFields.value.find((f: any) => f.id === currentFieldId.value);
+        break;
+      case 'GENERAL':
+        field = generalFields.value.find((f: any) => f.id === currentFieldId.value);
+        break;
+      case 'SOCIAL':
+        field = socialFields.value.find((f: any) => f.id === currentFieldId.value);
+        break;
+      case 'MESSAGING':
+        field = messagingFields.value.find((f: any) => f.id === currentFieldId.value);
+        break;
+      case 'BUSINESS':
+        field = businessFields.value.find((f: any) => f.id === currentFieldId.value);
+        break;
+    }
+
+    if (field) {
+      value.value = field.value;
+      if (field.label) {
+        label.value = field.label;
+      }
     }
   }
 };
@@ -52,10 +51,10 @@ const closeModal = () => {
 const handleSubmit = () => {
   const fieldData = {
     ...(isEditing.value && { id: currentFieldId.value ?? 0 }),
-    type: modalTitle.value,
+    name: modalTitle.value,
     value: value.value,
     category: currentCategory.value,
-    ...(currentCategory.value !== 'PERSONAL' && { label: title.value })
+    ...(currentCategory.value !== 'PERSONAL' && { label: label.value })
   };
 
   if (!isEditing.value) {
@@ -76,24 +75,20 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-5 px-4">
     <FloatingLabelInput
-v-model="value" label="Value" input-name="Value" placeholder="Value" input-type="text"
+      v-model="value" label="Value" input-name="Value" placeholder="Value" input-type="text"
       class="w-full" />
     <FloatingLabelInput
-v-if="currentCategory != 'PERSONAL'" v-model="title" label="Title" input-name="Title"
+      v-if="currentCategory != 'PERSONAL'" v-model="label" label="Title" input-name="Title"
       placeholder="Title" input-type="text" class="w-full" />
 
     <Suggestion
-v-if="props.suggestedLabels" :suggested-labels="props.suggestedLabels" :current="title"
-      title="Here are some suggestions for your title:" @update:label="title = $event" />
+      v-if="props.suggestedLabels" :suggested-labels="props.suggestedLabels" :current="label"
+      title="Here are some suggestions for your title:" @update:label="label = $event" />
   </div>
 
-  <div class="flex gap-3 mt-5 w-full border-t-2" :class="isEditing ? 'justify-between' : 'justify-end'">
-    <div v-if="isEditing" class="px-4 flex flex-row mt-5 gap-5">
-      <ButtonIconIconify icon="bi:trash" text="Delete" foreground="gray" background="white" @click="{deleteField(currentCategory.toLowerCase() + 'Fields' as Category ,currentFieldId ?? 0); closeModal()}" />
-    </div>
-    <div class="px-4 flex flex-row mt-5 gap-5">
-      <Button text="Cancel" background="white" foreground="gray" @click="closeModal" />
-      <Button text="Save" background="gray" foreground="white" @click="handleSubmit" />
-    </div>
+  <div class="flex gap-3 w-full" :class="isEditing ? 'justify-between' : 'justify-end'">
+    <ModalFooterButton
+      class="mx-5 w-full" :edit_data="isEditing" :on-save="handleSubmit"
+      :on-delete="() => { deleteField(currentCategory.toLowerCase() + 'Fields' as Category, currentFieldId ?? 0); closeModal() }" :on-cancel="closeModal" />
   </div>
 </template>

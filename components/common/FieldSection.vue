@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<{
 
 watchEffect(() => {
     if (props.field) {
-        console.log(props.field.type);
+        console.log('Current Field',props.field);
     }
 });
 
@@ -31,7 +31,7 @@ const displayValue = computed(() => {
 class="w-full my-2 flex flex-row items-center justify-between group"
         :class="props.isView ? 'hover:cursor-pointer' : ''">
         <div>
-            <h1 v-if="displayValue" class="text-black" :class="props.field.type == 'Name'? 'font-bold text-3xl': 'text-2xl'">{{ displayValue }}</h1>
+            <h1 v-if="displayValue" class="text-black" :class="props.field.name == 'Name'? 'font-bold text-3xl': 'text-2xl'">{{ displayValue }}</h1>
         </div>
         <Icon
 v-if="props.isView" name="lucide:edit" size="20"
