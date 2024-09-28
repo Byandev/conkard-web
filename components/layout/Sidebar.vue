@@ -35,6 +35,7 @@ import type { ImageDataResponse } from '~/types/api/response/uploadImage';
 interface NavigationItem {
     name: string;
     href: string;
+    active: string[];
     icon: any;
 }
 
@@ -43,15 +44,21 @@ interface UserNavigationItem {
     href: string;
 }
 
+const route = useRoute();
+const router = useRouter();
+
+const { imageFields } = storeToRefs(useCardStore());
+const { currentId } = storeToRefs(useCardStore());
+
 const navigation: NavigationItem[] = [
-    { name: 'Cards', href: '/dashboard', icon: IdentificationIcon },
-    { name: 'Email Signature', href: '#', icon: EnvelopeIcon },
-    { name: 'Virtual Backgrounds', href: '#', icon: PhotoIcon },
-    { name: 'Accessories', href: '#', icon: ShoppingBagIcon },
+    { name: 'Cards', href: '/dashboard', active: ['/dashboard', '/cards/create', `/cards/${currentId.value}/edit`], icon: IdentificationIcon },
+    { name: 'Email Signature', href: '#', active: [], icon: EnvelopeIcon },
+    { name: 'Virtual Backgrounds', href: '#',active: [] ,icon: PhotoIcon },
+    { name: 'Accessories', href: '#', active:[], icon: ShoppingBagIcon },
 ];
 
 const lowerNavigation: NavigationItem[] = [
-    { name: 'Contacts', href: '#', icon: ChatBubbleBottomCenterIcon },
+    { name: 'Contacts', href: '#', active: [], icon: ChatBubbleBottomCenterIcon },
 ];
 
 const userNavigation: UserNavigationItem[] = [
@@ -60,20 +67,14 @@ const userNavigation: UserNavigationItem[] = [
     { name: 'Log out', href: '#' },
 ];
 
-const route = useRoute();
-const router = useRouter();
-
-const { imageFields } = storeToRefs(useCardStore());
-const { currentId } = storeToRefs(useCardStore());
-
 const isCardEdit = computed(() => route.path === `/cards/${currentId.value}/edit`);
 const isCardNew = computed(() => route.path === '/cards/create');
 const isDashboard = computed(() => route.path === '/dashboard');
 
 const { user } = authStore();
 
-const isActiveRoute = (href: string) => {
-    return route.path === href;
+const isActiveRoute = (active: string[]) => {
+    return active.includes(route.path);
 };
 
 const sidebarOpen = ref(false);
@@ -180,10 +181,10 @@ class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=white"
                                                 <li v-for="item in navigation" :key="item.name">
                                                     <a
 :href="item.href"
-                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
+                                                        :class="[isActiveRoute(item.active) ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                                         <component
 :is="item.icon"
-                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-white group-hover:text-white', 'h-5 w-5 shrink-0']"
+                                                            :class="[isActiveRoute(item.active) ? 'text-white' : 'text-white group-hover:text-white', 'h-5 w-5 shrink-0']"
                                                             aria-hidden="true" />
                                                         {{ item.name }}
                                                     </a>
@@ -197,10 +198,10 @@ class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=white"
                                                 <li v-for="item in lowerNavigation" :key="item.name">
                                                     <NuxtLink
 :to="item.href"
-                                                        :class="[isActiveRoute(item.href) ? 'bg-gray-700 text-gray-600' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
+                                                        :class="[isActiveRoute(item.active) ? 'bg-gray-700 text-gray-600' : 'text-white hover:bg-gray-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                                         <component
 :is="item.icon"
-                                                            :class="[isActiveRoute(item.href) ? 'text-white' : 'text-white group-hover:text-white', 'h-5 w-5 shrink-0']"
+                                                            :class="[isActiveRoute(item.active) ? 'text-white' : 'text-white group-hover:text-white', 'h-5 w-5 shrink-0']"
                                                             aria-hidden="true" />
                                                         {{ item.name }}
                                                     </NuxtLink>
@@ -313,11 +314,11 @@ class="mx-1 text-xs font-extrabold leading-6 text-gray-500"
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li v-for="item in navigation" :key="item.name">
                                     <NuxtLink
-:to="item.href"
-                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex items-center gap-x-3 rounded-md p-2 text-xs font-medium leading-6']">
+                                        :to="item.href"
+                                        :class="[isActiveRoute(item.active) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex items-center gap-x-3 rounded-md p-2 text-xs font-medium leading-6']">
                                         <component
-:is="item.icon"
-                                            :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
+                                            :is="item.icon"
+                                            :class="[isActiveRoute(item.active) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
                                             aria-hidden="true" />
                                         {{ item.name }}
                                     </NuxtLink>
@@ -333,10 +334,10 @@ class="mx-1 text-xs font-extrabold leading-6 text-gray-500"
                                 <li v-for="item in lowerNavigation" :key="item.name">
                                     <NuxtLink
 :to="item.href"
-                                        :class="[isActiveRoute(item.href) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex items-center gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
+                                        :class="[isActiveRoute(item.active) ? 'bg-gray-200 text-gray-600' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-600', 'group flex items-center gap-x-3 rounded-md p-2 text-xs font-semibold leading-6']">
                                         <component
 :is="item.icon"
-                                            :class="[isActiveRoute(item.href) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
+                                            :class="[isActiveRoute(item.active) ? 'text-gray-600' : 'text-gray-600 group-hover:text-gray-600', 'h-5 w-5 shrink-0']"
                                             aria-hidden="true" />
                                         {{ item.name }}
                                     </NuxtLink>
