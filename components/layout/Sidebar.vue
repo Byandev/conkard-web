@@ -82,6 +82,8 @@ const { sendRequest: uploadImage } = useSubmit<ImageDataResponse, ApiErrorRespon
 
 const { cardData } = useCards();
 
+const { currentId } = storeToRefs(useCardStore());
+
 const handleSaveCard = async () => {
     console.log(cardData.value);
 
@@ -254,7 +256,7 @@ class="h-7 w-7 rounded-full bg-gray-50"
                             <span
 class="ml-4 text-sm text-start font-semibold leading-6 text-gray-900"
                                 aria-hidden="true">{{
-                                    user.name }}</span>
+                                user.name }}</span>
                         </div>
                         <span class="hidden 2xl:flex 2xl:items-between">
                             <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -377,10 +379,8 @@ class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-red-300"
                 <!-- Home Dashboard Option -->
                 <div v-if="isDashboardCardsPersonal" class="flex flex-1 gap-x-2 self-stretch py-2 justify-between">
                     <div class="flex flex-row gap-x-2 self-stretch">
-                        <NuxtLink to="/cards/edit" class="p-0">
-                            <ButtonIcon
-class="h-full" :icon="PencilSquareIcon" text="Edit" background="black"
-                                foreground="white" />
+                        <NuxtLink :to="`/cards/${currentId}/edit`" class="p-0">
+                            <ButtonIcon class="h-full" :icon="PencilSquareIcon" text="Edit" background="black" foreground="white" />
                         </NuxtLink>
                         <ButtonIcon :icon="TrashIcon" text="Delete" background="gray" foreground="gray" />
                     </div>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useCardFieldTypes } from '~/composables/useCardFieldTypes.js';
 import { useCardStore } from '~/store/cardStore';
@@ -14,11 +16,14 @@ interface Card {
 }
 
 const cardStore = useCardStore();
+const { currentId } = storeToRefs(cardStore);
+const cardId = currentId.value; // Get the cardId from the store
+
 const { addField } = cardStore;
 const { label, isModalOpen, currentLabel, currentCategory } = storeToRefs(cardStore);
 const { fieldTypes } = storeToRefs(useFieldTypeStore());
 const { fetchFieldTypesData, fetchCards } = useCardFieldTypes();
-const { currentCard, currentId, setLoading, isLoading } = useCardStore();
+const { currentCard, setLoading, isLoading } = useCardStore();
 
 const companyImage = ref<string>('');
 const companyImageCoordinates = ref<string>('');
@@ -52,10 +57,10 @@ const mapAndAddFields = (fields: ReturnType<typeof getFieldsByCategory>, addFiel
 const router = useRouter();
 
 onMounted(async () => {
-    if (currentId) {
+    if (cardId) {
         try {
             setLoading(true);
-            await fetchCards(currentId);
+            await fetchCards(cardId);
             await fetchFieldTypesData()
         } catch (error) {
             console.log('Error', error);
@@ -65,15 +70,15 @@ onMounted(async () => {
     }
 
     // Navigate to /dashboard/cards/personal on page reload when card is empty
-    if (currentCard.length === 0 && currentId == null)
+    if (currentCard.length === 0 && currentId.value == null)
         router.push('/dashboard/');
 
     addField('label', currentLabel.value);
-    if (getName.value) addField('personalFields', {id: getName.value.id, name: getName.value.type.name, label: getName.value.label, value: getName.value.value || '' });
-    if (getJobEdit.value) addField('personalFields', {id: getJobEdit.value.id, name: getJobEdit.value.type.name , label: getJobEdit.value.label, value: getJobEdit.value.value || '' });
-    if (getDepartment.value) addField('personalFields', {id: getDepartment.value.id, name: getDepartment.value.type.name, label: getDepartment.value.label, value: getDepartment.value.value || " " });
-    if (getCompanyName.value) addField('personalFields', {id:getCompanyName.value.id, name: getCompanyName.value.type.name, label: getCompanyName.value.label, value: getCompanyName.value.value || " " });
-    
+    if (getName.value) addField('personalFields', { id: getName.value.id, name: getName.value.type.name, label: getName.value.label, value: getName.value.value || '' });
+    if (getJobEdit.value) addField('personalFields', { id: getJobEdit.value.id, name: getJobEdit.value.type.name, label: getJobEdit.value.label, value: getJobEdit.value.value || '' });
+    if (getDepartment.value) addField('personalFields', { id: getDepartment.value.id, name: getDepartment.value.type.name, label: getDepartment.value.label, value: getDepartment.value.value || " " });
+    if (getCompanyName.value) addField('personalFields', { id: getCompanyName.value.id, name: getCompanyName.value.type.name, label: getCompanyName.value.label, value: getCompanyName.value.value || " " });
+
     if (getGeneral.value?.length) mapAndAddFields(getGeneral, field => addField('generalFields', field));
     if (getSocial.value?.length) mapAndAddFields(getSocial, field => addField('socialFields', field));
     if (getMessaging.value?.length) mapAndAddFields(getMessaging, field => addField('messagingFields', field));
