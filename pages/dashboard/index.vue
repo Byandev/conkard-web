@@ -49,7 +49,7 @@ onMounted(() => {
               <p class="text-lg font-semibold mb-2">You don't have any cards!</p>
               <p class="mb-4">Click the button below (or the +) to create a personal card.</p>
               <NuxtLink
-                to="/dashboard/cards/new"
+                to="cards/create"
                 class="px-4 py-2 bg-gray-900 text-white rounded hover:bg-blue-600 transition-colors duration-300">Create
                 Card</NuxtLink>
 

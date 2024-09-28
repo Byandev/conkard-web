@@ -69,9 +69,9 @@ onMounted(async () => {
         }
     }
 
-    // Navigate to /dashboard/cards/personal on page reload when card is empty
+    // Navigate to /dashboard on page reload when card is empty
     if (currentCard.length === 0 && currentId.value == null)
-        router.push('/dashboard/');
+        router.push('/dashboard');
 
     addField('label', currentLabel.value);
     if (getName.value) addField('personalFields', { id: getName.value.id, name: getName.value.type.name, label: getName.value.label, value: getName.value.value || '' });

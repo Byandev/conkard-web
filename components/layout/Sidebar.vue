@@ -44,7 +44,7 @@ interface UserNavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-    { name: 'Cards', href: '/dashboard/', icon: IdentificationIcon },
+    { name: 'Cards', href: '/dashboard', icon: IdentificationIcon },
     { name: 'Email Signature', href: '#', icon: EnvelopeIcon },
     { name: 'Virtual Backgrounds', href: '#', icon: PhotoIcon },
     { name: 'Accessories', href: '#', icon: ShoppingBagIcon },
@@ -64,10 +64,11 @@ const route = useRoute();
 const router = useRouter();
 
 const { imageFields } = storeToRefs(useCardStore());
+const { currentId } = storeToRefs(useCardStore());
 
-const isDashboardCardsEdit = computed(() => route.path === '/cards/edit');
-const isDashboardCardsNew = computed(() => route.path === '/cards/create');
-const isDashboardCardsPersonal = computed(() => route.path === '/dashboard/');
+const isCardEdit = computed(() => route.path === `/cards/${currentId.value}/edit`);
+const isCardNew = computed(() => route.path === '/cards/create');
+const isDashboard = computed(() => route.path === '/dashboard');
 
 const { user } = authStore();
 
@@ -81,15 +82,12 @@ const { sendRequest: saveCard } = useSubmit<SaveCardResponse, ApiErrorResponse>(
 const { sendRequest: uploadImage } = useSubmit<ImageDataResponse, ApiErrorResponse>()
 
 const { cardData } = useCards();
-
-const { currentId } = storeToRefs(useCardStore());
-
 const handleSaveCard = async () => {
     console.log(cardData.value);
 
     const cardStore = useCardStore();
     const { currentId } = storeToRefs(cardStore);
-    const isNewCard = isDashboardCardsNew.value;
+    const isNewCard = isCardNew.value;
     const url = isNewCard ? '/v1/cards' : `/v1/cards/${currentId.value}`;
     const method = isNewCard ? 'POST' : 'PUT';
 
@@ -135,7 +133,7 @@ const handleSaveCard = async () => {
 };
 
 const navigateDashboard = () => {
-    router.push('/dashboard/');
+    router.push('/dashboard');
 }; 
 </script>
 
@@ -377,7 +375,7 @@ class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-red-300"
                 <div class="h-6 w-px bg-gray-900/10 2xl:hidden" aria-hidden="true" />
 
                 <!-- Home Dashboard Option -->
-                <div v-if="isDashboardCardsPersonal" class="flex flex-1 gap-x-2 self-stretch py-2 justify-between">
+                <div v-if="isDashboard" class="flex flex-1 gap-x-2 self-stretch py-2 justify-between">
                     <div class="flex flex-row gap-x-2 self-stretch">
                         <NuxtLink :to="`/cards/${currentId}/edit`" class="p-0">
                             <ButtonIcon class="h-full" :icon="PencilSquareIcon" text="Edit" background="black" foreground="white" />
@@ -389,7 +387,7 @@ class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-red-300"
 
                 <!-- New Card Options -->
                 <div
-v-if="isDashboardCardsNew || isDashboardCardsEdit"
+                    v-if="isCardNew || isCardEdit"
                     class="flex flex-1 gap-x-2 self-stretch py-2 justify-between overflow-x-auto">
                     <div class="flex flex-row gap-x-2 self-stretch">
                         <ButtonIcon :icon="Cog8ToothIcon" text="Settings" background="white" foreground="gray" />
@@ -397,11 +395,11 @@ v-if="isDashboardCardsNew || isDashboardCardsEdit"
                     </div>
                     <div class="flex flex-row gap-x-2">
                         <Button
-:text="isDashboardCardsNew ? 'Cancel' : 'Discard changes'" background="white"
+                            :text="isCardNew ? 'Cancel' : 'Discard changes'" background="white"
                             foreground="gray" @click="navigateDashboard" />
                         <ButtonIconIconify
-icon="material-symbols:save-outline"
-                            :text="isDashboardCardsNew ? 'Create' : 'Save'" background="black" foreground="white"
+                            icon="material-symbols:save-outline"
+                            :text="isCardNew ? 'Create' : 'Save'" background="black" foreground="white"
                             @click="handleSaveCard" />
                     </div>
                 </div>
