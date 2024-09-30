@@ -45,7 +45,12 @@ onMounted(async () => {
           <div
             v-else-if="cards && cards.length > 0"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-fade-in">
-            <CardPreview v-for="card in cards" :key="card.id" :card-id="card.id" />
+            <CardPreview
+              v-for="card in cards"
+              :key="card.id"
+              :card-id="card.id"
+              class="transition-transform transform hover:scale-105 hover:shadow-lg"
+            />
           </div>
           <div
             v-else
