@@ -1,4 +1,4 @@
-export interface ImageDataResponse {
+export interface Media {
     id: number;
     uuid: string;
     name: string;
@@ -10,12 +10,12 @@ export interface ImageDataResponse {
     preview_url: string;
     original_url: string;
     order_column: number;
-    manipulations: any[];
+    manipulations: string[];
     collection_name: string;
-    custom_properties: any[];
-    responsive_images: any[];
+    custom_properties: string[];
+    responsive_images: string[];
     human_readable_size: string;
-    generated_conversions: any[];
+    generated_conversions: string[];
     created_at: string;
     updated_at: string;
 }

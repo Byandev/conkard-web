@@ -23,4 +23,6 @@ definePageMeta({
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+@tailwind utilities;
+</style>

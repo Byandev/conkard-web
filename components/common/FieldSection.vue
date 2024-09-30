@@ -14,12 +14,6 @@ const props = withDefaults(defineProps<{
     placeholder: "Name",
 });
 
-watchEffect(() => {
-    if (props.field) {
-        console.log('Current Field',props.field);
-    }
-});
-
 const displayValue = computed(() => {
     return props.keys?.map(key => props.field?.[key]).filter(Boolean).join(" ");
 });
@@ -34,7 +28,7 @@ class="w-full my-2 flex flex-row items-center justify-between group"
             <h1 v-if="displayValue" class="text-black" :class="props.field.name == 'Name'? 'font-bold text-3xl': 'text-2xl'">{{ displayValue }}</h1>
         </div>
         <Icon
-v-if="props.isView" name="lucide:edit" size="20"
+            v-if="props.isView" name="lucide:edit" size="20"
             class="text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute right-5" />
     </section>
 </template>

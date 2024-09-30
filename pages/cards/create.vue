@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import ChooseTheme from '~/components/card/ChooseTheme.vue';
-import { useCardFieldTypes } from '~/composables/useCardFieldTypes';
-import { useCardStore } from '~/store/cardStore';
 import { useFieldTypeStore } from '~/store/fieldTypeStore';
+import { useStateStore } from '~/store/stateStore';
 
 definePageMeta({
   layout: 'dashboard-layout',
 });
 
-const { label, isModalOpen, currentCategory } = storeToRefs(useCardStore());
-const { setLoading, addField, resetFields } = useCardStore();
+const { label, modalOpen, category } = storeToRefs(useStateStore());
+const { setLoading, } = useStateStore();
 const { fieldTypes } = storeToRefs(useFieldTypeStore());
-const { fetchFieldTypesData } = useCardFieldTypes();
+const { fetchFieldTypes } = useFieldTypeStore();
 
 const companyImage = ref<string>('');
 const companyImageCoordinates = ref<string>('');
@@ -25,8 +24,7 @@ const coverPhotoCoordinates = ref<string>('');
 onMounted( async () => {
   try {
     setLoading(true);
-    resetFields();
-    fetchFieldTypesData();
+    fetchFieldTypes();
   } catch (error) {
     console.log('Error', error);
   } finally {
@@ -45,7 +43,7 @@ onMounted( async () => {
             :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
             :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
             :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" />
-          <AddModal :open="isModalOpen && currentCategory != 'IMAGE'">
+          <AddModal :open="modalOpen && category != 'IMAGE'">
             <ModalContent />
           </AddModal>
         </section>
@@ -54,7 +52,7 @@ onMounted( async () => {
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <TextInput
             v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
-            input-type="text" @update:model-value="addField('label', $event)" />
+            input-type="text" @update:model-value="{}" />
         </section>
         <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
           <AddImages
@@ -78,19 +76,4 @@ onMounted( async () => {
 
 <style scoped>
 @import 'tailwindcss/utilities';
-
-@layer utilities {
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.5s forwards;
-  }
-}
 </style>

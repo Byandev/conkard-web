@@ -1,82 +1,51 @@
-import { computed, onMounted } from "vue";
-import { storeToRefs } from "pinia";
-import { useCardStore } from "~/store/cardStore";
-import { useCardFieldTypes } from "~/composables/useCardFieldTypes";
-import type { Type } from "~/types/models/Card";
-import { useFieldTypeStore } from "~/store/fieldTypeStore";
+
+import type { Card } from "~/types/models/Card";
+import type { CardField } from "~/types/models/CardField";
 
 export function useCards() {
-  const cardStore = useCardStore();
-  const { fieldTypes } = storeToRefs(useFieldTypeStore());
-  const { fetchData } = useCardFieldTypes();
+  const cards = ref<Card[]>();
+  const currentPage = ref(1);
+  const totalPages = ref(1);
+  const { $api } = useNuxtApp();
 
-  onMounted(async () => await fetchData());
-
-  const { label, personalFields, generalFields, socialFields, messagingFields, businessFields } = storeToRefs(cardStore);
-
-  const getFieldTypesId = (name: string) => fieldTypes.value.find((fieldType: Type) => fieldType.name === name)?.id ?? null;
-  const isNotEmpty = (value: any) => value !== null && value !== undefined && value !== "";
-  const getValuesByType = (fields: any[], name: string): string => {
-    return fields
-      .filter((field: any) => field.name === name)
-      .map((field: any) => field.value)
-      .join(', ');
+  const fetchCardsPage = async (page = 1) => {
+    try {
+      const response: { data: Card[], meta: { current_page: number, last_page: number } } = await $api(`v1/cards?page=${page}`);
+      cards.value = response.data;
+      currentPage.value = response.meta.current_page;
+      totalPages.value = response.meta.last_page;
+    } catch (error) {
+      console.error("Error fetching cards data:", error);
+    }
   };
 
-  const getLabelByType = (fields: any[], name: string): string => {
-    return fields
-      .filter((field: any) => field.name === name)
-      .map((field: any) => field.label)
-      .join(', ');
-  };
+  const fetchCardDetails = async (id: number) => {
+    try {
+      const response: { data: Card } = await $api(`v1/cards/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching card data:", error);
+    }
+  }
 
-  const cardData = computed(() => {
-    const personalField = ["Name", "Job Title", "Department", "Company Name"]
-    .map(name => ({ type_id: getFieldTypesId(name), value: getValuesByType(personalFields.value, name) }))
-    .filter(field => isNotEmpty(field.value));
-  
-    const generalField = ["Email", "Phone", "Company URL", "Link", "Address"]
-      .map(name => ({
-        type_id: getFieldTypesId(name),
-        value: getValuesByType(generalFields.value, name),
-        label: getLabelByType(generalFields.value, name)
-      }))
-      .filter(field => isNotEmpty(field.value));
-    
-    const socialField = ["Facebook", "X", "Instagram", "Threads", "LinkedIn", "Youtube", "Tiktok", "Spotify"]
-      .map(name => ({
-        type_id: getFieldTypesId(name),
-        value: getValuesByType(socialFields.value, name),
-        label: getLabelByType(socialFields.value, name)
-      }))
-      .filter(field => isNotEmpty(field.value));
-    
-    const messagingField = ["Skype", "Telegram", "Whatsapp"]
-      .map(name => ({
-        type_id: getFieldTypesId(name),
-        value: getValuesByType(messagingFields.value, name),
-        label: getLabelByType(messagingFields.value, name)
-      }))
-      .filter(field => isNotEmpty(field.value));
-    
-    const businessField = ["Calendly"]
-      .map(name => ({
-        type_id: getFieldTypesId(name),
-        value: getValuesByType(businessFields.value, name),
-        label: getLabelByType(businessFields.value, name)
-      }))
-      .filter(field => isNotEmpty(field.value));
-
-    const fields = [
-      ...personalField,
-      ...generalField,
-      ...socialField,
-      ...messagingField,
-      ...businessField
-    ];
-
-    return { label: label.value || "", fields };
+  const getFieldByCategory = computed(() => (category: string, card: CardField[]) => {
+    return card
+      .filter((field) => field.type.category === category)
+      .map((field) => ({
+        id: field.id,
+        value: field.value,
+        label: field.label,
+        name: field.type.name,
+      }));
   });
 
-  return { cardData };
+
+  return {
+    cards,
+    currentPage,
+    totalPages,
+    fetchCardsPage,
+    fetchCardDetails,
+    getFieldByCategory,
+  };
 }

@@ -1,49 +1,23 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { useCardStore } from '~/store/cardStore';
-import type { Field } from '~/types/models/Card';
+import { useStateStore } from '~/store/stateStore';
+import { useCards } from '~/composables/useCards';
+import type { Card } from '~/types/models/Card';
 
 const props = defineProps<{
-    currentCard: Field[] | null;
+    cardId: number;
 }>();
 
-const cardItem = ref<Field[]>([]);
+const { loading } = storeToRefs( useStateStore() );
+const cardDetails = ref<Card>();
 
-const cardStore = useCardStore();
+const { fetchCardDetails } = useCards();
 
-const { isLoading } = storeToRefs(cardStore);
+onMounted(async () => {
+    if (props.cardId) {
+        cardDetails.value = await fetchCardDetails(props.cardId);
+    }
+});
 
-const getField = (name: string) => computed(() => props.currentCard?.find(field => field.type.name === name) || null);
-const getFieldsByCategory = (category: string) => computed(() => props.currentCard?.filter(field => field.type.category === category) || null);
-const isFieldEmpty = (field: ComputedRef<Field | null>, keys: (keyof Field)[]) => computed(() => keys.every(key => !field.value?.[key]));
-
-const nameField = getField("Name");
-const jobField = getField("Job Title");
-const departmentField = getField("Department");
-const companyNameField = getField("Company Name");
-
-const generalField = getFieldsByCategory("GENERAL");
-const socialField = getFieldsByCategory("SOCIAL");
-const messagingField = getFieldsByCategory("MESSAGING");
-const businessField = getFieldsByCategory("BUSINESS");
-
-const isJobFieldEmpty = isFieldEmpty(jobField, ['value']);
-const isDepartmentFieldEmpty = isFieldEmpty(departmentField, ['value']);
-const isCompanyNameEmpty = isFieldEmpty(companyNameField, ['value']);
-
-watch(
-    [generalField, socialField, messagingField, businessField],
-    ([newGeneralField, newSocialField, newMessagingField, newBusinessField]) => {
-        cardItem.value = [
-            ...newGeneralField?.map(field => ({ ...field, category: 'General' })) ?? [],
-            ...newSocialField?.map(field => ({ ...field, category: 'Social' })) ?? [],
-            ...newMessagingField?.map(field => ({ ...field, category: 'Messaging' })) ?? [],
-            ...newBusinessField?.map(field => ({ ...field, category: 'Business' })) ?? []
-        ];
-        console.log('Card value',cardItem.value);
-    },
-    { immediate: true, deep: true }
-);
 </script>
 
 <template>
@@ -60,25 +34,25 @@ watch(
                         clip-rule="evenodd" />
                 </svg>
             </div>
-            <div v-if="isLoading" class="animate-pulse px-5 md:px-10 my-7">
+            <div v-if="loading" class="animate-pulse px-5 md:px-10 my-7">
                 <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
                 <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
                 <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
             </div>
             <div v-else class=" px-5 md:px-10 pb-7">
-                <div class="text-2xl md:text-3xl mt-7 mb-3 font-semibold">
-                    <div>{{ nameField?.value }}</div>
-                </div>
-                <FieldSection v-if="!isJobFieldEmpty" :is-view="false" :field="jobField" :keys="['value']" />
+
+                <span>{{ cardDetails?.label }}</span>
+            
+                <!-- <FieldSection :is-view="false" :field="" :keys="['value']" />
                 <FieldSection
-                    v-if="!isDepartmentFieldEmpty" :is-view="false" :field="departmentField"
+                    :is-view="false" :field="departmentField"
                     :keys="['value']" />
-                <FieldSection v-if="!isCompanyNameEmpty" :is-view="false" :field="companyNameField" :keys="['value']" />
-                <div v-for="(item) in cardItem" :key="item.id">
+                <FieldSection v-if="!isCompanyNameEmpty" :is-view="false" :field="companyNameField" :keys="['value']" /> -->
+                <!-- <div v-for="(item) in cardItem" :key="item.id">
                     <ContactPreview
                         :id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
                         :value="item.value ?? ''" :label="item.label ?? ''" :name="item.type.name ?? ''" />
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
