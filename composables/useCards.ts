@@ -1,4 +1,3 @@
-
 import type { Card } from "~/types/models/Card";
 import type { CardField } from "~/types/models/CardField";
 
@@ -39,6 +38,17 @@ export function useCards() {
       }));
   });
 
+  const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+      fetchCardsPage(currentPage.value + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage.value > 1) {
+      fetchCardsPage(currentPage.value - 1);
+    }
+  };
 
   return {
     cards,
@@ -47,5 +57,7 @@ export function useCards() {
     fetchCardsPage,
     fetchCardDetails,
     getFieldByCategory,
+    nextPage,
+    prevPage,
   };
 }
