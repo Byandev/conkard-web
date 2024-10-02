@@ -54,7 +54,6 @@ const submitForm = async () => {
     console.error(error as ApiErrorResponse);
   } finally {
     isLoading.value = false;
-    console.log('Form submission attempt finished.');
   }
 };
 </script>
@@ -65,10 +64,9 @@ const submitForm = async () => {
     <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
-          <img
-alt="Your Company" class="h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600">
-          <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" alt="Dummy Logo" width="50" height="50">
+          <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account
+          </h2>
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Not a member?
             {{ ' ' }}
@@ -85,7 +83,7 @@ alt="Your Company" class="h-10 w-auto"
                 <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
                 <div class="mt-2">
                   <input
-id="email" v-model="formRef.email" autocomplete="email"
+                    id="email" v-model="formRef.email" autocomplete="email"
                     :class="{ 'ring-red-300': v$.email.$error, 'ring-gray-300': !v$.email.$error }"
                     class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     type="email">

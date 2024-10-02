@@ -1,94 +1,69 @@
 <script setup lang="ts">
 import { useCardStore } from '~/store/cardStore.js';
-import type { Category } from '~/types/enums/CategoryEnum';
-
-const props = defineProps<{
-  suggestedLabels?: string;
-}>();
-const label = ref<string>('');
-const value = ref<string>('');
+import { useValidation } from '~/composables/useValidation';
+import type { CardField } from '~/types/models/CardField';
+import { useFieldTypeStore } from '~/store/fieldTypeStore';
 
 const cardStore = useCardStore();
-const { addField, setEditing, setModalOpen, updateField, deleteField } = cardStore;
+const { setEditing, setModalOpen, resetSuggestedLabel, addField } = cardStore;
+const { editing, suggestedLabels, type_id } = storeToRefs(cardStore);
+const { fieldTypes } = storeToRefs(useFieldTypeStore());
 
-const { currentCategory, isEditing, currentFieldId, personalFields, generalFields, socialFields, messagingFields,businessFields, modalTitle } = storeToRefs(cardStore);
+const CardForm = ref<Partial<CardField>>({
+  type_id: type_id.value,
+  value: '',
+  label: '',
+});
 
-const getFieldData = () => {
-  if (isEditing.value) {
-    let field: any;
-    switch (currentCategory.value) {
-      case 'PERSONAL':
-        field = personalFields.value.find((f: any) => f.id === currentFieldId.value);
-        break;
-      case 'GENERAL':
-        field = generalFields.value.find((f: any) => f.id === currentFieldId.value);
-        break;
-      case 'SOCIAL':
-        field = socialFields.value.find((f: any) => f.id === currentFieldId.value);
-        break;
-      case 'MESSAGING':
-        field = messagingFields.value.find((f: any) => f.id === currentFieldId.value);
-        break;
-      case 'BUSINESS':
-        field = businessFields.value.find((f: any) => f.id === currentFieldId.value);
-        break;
-    }
-
-    if (field) {
-      value.value = field.value;
-      if (field.label) {
-        label.value = field.label;
-      }
-    }
-  }
-};
+const { formRef, v$ } = useValidation(CardForm, {
+  value: { required: true },
+  label: { required: false },
+});
 
 const closeModal = () => {
   setEditing(false);
   setModalOpen(false);
+  resetSuggestedLabel();
 };
 
 const handleSubmit = () => {
-  const fieldData = {
-    ...(isEditing.value && { id: currentFieldId.value ?? 0 }),
-    name: modalTitle.value,
-    value: value.value,
-    category: currentCategory.value,
-    ...(currentCategory.value !== 'PERSONAL' && { label: label.value })
-  };
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
 
-  if (!isEditing.value) {
-    addField(`${currentCategory.value.toLowerCase()}Fields` as Category, fieldData);
-  } else {
-    console.log('Updated', fieldData);
-    updateField(`${currentCategory.value.toLowerCase()}Fields` as Category, { ...fieldData, id: currentFieldId.value ?? 0 });
-  }
+  const { type_id, value, label } = formRef.value;
+
+  const fieldData: Partial<CardField> = { type_id, value };
+
+  // Find the field type object from the fieldTypes store
+  fieldData.type = fieldTypes.value.find((fieldType) => fieldType.id === type_id);
+
+  // If label is not empty, add it to the fieldData object
+  if (label) fieldData.label = label;
+
+  addField(fieldData as CardField);
   closeModal();
 };
-
-onMounted(() => {
-  getFieldData();
-});
-
 </script>
 
 <template>
   <div class="flex flex-col gap-5 px-4">
-    <FloatingLabelInput
-      v-model="value" label="Value" input-name="Value" placeholder="Value" input-type="text"
-      class="w-full" />
-    <FloatingLabelInput
-      v-if="currentCategory != 'PERSONAL'" v-model="label" label="Title" input-name="Title"
-      placeholder="Title" input-type="text" class="w-full" />
+
+    <div class="flex flex-col gap-3">
+      <label>Value</label>
+      <input v-model="formRef.value" class="w-full p-2 border border-gray-300 rounded-md">
+    </div>
+
+    <div v-if="suggestedLabels" class="flex flex-col gap-3">
+      <label>Title</label>
+      <input v-model="formRef.label" class="w-full p-2 border border-gray-300 rounded-md">
+    </div>
 
     <Suggestion
-      v-if="props.suggestedLabels" :suggested-labels="props.suggestedLabels" :current="label"
-      title="Here are some suggestions for your title:" @update:label="label = $event" />
+      v-if="suggestedLabels" :suggested-labels="suggestedLabels" :current="formRef.label"
+      title="Here are some suggestions for your title:" @update:label="formRef.label = $event" />
   </div>
 
-  <div class="flex gap-3 w-full" :class="isEditing ? 'justify-between' : 'justify-end'">
-    <ModalFooterButton
-      class="mx-5 w-full" :edit_data="isEditing" :on-save="handleSubmit"
-      :on-delete="() => { deleteField(currentCategory.toLowerCase() + 'Fields' as Category, currentFieldId ?? 0); closeModal() }" :on-cancel="closeModal" />
+  <div class="flex gap-3 w-full" :class="editing ? 'justify-between' : 'justify-end'">
+    <ModalFooterButton :has-save="true" lass="mx-5 w-full" :edit-data="editing" @save="handleSubmit" @cancel="closeModal" />
   </div>
 </template>

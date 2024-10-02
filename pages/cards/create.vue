@@ -1,32 +1,21 @@
 <script setup lang="ts">
-import ChooseTheme from '~/components/card/ChooseTheme.vue';
 import { useFieldTypeStore } from '~/store/fieldTypeStore';
-import { useStateStore } from '~/store/stateStore';
+import { useCardStore } from '~/store/cardStore';
 
 definePageMeta({
   layout: 'dashboard-layout',
 });
 
-const { label, modalOpen, category } = storeToRefs(useStateStore());
-const { setLoading, } = useStateStore();
-const { fieldTypes } = storeToRefs(useFieldTypeStore());
+const { setLoading } = useCardStore();
+const { loading } = storeToRefs(useCardStore());
 const { fetchFieldTypes } = useFieldTypeStore();
 
-const companyImage = ref<string>('');
-const companyImageCoordinates = ref<string>('');
-
-const profilePicture = ref<string>('');
-const profilePictureCoordinates = ref<string>('');
-
-const coverPhoto = ref<string>('');
-const coverPhotoCoordinates = ref<string>('');
-
-onMounted( async () => {
+onMounted(async () => {
   try {
     setLoading(true);
-    fetchFieldTypes();
+    await fetchFieldTypes();
   } catch (error) {
-    console.log('Error', error);
+    console.error('Error', error);
   } finally {
     setLoading(false);
   }
@@ -35,40 +24,40 @@ onMounted( async () => {
 
 <template>
   <div class="h-full animate-fade-in">
-    <Tabs class="ml-10" />
-    <div class="flex flex-col lg:flex-row w-full lg:w-fit h-full gap-5 p-4 md:py-10 md:px-3">
-      <div class="flex flex-col gap-7 w-full md:w-1/8">
-        <section class="grid grid-cols-1 gap-4">
-          <CardPreview
-            :company-image="companyImage" :company-image-coordinates="companyImageCoordinates"
-            :profile-picture="profilePicture" :profile-picture-coordinates="profilePictureCoordinates"
-            :cover-photo="coverPhoto" :cover-photo-coordinates="coverPhotoCoordinates" />
-          <AddModal :open="modalOpen && category != 'IMAGE'">
-            <ModalContent />
-          </AddModal>
-        </section>
+    <h1 class="my-5 mx-3 text-2xl font-semibold">Create Card</h1>
+    <div class="mr-0 lg:mr-52">
+      <div class="w-full flex justify-end">
+        <Button
+          :is-wide="false" :is-loading="loading" text="Create" background="gray" foreground="white"
+          type="submit" />
       </div>
-      <div class="w-full md:max-w-[580px] flex flex-col gap-7 transition-all duration-300">
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <TextInput
-            v-model="label" label="Add Label" input-name="card-label" placeholder="Label this card"
-            input-type="text" @update:model-value="{}" />
-        </section>
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <AddImages
-            @update:company-image="companyImage = $event"
-            @update:company-image-coordinates="companyImageCoordinates = $event"
-            @update:profile-image="profilePicture = $event"
-            @update:profile-image-coordinates="profilePictureCoordinates = $event"
-            @update:cover-image="coverPhoto = $event"
-            @update:cover-image-coordinates="coverPhotoCoordinates = $event" />
-        </section>
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <ChooseTheme />
-        </section>
-        <section class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
-          <AddDetails :field-types="fieldTypes" />
-        </section>
+
+      <div class="flex flex-col lg:flex-row w-full h-full gap-5 p-4 md:py-5 md:px-3">
+        <div class="flex flex-col gap-7 w-full lg:w-2/5">
+          <div class="grid grid-cols-1 gap-4">
+            <CardEditPreview />
+            <AddModal>
+              <AddField />
+            </AddModal>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-3/5 flex flex-col gap-7 transition-all duration-300">
+          <div class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
+            <h2 class="mb-5 font-semibold">Card Label</h2>
+            <input class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+          </div>
+
+          <div class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
+            <h2 class="mb-5 font-semibold">Images</h2>
+          </div>
+
+          <div class="px-5 py-7 w-full bg-white drop-shadow-xl rounded-xl transition-all duration-300">
+            <h2 class="mb-5 font-semibold">Add your Details</h2>
+            <FieldCategoryList />
+          </div>
+
+        </div>
       </div>
     </div>
   </div>

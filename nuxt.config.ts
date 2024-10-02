@@ -33,6 +33,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@vueform/nuxt",
     "nuxt-svgo",
+    "nuxt-lodash",
   ],
 
   auth: {

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useStateStore } from "~/store/stateStore";
 import { useCards } from "~/composables/useCards";
 import PaginationControls from '~/components/dashboard/DashboardPagination.vue';
+import { useCardStore } from "~/store/cardStore";
 
 definePageMeta({
   layout: "dashboard-layout",
 });
 
 const { fetchCardsPage, cards, currentPage, totalPages, nextPage, prevPage } = useCards();
-const { loading } = storeToRefs(useStateStore());
-const { setLoading } = useStateStore();
+const { loading } = storeToRefs(useCardStore());
+const { setLoading } = useCardStore();
 
 onMounted(async () => {
   try {
@@ -44,7 +44,7 @@ onMounted(async () => {
           </div>
           <div
             v-else-if="cards && cards.length > 0"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-fade-in">
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 animate-fade-in">
             <CardPreview
               v-for="card in cards"
               :key="card.id"
@@ -59,15 +59,17 @@ onMounted(async () => {
             <p class="mb-4">Click the button below (or the +) to create a personal card.</p>
             <NuxtLink
               to="cards/create"
-              class="px-4 py-2 bg-gray-900 text-white rounded hover:bg-blue-600 transition-colors duration-300">Create
-              Card</NuxtLink>
+              class="px-4 py-2 bg-gray-900 text-white rounded hover:bg-blue-600 transition-colors duration-300">
+              Create Card
+            </NuxtLink>
           </div>
         </div>
         <PaginationControls
+          v-if="!loading && (cards ?? []).length > 0"
           :current-page="currentPage"
           :total-pages="totalPages"
-          :prev-page="prevPage"
-          :next-page="nextPage"
+          @prev-page="prevPage"
+          @next-page="nextPage"
         />
       </div>
     </div>

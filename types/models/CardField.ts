@@ -1,4 +1,4 @@
-import type { CardType } from "@/types/models/CardType";
+import type { CardFieldType } from "~/types/models/CardFieldType";
 
 export interface CardField {
   id: number;
@@ -8,5 +8,5 @@ export interface CardField {
   type_id: number;
   created_at: string;
   updated_at: string;
-  type: CardType;
+  type: CardFieldType;
 }

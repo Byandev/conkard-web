@@ -36,7 +36,6 @@ const { formRef, v$ } = useValidation(RegisterForm, RegisterRules);
 const isLoading = ref(false);
 
 const submitForm = async () => {
-  console.log(RegisterForm.value)
 
   v$.value.$touch();
   if (v$.value.$invalid) return;
@@ -59,10 +58,10 @@ const submitForm = async () => {
 
     await router.push("/dashboard")
   } catch (error) {
-    console.log(error as ApiErrorResponse)
+    console.error(error as ApiErrorResponse)
   } finally {
     isLoading.value = false;
-    console.log('Form submission attempt finished.')
+    console.error('Form submission attempt finished.')
   }
 };
 </script>
@@ -73,8 +72,8 @@ const submitForm = async () => {
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <img
-alt="Your Company" class="h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=600">
+src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" alt="Dummy Logo"
+            width="50" height="50">
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Register an account</h2>
           <p class="mt-2 text-sm leading-6 text-gray-500">
             Already a member?

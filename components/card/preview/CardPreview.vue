@@ -2,7 +2,6 @@
 import { useCards } from '~/composables/useCards';
 import type { Card } from '~/types/models/Card';
 import type { CardField } from '~/types/models/CardField';
-import { useFieldTypeStore } from '~/store/fieldTypeStore';
 
 const props = defineProps<{
   cardId: number;
@@ -10,14 +9,21 @@ const props = defineProps<{
 
 const cardDetails = ref<Card>();
 
-const { fetchCardDetails, getFieldByCategory } = useCards();
-const { fetchFieldTypes } = useFieldTypeStore();
-const { fieldTypeCategory } = storeToRefs(useFieldTypeStore());
+const { fetchCardDetails } = useCards();
+
+const sortedFields = computed(() => {
+  if (!cardDetails.value) return [];
+  return [...cardDetails.value.fields].sort((a: CardField, b: CardField) => a.type.order - b.type.order);
+});
+
+
+//Reason for this is to Add margin top and button to separate PERSONAL Fields
+const personalFields = computed(() => sortedFields.value.filter(field => field.type.category === 'PERSONAL'));
+const otherFields = computed(() => sortedFields.value.filter(field => field.type.category !== 'PERSONAL'));
 
 onMounted(async () => {
   if (props.cardId) {
-    await fetchFieldTypes();
-    cardDetails.value = await fetchCardDetails(props.cardId);
+    cardDetails.value = await fetchCardDetails(props.cardId); 
   }
 });
 </script>
@@ -33,24 +39,23 @@ onMounted(async () => {
             clip-rule="evenodd" />
         </svg>
       </div>
-      <div v-if="!cardDetails" class="animate-pulse px-5 my-7">
+      <div v-if="cardDetails" class="px-5 pb-7">
+        <!-- Displaying only PERSONAL fields to add margin top and button to separate PERSONAL Fields -->
+        <div class="my-10">
+          <div v-for="(field, index) in personalFields" :key="index">
+            <FieldPreview :field="field" :is-clickable="true" />
+          </div>
+        </div>
+
+        <!-- Display Fields Exept PERSONAL fields -->
+        <div v-for="(field, index) in otherFields" :key="index">
+          <FieldPreview :field="field" :is-clickable="true" />
+        </div>
+      </div>
+      <div v-else class="px-5 py-7 animate-fade-in">
         <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
         <div class="h-6 bg-gray-200 rounded w-1/2 mb-4" />
         <div class="h-6 bg-gray-200 rounded w-1/4 mb-4" />
-      </div>
-      <div v-else class="px-5 pb-7 animate-fade-in">
-        <div v-for="(category, index) in fieldTypeCategory" :key="index">
-          <div v-if="index == 0">
-            <FieldSection
-              v-for="(field) in getFieldByCategory(category, cardDetails?.fields as CardField[])"
-              :key="field.id" :is-view="false" :field="field" :keys="['value']" />
-          </div>
-          <div v-for="(item) in getFieldByCategory(category, cardDetails?.fields as CardField[])" v-else :key="item.id">
-            <ContactPreview 
-              :id="item.id ?? 0" :is-clickable="true" class="mt-5" :color="'#FFA500'"
-              :value="item.value ?? ''" :label="item.label ?? ''" :name="item.name ?? ''" />
-          </div>
-        </div>
       </div>
     </div>
   </div>

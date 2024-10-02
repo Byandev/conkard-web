@@ -1,5 +1,4 @@
 import type { Card } from "~/types/models/Card";
-import type { CardField } from "~/types/models/CardField";
 
 export function useCards() {
   const cards = ref<Card[]>();
@@ -25,18 +24,7 @@ export function useCards() {
     } catch (error) {
       console.error("Error fetching card data:", error);
     }
-  }
-
-  const getFieldByCategory = computed(() => (category: string, card: CardField[]) => {
-    return card
-      .filter((field) => field.type.category === category)
-      .map((field) => ({
-        id: field.id,
-        value: field.value,
-        label: field.label,
-        name: field.type.name,
-      }));
-  });
+  };
 
   const nextPage = () => {
     if (currentPage.value < totalPages.value) {
@@ -56,7 +44,6 @@ export function useCards() {
     totalPages,
     fetchCardsPage,
     fetchCardDetails,
-    getFieldByCategory,
     nextPage,
     prevPage,
   };

@@ -3,12 +3,12 @@ import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessu
 import { useCardStore } from '~/store/cardStore';
 
 const { setModalOpen } = useCardStore();
-const { modalTitle, isModalOpen } = storeToRefs(useCardStore());
+const { modalTitle, modalOpen } = storeToRefs(useCardStore());
 
 </script>
 
 <template>
-    <TransitionRoot as="template" :show="isModalOpen">
+    <TransitionRoot as="template" :show="modalOpen">
         <Dialog class="relative z-50" @close="setModalOpen(false)">
             <TransitionChild
                 as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"

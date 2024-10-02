@@ -23,7 +23,7 @@ onMounted(async () => {
         try {
             setLoading(true);
         } catch (error) {
-            console.log('Error', error);
+            console.error('Error', error);
         } finally {
             setLoading(false);
         }
