@@ -1,3 +1,9 @@
+export enum MediaType {
+    CARD_COVER_PHOTO = 'CARD_COVER_PHOTO',
+    CARD_COMPANY_LOGO = 'CARD_COMPANY_LOGO',
+    CARD_PROFILE_PICTURE = 'CARD_PROFILE_PICTURE',
+}
+
 export interface Media {
     id: number;
     uuid: string;
@@ -18,4 +24,9 @@ export interface Media {
     generated_conversions: string[];
     created_at: string;
     updated_at: string;
+}
+
+export interface UploadImage {
+    type: MediaType;
+    image: File | null;
 }

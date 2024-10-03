@@ -9,7 +9,7 @@ const props = defineProps<{
 
 const cardDetails = ref<Card>();
 
-const { fetchCardDetails } = useCards();
+const { fetchCard } = useCards();
 
 const sortedFields = computed(() => {
   if (!cardDetails.value) return [];
@@ -23,7 +23,7 @@ const otherFields = computed(() => sortedFields.value.filter(field => field.type
 
 onMounted(async () => {
   if (props.cardId) {
-    cardDetails.value = await fetchCardDetails(props.cardId); 
+    cardDetails.value = await fetchCard(props.cardId); 
   }
 });
 </script>

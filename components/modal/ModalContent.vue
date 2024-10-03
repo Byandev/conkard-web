@@ -63,7 +63,7 @@ const handleSubmit = () => {
       title="Here are some suggestions for your title:" @update:label="formRef.label = $event" />
   </div>
 
-  <div class="flex gap-3 w-full" :class="editing ? 'justify-between' : 'justify-end'">
-    <ModalFooterButton :has-save="true" lass="mx-5 w-full" :edit-data="editing" @save="handleSubmit" @cancel="closeModal" />
+  <div class="w-full" :class="editing ? 'justify-between' : 'justify-end'">
+    <ModalFooter :has-save="true" lass="mx-5 w-full" :edit-data="editing" @save="handleSubmit" @cancel="closeModal" />
   </div>
 </template>

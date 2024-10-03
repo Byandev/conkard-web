@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { useCards } from "~/composables/useCards";
-import PaginationControls from '~/components/dashboard/DashboardPagination.vue';
 import { useCardStore } from "~/store/cardStore";
 
 definePageMeta({
   layout: "dashboard-layout",
 });
 
-const { fetchCardsPage, cards, currentPage, totalPages, nextPage, prevPage } = useCards();
+const { fetchCards, cards} = useCards();
 const { loading } = storeToRefs(useCardStore());
 const { setLoading } = useCardStore();
 
 onMounted(async () => {
   try {
     setLoading(true);
-    await fetchCardsPage();
+    await fetchCards();
   } catch (error) {
     console.error(error);
   } finally {
@@ -29,7 +28,7 @@ onMounted(async () => {
       <div class="flex flex-col">
         <div class="flex flex-row items-center justify-center md:justify-start gap-2 mt-5">
           <h1 class="text-2xl font-normal">Cards</h1>
-          <CardDropdown />
+          <Dropdown />
         </div>
         <div class="grid grid-cols-1 gap-3 w-full p-3 rounded-lg">
           <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
@@ -43,10 +42,10 @@ onMounted(async () => {
             </div>
           </div>
           <div
-            v-else-if="cards && cards.length > 0"
+            v-else-if="cards && cards.data.length > 0"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 animate-fade-in">
             <CardPreview
-              v-for="card in cards"
+              v-for="card in cards.data"
               :key="card.id"
               :card-id="card.id"
               class="transition-transform transform hover:scale-105 hover:shadow-lg"
@@ -64,12 +63,12 @@ onMounted(async () => {
             </NuxtLink>
           </div>
         </div>
-        <PaginationControls
-          v-if="!loading && (cards ?? []).length > 0"
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          @prev-page="prevPage"
-          @next-page="nextPage"
+        <PaginationControl
+          v-if="!loading && (cards.data ?? []).length > 0"
+          :current-page="cards.meta.current_page"
+          :total-pages="cards.meta.last_page"
+          @prev-page="fetchCards(cards.meta.current_page - 1)"
+          @next-page="fetchCards(cards.meta.current_page + 1)"
         />
       </div>
     </div>

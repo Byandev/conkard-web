@@ -21,7 +21,7 @@ const handleAddField = (field: CardFieldType) => {
 <template>
     <div class="flex flex-col group">
         <div v-for="(fields, category) in groupedFieldsByCategory" :key="category" class="mb-5">
-            <h2 class="my-3 text-lg">
+            <h2 class="mb-2 text-lg">
                 {{ useCapitalize(category) }}
             </h2>
             <div

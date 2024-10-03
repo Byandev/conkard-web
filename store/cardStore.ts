@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import { ref, reactive, toRefs } from "vue";
 import type { Card } from "~/types/models/Card";
 import type { CardField } from "~/types/models/CardField";
+import type { UploadImage , MediaType } from "~/types/models/Media";
+
 
 export const useCardStore = defineStore("card", () => {
   const state = reactive({
@@ -15,12 +17,26 @@ export const useCardStore = defineStore("card", () => {
     selectedColor: '',
   });
 
-  
-
   const cardForm = ref<Partial<Card>>({
     label: '',
     fields: [],
   });
+
+  const images = ref<UploadImage[]>([]);
+
+  const addImage = (type: MediaType, image: File) => {
+    images.value?.push({
+      type,
+      image,
+    });
+  }
+
+  const removeImage = (type: MediaType) => {
+    const index = images.value.findIndex((image: UploadImage) => image.type === type);
+    if (index !== -1) {
+      images.value.splice(index, 1);
+    }
+  };
 
   const addLabel = (label: string) => {
     cardForm.value.label = label;
@@ -85,6 +101,9 @@ export const useCardStore = defineStore("card", () => {
   return {
     ...toRefs(state),
     cardForm,
+    images,
+    addImage,
+    removeImage,
     addLabel,
     setCardId,
     addField,
