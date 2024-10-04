@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
+import type { PaginationMeta } from '~/types/models/Pagination';
 
 const props = defineProps<{
-    currentPage: number;
-    totalPages: number;
+    pagination: PaginationMeta;
 }>();
 
 const _emit = defineEmits(['prevPage', 'nextPage']);
@@ -12,14 +12,14 @@ const _emit = defineEmits(['prevPage', 'nextPage']);
 <template>
     <div class="flex justify-between items-center mt-4">
         <button
-            :disabled="props.currentPage === 1"
+            :disabled="props.pagination.current_page === 1"
             class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             @click="_emit('prevPage')">
             Previous
         </button>
-        <span class="text-gray-700 font-semibold">Page {{ props.currentPage }} of {{ props.totalPages }}</span>
+        <span class="text-gray-700 font-semibold">Page {{ props.pagination.current_page }} of {{ props.pagination.total }}</span>
         <button
-            :disabled="props.currentPage === props.totalPages"
+            :disabled="props.pagination.current_page === props.pagination.total"
             class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             @click="_emit('nextPage')">
             Next

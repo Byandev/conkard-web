@@ -65,8 +65,7 @@ onMounted(async () => {
         </div>
         <PaginationControl
           v-if="!loading && (cards.data ?? []).length > 0"
-          :current-page="cards.meta.current_page"
-          :total-pages="cards.meta.last_page"
+          :pagination="cards.meta"
           @prev-page="fetchCards(cards.meta.current_page - 1)"
           @next-page="fetchCards(cards.meta.current_page + 1)"
         />
